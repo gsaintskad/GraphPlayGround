@@ -50,7 +50,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
           <div
             className={`bg-gray-200 flex justify-center items-center shadow-2xl h-full w-full`}
           >
-            {props.id}
+            {props.id}//
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

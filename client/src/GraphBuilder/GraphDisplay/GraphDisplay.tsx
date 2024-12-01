@@ -8,6 +8,7 @@ interface GraphDisplayProps {
 
 const GraphDisplay = (props: GraphDisplayProps) => {
     const [nodeMap, setNodeMap] = useState<Map<string, GraphNodeProps>>(new Map());
+
     const [nodeRadius, setNodeRadius] = useState<number>(90)
     const divRef = useRef<HTMLDivElement | null>(null);
 
@@ -34,7 +35,28 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         },
         [props.activeHandler]
     );
+    const addEdgeHandler = useCallback(
+        (e: MouseEvent) => {
+            setNodeMap((prevNodeMap) => {
+                const map = new Map(prevNodeMap);
+                const dto: GraphNodeProps = {
+                    id: (map.size + 1).toString(),
+                    name: `Node ${map.size + 1}`, // Optional name for the node
+                    x: e.offsetX-nodeRadius/2,
+                    y: e.offsetY-nodeRadius/2,
+                    radius:nodeRadius
+                };
+                map.set(dto.id, dto);
+                console.log("Updated map after adding node:", map);
+                return map;
+            });
 
+            console.log(
+                `Mouse clicked at coordinates: (${e.offsetX}, ${e.offsetY}) during ${props.activeHandler}`
+            );
+        },
+        [props.activeHandler]
+    );
     // General handler for activeHandler-related events
     const handleEvent = useCallback(
         (e: MouseEvent) => {

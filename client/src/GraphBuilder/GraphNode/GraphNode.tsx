@@ -17,7 +17,7 @@ export interface GraphNodeProps {
 export const GraphNode = (props: GraphNodeProps) => {
   return (
     <div
-      className={`absolute`}
+      className={`absolute z-50`}
       style={{ left: `${props.x}px`, top: `${props.y}px` }}
     >
       <DropdownMenu>

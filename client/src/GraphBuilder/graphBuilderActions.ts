@@ -1,1 +1,1 @@
-export type GraphBuilderActions = 'create'|'delete'|'connect'|'disconnect'|'';
+export type GraphBuilderActions = 'create'|'delete'|'connect'|'disconnect'|'pointer'|'';

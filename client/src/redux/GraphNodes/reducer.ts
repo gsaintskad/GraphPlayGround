@@ -5,10 +5,11 @@ import {stateObject} from "../../../types.ts";
 
 
 const initialState:stateObject<GraphNodeProps> = {}
+const selectedState:GraphNodeProps[] =[]
 
 
 
-const graphNodesReducer:Reducer<stateObject<GraphNodeProps>,AnyAction>=(state=initialState,action):stateObject<GraphNodeProps>=>{
+export const graphNodesReducer:Reducer<stateObject<GraphNodeProps>,AnyAction>=(state=initialState,action):stateObject<GraphNodeProps>=>{
     switch(action.type){
         case a.ADD_NODE:{
             const prevState=structuredClone(state);
@@ -23,9 +24,24 @@ const graphNodesReducer:Reducer<stateObject<GraphNodeProps>,AnyAction>=(state=in
             }
             return prevState;
         }
+
         default:
             return state;
 
     }
 }
-export default graphNodesReducer;
+export const selectedGraphNodesReducer:Reducer<GraphNodeProps[],AnyAction>=(state=selectedState,action):GraphNodeProps[]=>{
+    switch(action.type){
+        case a.SELECT_NODE:{
+            const prevState=structuredClone(state);
+            prevState.push(action.payload);
+            return prevState;
+
+        }
+        case a.DISCARD_SELECTION:{
+            return [] as GraphNodeProps[];
+        }
+        default:
+            return state;
+    }
+}

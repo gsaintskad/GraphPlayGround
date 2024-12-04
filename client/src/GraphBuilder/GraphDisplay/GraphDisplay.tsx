@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNode, setNodesIsActive } from "@/redux/GraphNodes/actionCreator.ts";
+import {addNode, discardSelection, selectNode, setNodesIsActive} from "@/redux/GraphNodes/actionCreator.ts";
 import { GraphBuilderActions } from "@/GraphBuilder/graphBuilderActions.ts";
 import {
   GraphNodeProps,
@@ -27,17 +27,41 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   const dispatch = useDispatch();
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
+  const selectedNodesArr = useSelector(
+    (state: RootState) => state.selectedGraphNodes,
+  );
 
   const [nodeSize, setNodeSize] = useState<number>(90);
   const divRef = useRef<HTMLDivElement | null>(null);
-  const [targetNode1, setTargetNode1] = useState<GraphNodeProps | null>(null);
-  const [targetNode2, setTargetNode2] = useState<GraphNodeProps | null>(null);
+  const [isAddingAnEdge, setIsAddingAnEdge] = useState<boolean>(false);
+
   const changeNodesActiveState = (isActive: boolean) => {
     const divElement = divRef.current;
     dispatch(setNodesIsActive(isActive));
     dispatch(setEdgesIsActive(isActive)); //??????????
     divElement?.style.setProperty("z-index", isActive ? "30" : "50");
   };
+  const selectionHandler = useCallback(
+    (e: MouseEvent) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const clickCoords = { x: e.offsetX, y: e.offsetY };
+      // Track selected nodes
+      console.log(clickCoords,nodeMap);
+      for (const id in nodeMap) {
+        const node = nodeMap[id];
+          if(isLiesBetween(clickCoords, node.coordinates, movePoint(node.coordinates, { x: nodeSize, y: nodeSize }),)) {
+              dispatch(selectNode(node));
+              break;
+          }
+      }
+      //coincidence check might be here
+
+
+
+    },
+    [nodeMap],
+  );
 
   const createNodeHandler = useCallback(
     (e: MouseEvent) => {
@@ -59,63 +83,27 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     },
     [props.activeHandler],
   );
-  const addEdgeHandler = useCallback(
-    (e: MouseEvent) => {
-      e.stopPropagation();
-      e.preventDefault();
-      const clickCoords = { x: e.offsetX, y: e.offsetY };
-      // Track selected nodes
-      let selectedNode: GraphNodeProps | null = null;
-
-      for (const id in nodeMap) {
-        const node = nodeMap[id];
-        if (
-          isLiesBetween(
-            clickCoords,
-            node.coordinates,
-            movePoint(node.coordinates, { x: nodeSize, y: nodeSize }),
-          )
-        ) {
-          selectedNode = node;
-          break;
-        }
-      }
-
-      if (!selectedNode) {
-        console.log("No node detected at click location:", clickCoords);
-        return;
-      }
-
-      // Handle node selection logic
-      if (!targetNode1) {
-        setTargetNode1(() => selectedNode);
-      } else if (targetNode1.id !== selectedNode.id) {
-        setTargetNode2(() => selectedNode);
-      } else {
-        console.log(
-          `Please choose another node! Node (${selectedNode.id}) is already selected as Target Node 1.`,
-        );
-      }
-      if (targetNode1 && targetNode2) {
+  //addEdgeHandler
+  useEffect(() => {
+    if (isAddingAnEdge) {
+      if (selectedNodesArr.length >=2) {
+        const copy = structuredClone(selectedNodesArr);
+        const nodeA = copy.shift() as GraphNodeProps;
+        const nodeB = copy.shift() as GraphNodeProps;
         dispatch(
           addEdge({
-            nodeA: targetNode1,
-            nodeB: targetNode2,
+            nodeA,
+            nodeB,
             nodeSize: nodeSize,
             width: 10,
-            id: `${targetNode1.id}-${targetNode2}`,
+            id: `${nodeA.id}-${nodeB.id}`,
             isActive: true,
           }),
         );
-        console.log(
-          `new edge connecting node${targetNode1.id} with node ${targetNode2.id} has been addded`,
-        );
-        setTargetNode1(() => null);
-        setTargetNode2(() => null);
+        dispatch(discardSelection());
       }
-    },
-    [nodeMap, targetNode1, targetNode2],
-  );
+    }
+  }, [selectedNodesArr]);
 
   // General handler for activeHandler-related events
   const handleEvent = useCallback(
@@ -126,9 +114,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     },
     [props.activeHandler],
   );
-  useEffect(() => {
-    console.log("actual tn1:", targetNode1, "\nactual tn2:", targetNode2);
-  }, [targetNode1, targetNode2]);
 
   // Attach and remove event listener on the parent div
   useEffect(() => {
@@ -141,8 +126,9 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       changeNodesActiveState(true);
       console.log("CreateNodeHandler added");
     } else if (props.activeHandler === "connect" && divElement) {
-      divElement.addEventListener("click", addEdgeHandler);
       changeNodesActiveState(false);
+      setIsAddingAnEdge(true);
+      divElement.addEventListener("click", selectionHandler);
     } else if (props.activeHandler && divElement) {
       divElement.addEventListener("click", handleEvent);
       console.log(`Event listener added to div for ${props.activeHandler}`);
@@ -151,33 +137,31 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     return () => {
       if (divElement) {
         divElement.removeEventListener("click", createNodeHandler);
-        divElement.removeEventListener("click", addEdgeHandler);
+        divElement.removeEventListener("click", selectionHandler);
         divElement.removeEventListener("click", handleEvent);
+        if (props.activeHandler === "connect") setIsAddingAnEdge(false);
         console.log("Event listeners removed");
       }
     };
   }, [props.activeHandler, createNodeHandler, handleEvent]);
 
   // Render the GraphNodes based on the nodeMap
-  const renderNodes = () => {
-    const nodeArr = [];
-    for (const id in nodeMap) {
-      nodeArr.push(<GraphNode key={id} {...nodeMap[id]} />);
-    }
-    return nodeArr;
-  };
-  const renderEdges = () => {
-    const edgeArr = [];
-    for (const id in edgeMap) {
-      edgeArr.push(<GraphEdge key={id} {...edgeMap[id]} />);
-    }
-    return edgeArr;
-  };
+  const renderNodes = useMemo(() => {
+    return Object.values(nodeMap).map((node) => (
+      <GraphNode key={node.id} {...node} />
+    ));
+  }, [nodeMap]);
+
+  const renderEdges = useMemo(() => {
+    return Object.values(edgeMap).map((edge) => (
+      <GraphEdge key={edge.id} {...edge} />
+    ));
+  }, [edgeMap]);
   return (
     <div className="relative w-full h-full">
       {/* Render nodes dynamically */}
-      {renderNodes()}
-      {renderEdges()}
+      {renderNodes}
+      {renderEdges}
       <div className="relative w-full h-full bg-transparent" ref={divRef} />
     </div>
   );

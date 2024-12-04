@@ -12,3 +12,15 @@ export const setNodesIsActive=(isActive:boolean)=>{
         payload:isActive
     }
 }
+export const selectNode = (nodeDto:GraphNodeProps)=>{
+    return {
+        type:a.SELECT_NODE,
+        payload:nodeDto
+    }
+}
+export const discardSelection=()=>{
+    return {
+        type:a.DISCARD_SELECTION,
+        payload:null
+    }
+}

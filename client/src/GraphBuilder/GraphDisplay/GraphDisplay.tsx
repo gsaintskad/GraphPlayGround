@@ -50,15 +50,16 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       console.log(clickCoords,nodeMap);
       for (const id in nodeMap) {
         const node = nodeMap[id];
-          if(isLiesBetween(clickCoords, node.coordinates, movePoint(node.coordinates, { x: nodeSize, y: nodeSize }),)) {
-              dispatch(selectNode(node));
-              break;
+          if(isLiesBetween(clickCoords, node.coordinates, movePoint(node.coordinates, { x: nodeSize, y: nodeSize }))) {
+
+              if(!selectedNodesArr.some((selectedNode)=>node.id===selectedNode.id)) {
+
+                  dispatch(selectNode(node));
+                  break;
+              }
           }
       }
       //coincidence check might be here
-
-
-
     },
     [nodeMap],
   );

@@ -65,7 +65,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
     return -45;
 
   }, [lenght,trigonometryValue]);
-  console.log(`current angle:${angle}`)
+
   return (
     <div
       className={`absolute transform origin-left`}

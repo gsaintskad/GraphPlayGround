@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import GraphDisplay from "@/GraphBuilder/GraphDisplay/GraphDisplay.tsx";
 import {useState} from "react";
 import {GraphBuilderActions} from "./graphBuilderActions.ts";
-import {GraphNodeProps} from "@/GraphBuilder/GraphNode/GraphNode.tsx";
+import {GraphNodeProps} from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
 
 export const GraphBuilder=()=>{
 

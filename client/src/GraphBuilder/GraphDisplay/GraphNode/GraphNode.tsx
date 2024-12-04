@@ -5,8 +5,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {Point} from "../../../types.ts";
+} from "@/components/ui/dropdown-menu.tsx";
+import {Point} from "../../../../types.ts";
 
 export interface GraphNodeProps {
   name?: string;
@@ -18,14 +18,15 @@ export interface GraphNodeProps {
 export const GraphNode = (props: GraphNodeProps) => {
   return (
     <div
-      className={`absolute z-50`}
+      className={`absolute z-40`}
       style={{ left: `${props.coordinates.x}px`, top: `${props.coordinates.y}px` }}
+      // onClick={()=>console.log(props.id)}
     >
       <DropdownMenu>
         <DropdownMenuTrigger disabled={!props.isActive}>
-          <div className={`bg-green-700 flex justify-center items-center shadow-2xl aspect-square rounded-full w-full text-white text-xl font-bold border-4 border-white`}
-          style={{width: `${props.radius||80}px`}}>
-              {props.id}
+          <div className={`bg-green-700 flex justify-center items-center shadow-2xl aspect-square overflow-hidden rounded-full w-full text-white text-xl font-bold border-4 border-white`}
+          style={{width: `${props.radius||90}px`}}>
+              {props.name}
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

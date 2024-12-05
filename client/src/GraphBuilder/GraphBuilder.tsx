@@ -52,6 +52,7 @@ export const GraphBuilder=()=>{
         <div className={`bg-amber-300 h-full flex`}>
             <div className={`pt-10 flex flex-col h-full bg-red-300 w-20 gap-8`}>
                 <Button  onClick={()=>toggleHandler('pointer')}>pointer</Button>
+                <Button  onClick={()=>toggleHandler('drag')}>drag</Button>
                 <Button  onClick={()=>toggleHandler('create')}>create</Button>
                 <Button  onClick={()=>toggleHandler('delete')}>delete</Button>
                 <Button  onClick={()=>toggleHandler('connect')}>connect</Button>

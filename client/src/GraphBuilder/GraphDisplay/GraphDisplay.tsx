@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {addNode, discardSelection, selectNode, setNodesIsActive} from "@/redux/GraphNodes/actionCreator.ts";
+import {
+  addNode,
+  discardSelection,
+  selectNode,
+  setNodesIsActive,
+} from "@/redux/GraphNodes/actionCreator.ts";
 import { GraphBuilderActions } from "@/GraphBuilder/graphBuilderActions.ts";
 import {
   GraphNodeProps,
@@ -33,7 +38,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
 
   const [nodeSize, setNodeSize] = useState<number>(90);
   const divRef = useRef<HTMLDivElement | null>(null);
-  const [isAddingAnEdge, setIsAddingAnEdge] = useState<boolean>(false);
 
   const changeNodesActiveState = (isActive: boolean) => {
     const divElement = divRef.current;
@@ -41,28 +45,38 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     dispatch(setEdgesIsActive(isActive)); //??????????
     divElement?.style.setProperty("z-index", isActive ? "30" : "50");
   };
+
   const selectionHandler = useCallback(
     (e: MouseEvent) => {
       e.stopPropagation();
       e.preventDefault();
       const clickCoords = { x: e.offsetX, y: e.offsetY };
       // Track selected nodes
-      console.log(clickCoords,nodeMap);
+      console.log(clickCoords, nodeMap);
       for (const id in nodeMap) {
         const node = nodeMap[id];
-          if(isLiesBetween(clickCoords, node.coordinates, movePoint(node.coordinates, { x: nodeSize, y: nodeSize }))) {
-
-              if(!selectedNodesArr.some((selectedNode)=>node.id===selectedNode.id)) {
-
-                  dispatch(selectNode(node));
-                  break;
-              }
+        if (
+          isLiesBetween(
+            clickCoords,
+            node.coordinates,
+            movePoint(node.coordinates, { x: nodeSize, y: nodeSize }),
+          )
+        ) {
+          if (
+            !selectedNodesArr.some(
+              (selectedNode) => node.id === selectedNode.id,
+            )
+          ) {
+            dispatch(selectNode(node));
+            break;
           }
+        }
       }
       //coincidence check might be here
     },
     [nodeMap],
   );
+
 
   const createNodeHandler = useCallback(
     (e: MouseEvent) => {
@@ -84,10 +98,12 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     },
     [props.activeHandler],
   );
+
   //addEdgeHandler
+  const [isAddingAnEdge, setIsAddingAnEdge] = useState<boolean>(false);
   useEffect(() => {
     if (isAddingAnEdge) {
-      if (selectedNodesArr.length >=2) {
+      if (selectedNodesArr.length >= 2) {
         const copy = structuredClone(selectedNodesArr);
         const nodeA = copy.shift() as GraphNodeProps;
         const nodeB = copy.shift() as GraphNodeProps;
@@ -104,8 +120,18 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         dispatch(discardSelection());
       }
     }
-  }, [selectedNodesArr]);
+  }, [isAddingAnEdge,selectedNodesArr]);
+    //drag handler
+    const [isDraggingNode, setIsDraggingNode] = useState<boolean>(false);
+    useEffect(() => {
+        if(isDraggingNode){
+            if(selectedNodesArr.length>0){
 
+                const nId = selectedNodesArr[0].id;
+
+            }
+        }
+    }, [isDraggingNode,selectedNodesArr]);
   // General handler for activeHandler-related events
   const handleEvent = useCallback(
     (e: MouseEvent) => {
@@ -122,6 +148,8 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     if (props.activeHandler === "pointer" && divElement) {
       //pointer
       changeNodesActiveState(true);
+    } else if (props.activeHandler === "drag" && divElement && nodeMap) {
+      //not empty block :)
     } else if (props.activeHandler === "create" && divElement) {
       divElement.addEventListener("click", createNodeHandler);
       changeNodesActiveState(true);
@@ -130,6 +158,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       changeNodesActiveState(false);
       setIsAddingAnEdge(true);
       divElement.addEventListener("click", selectionHandler);
+      console.log("addEdgeHandler added");
     } else if (props.activeHandler && divElement) {
       divElement.addEventListener("click", handleEvent);
       console.log(`Event listener added to div for ${props.activeHandler}`);

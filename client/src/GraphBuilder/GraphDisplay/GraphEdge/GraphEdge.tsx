@@ -18,6 +18,7 @@ export interface GraphEdgeProps {
   isActive: boolean;
   nodeSize?: number;
   width: number;
+  
 }
 const toDeg=(angle:number):number=>{
   return angle*180/Math.PI;

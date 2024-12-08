@@ -24,6 +24,19 @@ const graphEdgesReducer:Reducer<stateObject<GraphEdgeProps>,AnyAction>=(state=in
             }
             return prevState;
         }
+        case a.CALCULATE_PROPS:{
+            const prevState=structuredClone(state);
+            for (const id in prevState) {
+                if(prevState[id].nodeA.id === action.payload.id){
+                    prevState[id].nodeA = action.payload;
+                }
+                else if(prevState[id].nodeB.id === action.payload.id){
+                    prevState[id].nodeB = action.payload;
+                }
+            }
+
+            return prevState
+        }
         default:
             return state;
 

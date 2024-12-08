@@ -50,13 +50,14 @@ export const GraphBuilder=()=>{
         </div>
 
         <div className={`bg-amber-300 h-full flex`}>
-            <div className={`pt-10 flex flex-col h-full bg-red-300 w-20 gap-8`}>
+            <div className={`pt-10 flex flex-col h-full bg-red-300 w-32 gap-8 overflow-scroll`}>
                 <Button  onClick={()=>toggleHandler('pointer')}>pointer</Button>
                 <Button  onClick={()=>toggleHandler('drag')}>drag</Button>
                 <Button  onClick={()=>toggleHandler('create')}>create</Button>
                 <Button  onClick={()=>toggleHandler('delete')}>delete</Button>
                 <Button  onClick={()=>toggleHandler('connect')}>connect</Button>
                 <Button  onClick={()=>toggleHandler('disconnect')}>disconnect</Button>
+                <Button  onClick={()=>toggleHandler('test')}>test</Button>
             </div>
             <GraphDisplay activeHandler={activeHandler}/>
 

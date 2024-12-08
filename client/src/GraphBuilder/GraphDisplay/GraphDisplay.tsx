@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNode,
   discardSelection,
-  selectNode,
+  selectNode, setNodeCoordinates,
   setNodesIsActive,
 } from "@/redux/GraphNodes/actionCreator.ts";
 import { GraphBuilderActions } from "@/GraphBuilder/graphBuilderActions.ts";
@@ -35,9 +35,9 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   const selectedNodesArr = useSelector(
     (state: RootState) => state.selectedGraphNodes,
   );
+  const divRef = useRef<HTMLDivElement | null>(null);
 
   const [nodeSize, setNodeSize] = useState<number>(90);
-  const divRef = useRef<HTMLDivElement | null>(null);
 
   const changeNodesActiveState = (isActive: boolean) => {
     const divElement = divRef.current;
@@ -45,14 +45,32 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     dispatch(setEdgesIsActive(isActive)); //??????????
     divElement?.style.setProperty("z-index", isActive ? "30" : "50");
   };
+  const isMouseDown = useRef(false);
+  const mouseDownHandler = useCallback(() => {
+    isMouseDown.current = true;
+  }, []);
+  const mouseUpHandler = useCallback(() => {
+    isMouseDown.current = false;
+  }, []);
+  const handleMouseDragEventController =
+    (addMouseDragEvent: boolean) => {
+      if (divRef) {
+        const divElement = divRef.current!;
+        if (addMouseDragEvent) {
+          divElement.addEventListener("mousedown", mouseDownHandler);
+          divElement.addEventListener("mouseup", mouseUpHandler);
+        } else {
+          divElement.removeEventListener("mousedown", mouseDownHandler);
+          divElement.removeEventListener("mouseup", mouseUpHandler);
+        }
+      }
+    }
 
   const selectionHandler = useCallback(
     (e: MouseEvent) => {
       e.stopPropagation();
       e.preventDefault();
       const clickCoords = { x: e.offsetX, y: e.offsetY };
-      // Track selected nodes
-      console.log(clickCoords, nodeMap);
       for (const id in nodeMap) {
         const node = nodeMap[id];
         if (
@@ -62,22 +80,35 @@ const GraphDisplay = (props: GraphDisplayProps) => {
             movePoint(node.coordinates, { x: nodeSize, y: nodeSize }),
           )
         ) {
-          if (
-            !selectedNodesArr.some(
-              (selectedNode) => node.id === selectedNode.id,
-            )
-          ) {
-            dispatch(selectNode(node));
-            break;
-          }
+          dispatch(selectNode(node));
+
+          break;
         }
       }
-      //coincidence check might be here
     },
     [nodeMap],
   );
+  const isDraggingNode = useRef(false);
+  const dragNodeHandler = useCallback(
+    (e: MouseEvent) => {
+      if (isDraggingNode.current) {
 
+        if(isMouseDown.current) {
 
+          if (selectedNodesArr.length > 0) {
+            const nId = selectedNodesArr[0].id;
+            console.log(`nId${nId}`)
+            dispatch(setNodeCoordinates(nId,{x:e.offsetX, y:e.offsetY} as Point));
+          }
+        }
+        else{
+          dispatch(discardSelection());
+        }
+      }
+      console.log(`selectedNodeArr.length:${selectedNodesArr.length}\nisDraggingNode:${isDraggingNode.current}\nisMouseDown:${isMouseDown.current}`);
+    },
+    [props.activeHandler,isDraggingNode.current],
+  );
   const createNodeHandler = useCallback(
     (e: MouseEvent) => {
       const dto: GraphNodeProps = {
@@ -106,32 +137,26 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       if (selectedNodesArr.length >= 2) {
         const copy = structuredClone(selectedNodesArr);
         const nodeA = copy.shift() as GraphNodeProps;
-        const nodeB = copy.shift() as GraphNodeProps;
-        dispatch(
-          addEdge({
-            nodeA,
-            nodeB,
-            nodeSize: nodeSize,
-            width: 10,
-            id: `${nodeA.id}-${nodeB.id}`,
-            isActive: true,
-          }),
-        );
-        dispatch(discardSelection());
+
+        const nodeB =copy.shift() as GraphNodeProps
+        if(nodeA.id!==nodeB.id){
+          dispatch(
+              addEdge({
+                nodeA,
+                nodeB,
+                nodeSize: nodeSize,
+                width: 10,
+                id: `${nodeA.id}-${nodeB.id}`,
+                isActive: true,
+              }),
+          );
+        }
+          dispatch(discardSelection());
+
       }
     }
-  }, [isAddingAnEdge,selectedNodesArr]);
-    //drag handler
-    const [isDraggingNode, setIsDraggingNode] = useState<boolean>(false);
-    useEffect(() => {
-        if(isDraggingNode){
-            if(selectedNodesArr.length>0){
+  }, [isAddingAnEdge, selectedNodesArr]);
 
-                const nId = selectedNodesArr[0].id;
-
-            }
-        }
-    }, [isDraggingNode,selectedNodesArr]);
   // General handler for activeHandler-related events
   const handleEvent = useCallback(
     (e: MouseEvent) => {
@@ -147,9 +172,16 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     const divElement = divRef.current;
     if (props.activeHandler === "pointer" && divElement) {
       //pointer
+      handleMouseDragEventController(true);
       changeNodesActiveState(true);
+    } else if (props.activeHandler === "test" && divElement && nodeMap) {
+      //notemptyblocvk:)
     } else if (props.activeHandler === "drag" && divElement && nodeMap) {
-      //not empty block :)
+      isDraggingNode.current=true;
+      handleMouseDragEventController(true);
+      changeNodesActiveState(false);
+      divElement.addEventListener("mousedown", selectionHandler);
+      divElement.addEventListener("mousemove", dragNodeHandler);
     } else if (props.activeHandler === "create" && divElement) {
       divElement.addEventListener("click", createNodeHandler);
       changeNodesActiveState(true);
@@ -169,7 +201,12 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         divElement.removeEventListener("click", createNodeHandler);
         divElement.removeEventListener("click", selectionHandler);
         divElement.removeEventListener("click", handleEvent);
-        if (props.activeHandler === "connect") setIsAddingAnEdge(false);
+        divElement.removeEventListener("mousedown", selectionHandler);
+        divElement.removeEventListener("mousemove", dragNodeHandler);
+        handleMouseDragEventController(false);
+        isDraggingNode.current=false;
+        setIsAddingAnEdge(false);
+        handleMouseDragEventController(false);
         console.log("Event listeners removed");
       }
     };

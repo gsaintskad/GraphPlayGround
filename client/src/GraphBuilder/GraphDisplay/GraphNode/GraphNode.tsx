@@ -24,7 +24,7 @@ export const GraphNode = (props: GraphNodeProps) => {
     >
       <DropdownMenu>
         <DropdownMenuTrigger disabled={!props.isActive}>
-          <div className={`bg-green-700 flex justify-center items-center shadow-2xl aspect-square overflow-hidden rounded-full w-full text-white text-xl font-bold border-4 border-white`}
+          <div  className={`bg-green-700 flex justify-center items-center shadow-2xl aspect-square overflow-hidden rounded-full w-full text-white text-xl font-bold border-4 border-white`}
           style={{width: `${props.radius||90}px`}}>
               {props.name}
           </div>

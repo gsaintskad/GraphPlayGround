@@ -21,6 +21,7 @@ import {
 } from "../../../types.ts";
 
 import { Reducer } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from 'uuid';
 import { RootState } from "../../redux/store.ts";
 import {
   addEdge,
@@ -111,8 +112,8 @@ const GraphDisplay = (props: GraphDisplayProps) => {
                 y: e.offsetY - nodeSize / 2,
               } as Point),
             );
-
             dispatch(calculateEdgeProps(selectedNodesArr[0]));
+
           }
         } else {
           dispatch(discardSelection());
@@ -125,9 +126,10 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   // );
   const createNodeHandler = useCallback(
     (e: MouseEvent) => {
+      const id=uuidv4().slice(0,5);
       const dto: GraphNodeProps = {
-        id: Math.random().toString(),
-        name: `Node ${Math.random() + 1}`, // Optional name for the node
+        id,
+        name: `Node ${id}`, // Optional name for the node
         coordinates: {
           x: e.offsetX - nodeSize / 2,
           y: e.offsetY - nodeSize / 2,

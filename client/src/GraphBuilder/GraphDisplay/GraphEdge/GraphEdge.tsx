@@ -81,7 +81,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
     >
       <DropdownMenu>
         <DropdownMenuTrigger
-          className={`bg-white shadow-2xl h-full w-full rounded-b border-2 border-gray-800`}
+          className={`bg-white shadow-2xl h-full w-full rounded-b border-2 border-gray-300`}
         >
           <div className={`bg-white shadow-2xl h-full w-full rounded-b`}>
 

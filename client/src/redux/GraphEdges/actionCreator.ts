@@ -20,3 +20,9 @@ export const calculateEdgeProps=(nodeDto:GraphNodeProps)=>{
         payload:nodeDto
     }
 }
+export const removeEdge=(id:string)=>{
+    return {
+        type:a.REMOVE_EDGE,
+        payload:id
+    }
+}

@@ -21,11 +21,12 @@ import {
 } from "../../../types.ts";
 
 import { Reducer } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { RootState } from "../../redux/store.ts";
 import {
   addEdge,
   calculateEdgeProps,
+  removeEdge,
   setEdgesIsActive,
 } from "@/redux/GraphEdges/actionCreator.ts";
 
@@ -59,7 +60,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   const mouseUpHandler = useCallback(() => {
     isMouseDown.current = false;
   }, []);
-  const handleMouseDragEventController = (addMouseDragEvent: boolean) => {
+  const setIsMouseDownListenerActive = (addMouseDragEvent: boolean) => {
     if (divRef) {
       const divElement = divRef.current!;
       if (addMouseDragEvent) {
@@ -113,7 +114,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
               } as Point),
             );
             dispatch(calculateEdgeProps(selectedNodesArr[0]));
-
           }
         } else {
           dispatch(discardSelection());
@@ -122,11 +122,10 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     },
     [props.activeHandler, isDraggingNode.current, selectedNodesArr, nodeMap],
   );
-  //   , [props.activeHandler,isDraggingNode.current,selectedNodesArr,dispatch],
-  // );
+
   const createNodeHandler = useCallback(
     (e: MouseEvent) => {
-      const id=uuidv4().slice(0,5);
+      const id = uuidv4().slice(0, 5);
       const dto: GraphNodeProps = {
         id,
         name: `Node ${id}`, // Optional name for the node
@@ -172,6 +171,23 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     }
   }, [isAddingAnEdge, selectedNodesArr]);
 
+  const [isRemovingAnEdge, setIsRemovingAnEdge] = useState<boolean>(false);
+  useEffect(() => {
+    if (isRemovingAnEdge) {
+      if (selectedNodesArr.length >= 2) {
+        const copy = structuredClone(selectedNodesArr);
+        const nodeA = copy.shift() as GraphNodeProps;
+
+        const nodeB = copy.shift() as GraphNodeProps;
+        console.log('nodeA.id !== nodeB.id:',nodeA.id !== nodeB.id)
+        if (nodeA.id !== nodeB.id) {
+          dispatch(removeEdge(`${nodeA.id}-${nodeB.id}`));
+        }
+        dispatch(discardSelection());
+      }
+    }
+  }, [isRemovingAnEdge, selectedNodesArr]);
+
   // General handler for activeHandler-related events
   const handleEvent = useCallback(
     (e: MouseEvent) => {
@@ -187,13 +203,18 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     const divElement = divRef.current;
     if (props.activeHandler === "pointer" && divElement) {
       //pointer
-      handleMouseDragEventController(true);
+      setIsMouseDownListenerActive(true);
       changeNodesActiveState(true);
     } else if (props.activeHandler === "test" && divElement && nodeMap) {
       //notemptyblocvk:)
+    } else if (props.activeHandler === "disconnect" && divElement && edgeMap) {
+      changeNodesActiveState(false);
+      setIsRemovingAnEdge(true);
+      divElement.addEventListener("click", selectionHandler);
+      console.log("removeEdgeHandler added");
     } else if (props.activeHandler === "drag" && divElement && nodeMap) {
       isDraggingNode.current = true;
-      handleMouseDragEventController(true);
+      setIsMouseDownListenerActive(true);
       changeNodesActiveState(false);
       divElement.addEventListener("mousemove", dragNodeHandler);
       divElement.addEventListener("mousedown", selectionHandler);
@@ -218,10 +239,11 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         divElement.removeEventListener("click", handleEvent);
         divElement.removeEventListener("mousedown", selectionHandler);
         divElement.removeEventListener("mousemove", dragNodeHandler);
-        handleMouseDragEventController(false);
+        setIsMouseDownListenerActive(false);
         isDraggingNode.current = false;
         setIsAddingAnEdge(false);
-        handleMouseDragEventController(false);
+        setIsRemovingAnEdge(false);
+        setIsMouseDownListenerActive(false);
         console.log("Event listeners removed");
       }
     };

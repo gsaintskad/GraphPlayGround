@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNode,
-  discardSelection,
+  discardSelection, removeNode,
   selectNode,
   setNodeCoordinates,
   setNodesIsActive,
@@ -26,7 +26,7 @@ import { RootState } from "../../redux/store.ts";
 import {
   addEdge,
   calculateEdgeProps,
-  removeEdge,
+  removeEdge, removeEdgesForNode,
   setEdgesIsActive,
 } from "@/redux/GraphEdges/actionCreator.ts";
 
@@ -137,13 +137,23 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         isActive: true,
       };
       dispatch(addNode(dto));
-
-      console.log(
-        `Mouse clicked at coordinates: (${e.offsetX}, ${e.offsetY}) during ${props.activeHandler}`,
-      );
     },
     [props.activeHandler],
   );
+
+  const [isRemovingNode, setIsRemovingNode] = useState<boolean>(false);
+  useEffect(() => {
+    if(isRemovingNode){
+
+      console.log(selectedNodesArr);
+      if (selectedNodesArr.length > 0) {
+        dispatch(removeNode(selectedNodesArr[0].id));
+        dispatch(removeEdgesForNode(selectedNodesArr[0].id));
+        dispatch(discardSelection());
+      }
+    }
+  }, [props.activeHandler,isRemovingNode,selectedNodesArr]);
+
 
   //addEdgeHandler
   const [isAddingAnEdge, setIsAddingAnEdge] = useState<boolean>(false);
@@ -205,7 +215,18 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       //pointer
       setIsMouseDownListenerActive(true);
       changeNodesActiveState(true);
-    } else if (props.activeHandler === "test" && divElement && nodeMap) {
+    }
+    else if (props.activeHandler === "create" && divElement) {
+      divElement.addEventListener("click", createNodeHandler);
+      changeNodesActiveState(true);
+      console.log("CreateNodeHandler added");
+    }
+    else if (props.activeHandler === "remove" && divElement && nodeMap) {
+      setIsRemovingNode(true);
+      changeNodesActiveState(false);
+      divElement.addEventListener("click", selectionHandler);
+    }
+    else if (props.activeHandler === "test" && divElement && nodeMap) {
       //notemptyblocvk:)
     } else if (props.activeHandler === "disconnect" && divElement && edgeMap) {
       changeNodesActiveState(false);
@@ -218,11 +239,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       changeNodesActiveState(false);
       divElement.addEventListener("mousemove", dragNodeHandler);
       divElement.addEventListener("mousedown", selectionHandler);
-    } else if (props.activeHandler === "create" && divElement) {
-      divElement.addEventListener("click", createNodeHandler);
-      changeNodesActiveState(true);
-      console.log("CreateNodeHandler added");
-    } else if (props.activeHandler === "connect" && divElement) {
+    }  else if (props.activeHandler === "connect" && divElement) {
       changeNodesActiveState(false);
       setIsAddingAnEdge(true);
       divElement.addEventListener("click", selectionHandler);
@@ -242,6 +259,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         setIsMouseDownListenerActive(false);
         isDraggingNode.current = false;
         setIsAddingAnEdge(false);
+        setIsRemovingNode(false);
         setIsRemovingAnEdge(false);
         setIsMouseDownListenerActive(false);
         console.log("Event listeners removed");

@@ -33,3 +33,9 @@ export const setNodeCoordinates=(id:string,nodeCoordinates:Point)=>{
         payload:{nodeCoordinates,id}
     }
 }
+export const removeNode=(id:string)=>{
+    return{
+        type:a.REMOVE_NODE,
+        payload:id
+    }
+}

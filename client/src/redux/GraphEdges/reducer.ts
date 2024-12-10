@@ -29,6 +29,17 @@ const graphEdgesReducer:Reducer<stateObject<GraphEdgeProps>,AnyAction>=(state=in
             return newState;
 
         }
+        case a.REMOVE_EDGES_CONNECTING_NODE:{
+            const targetId  = action.payload as string;
+            const prevState=structuredClone(state);
+            const newState:stateObject<GraphEdgeProps> = {};
+            for (const id in prevState) {
+                if(!(id.split('-').includes(targetId))){
+                    newState[id] = prevState[id];
+                }
+            }
+            return newState;
+        }
 
         case a.SET_EDGES_IS_ACTIVE:{
             const prevState=structuredClone(state);

@@ -2,6 +2,7 @@ import * as a from "./actionTypes.ts";
 import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
 import { AnyAction, Reducer } from "@reduxjs/toolkit";
 import { Point, stateObject } from "../../../types.ts";
+import {GraphEdgeProps} from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
 
 const initialState: stateObject<GraphNodeProps> = {};
 const selectedState: GraphNodeProps[] = [];
@@ -16,6 +17,17 @@ export const graphNodesReducer: Reducer<
       const payload = action.payload as GraphNodeProps;
       prevState[payload.id] = payload;
       return prevState;
+    }
+    case a.REMOVE_NODE: {
+      const targetId  = action.payload as string;
+      const prevState=structuredClone(state);
+      const newState:stateObject<GraphNodeProps> = {};
+      for (const id in prevState) {
+        if(id!==targetId){
+          newState[id] = prevState[id];
+        }
+      }
+      return newState;
     }
     case a.SET_NODES_IS_ACTIVE: {
       const prevState = structuredClone(state);

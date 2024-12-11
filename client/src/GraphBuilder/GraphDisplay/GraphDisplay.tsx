@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 import {
   addNode,
   discardSelection,
@@ -14,15 +15,7 @@ import {
   GraphNode,
 } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
 import { GraphEdge } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
-import {
-  isLiesBetween,
-  movePoint,
-  Point,
-  stateObject,
-} from "../../../types.ts";
-
-import { Reducer } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
+import { isLiesBetween, movePoint, Point } from "../../../types.ts";
 import { RootState } from "../../redux/store.ts";
 import {
   addEdge,

@@ -18,6 +18,7 @@ export interface GraphEdgeProps {
   isActive: boolean;
   nodeSize?: number;
   width: number;
+  isDirected?: boolean;
   
 }
 const toDeg=(angle:number):number=>{
@@ -77,13 +78,17 @@ export const GraphEdge = (props: GraphEdgeProps) => {
         width: `${lenght || 300}px`,
         height: `${props.width || 20}px`,
         transform: `rotate(${angle}deg)`,
+        paddingInline:`${(props.nodeSize||90)/2}px`,
+        paddingBlock:'0px',
       }}
     >
       <DropdownMenu>
         <DropdownMenuTrigger
-          className={`bg-white shadow-2xl h-full w-full rounded-b border-2 border-gray-300`}
+          className={`bg-white shadow-2xl h-full w-full rounded-b border-2 border-gray-300 m-0 
+          ${props.isDirected?'-translate-y-2.5':''}
+          `}
         >
-          <div className={`bg-white shadow-2xl h-full w-full rounded-b`}>
+          <div className={`bg-white shadow-2xl h-full w-full rounded-b m-0`}>
 
           </div>
         </DropdownMenuTrigger>

@@ -100,7 +100,12 @@ export const GraphEdge = (props: GraphEdgeProps) => {
           <div
             className={`flex justify-center bg-white shadow-2xl h-1/2 w-full border-2 border-gray-300 rounded-sm m-0`}
           >
-            <label style={{ transform: `rotate(${-angle}deg) translateX(-10px)`}} className={'font-bold text-white'}>{props.weight}</label>
+            <label
+              style={{ transform: `rotate(${-angle}deg) translateX(-10px)` }}
+              className={"font-bold text-white"}
+            >
+              {props.weight}
+            </label>
           </div>
           {props.isDirected ? (
             <div

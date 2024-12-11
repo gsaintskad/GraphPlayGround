@@ -67,10 +67,11 @@ export const GraphBuilder = (props:{style:{width:string,height:string}}) => {
           <Button onClick={() => toggleHandler("create")}>create</Button>
           <Button onClick={() => toggleHandler("remove")}>remove</Button>
           <Button onClick={() => toggleHandler("connect")}>connect</Button>
+          <Button onClick={() => toggleHandler("directConnect")}>direct connect</Button>
           <Button onClick={() => toggleHandler("disconnect")}>
             disconnect
           </Button>
-          <Button onClick={() => toggleHandler("test")}>test</Button>
+
         </div>
         <GraphDisplay activeHandler={activeHandler} />
       </div>

@@ -149,7 +149,9 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         const nodeA = copy.shift() as GraphNodeProps;
 
         const nodeB = copy.shift() as GraphNodeProps;
-        if (nodeA.id !== nodeB.id) {
+        const isDirected: boolean = props.activeHandler === "directConnect";
+
+        if ((nodeA.id !== nodeB.id)) {
           dispatch(
             addEdge({
               nodeA,
@@ -158,6 +160,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
               width: 10,
               id: `${nodeA.id}-${nodeB.id}`,
               isActive: true,
+              isDirected,
             }),
           );
         }
@@ -213,7 +216,11 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       changeNodesActiveState(false);
       divElement.addEventListener("mousemove", dragNodeHandler);
       divElement.addEventListener("mousedown", selectionHandler);
-    } else if (props.activeHandler === "connect" && divElement) {
+    } else if (
+      (props.activeHandler === "connect" ||
+        props.activeHandler === "directConnect") &&
+      divElement
+    ) {
       changeNodesActiveState(false);
       setIsAddingAnEdge(true);
       divElement.addEventListener("click", selectionHandler);

@@ -7,6 +7,11 @@ export enum GraphEdgesActionTypes {
   SET_EDGES_IS_ACTIVE = "SET_EDGES_IS_ACTIVE",
   CALCULATE_PROPS = "CALCULATE_PROPS",
   REMOVE_EDGES_CONNECTING_NODE = "REMOVE_EDGES_CONNECTING_NODE",
+  SET_WEIGHT = "SET_WEIGHT",
+}
+interface setWeightAction {
+  type: GraphEdgesActionTypes.SET_WEIGHT;
+  payload: { id: string; weight: number };
 }
 interface addEdgeAction {
   type: GraphEdgesActionTypes.ADD_EDGE;
@@ -33,4 +38,5 @@ export type GraphEdgeAction =
   | removeEdgeAction
   | calculateEdgePropsAction
   | setEdgeIsActive
+  | setWeightAction
   | removeEdgesForNodeAction;

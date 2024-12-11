@@ -1,6 +1,6 @@
-import {GraphEdgesActionTypes, GraphEdgeAction} from "./actionTypes.ts";
-import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
-import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
+import {GraphEdgeAction, GraphEdgesActionTypes} from "./actionTypes.ts";
+import {GraphEdgeProps} from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
+import {GraphNodeProps} from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
 
 export const addEdge = (edgeDto: GraphEdgeProps):GraphEdgeAction => {
   return {
@@ -32,3 +32,9 @@ export const removeEdgesForNode = (nodeId: string):GraphEdgeAction => {
     payload: nodeId,
   };
 };
+export const setWeight=(id:string,weight:number):GraphEdgeAction=>{
+  return{
+    type:GraphEdgesActionTypes.SET_WEIGHT,
+    payload: {weight,id},
+  }
+}

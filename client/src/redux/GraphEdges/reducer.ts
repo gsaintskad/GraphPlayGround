@@ -1,15 +1,14 @@
 import { GraphEdgeAction, GraphEdgesActionTypes } from "./actionTypes.ts";
-import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
-import { AnyAction, Reducer } from "@reduxjs/toolkit";
+import { Reducer } from "@reduxjs/toolkit";
 import { stateObject } from "../../../types.ts";
 import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
 
 const initialState: stateObject<GraphEdgeProps> = {};
 
-const graphEdgesReducer: Reducer<stateObject<GraphEdgeProps>, GraphEdgeAction> = (
-  state = initialState,
-  action,
-): stateObject<GraphEdgeProps> => {
+const graphEdgesReducer: Reducer<
+  stateObject<GraphEdgeProps>,
+  GraphEdgeAction
+> = (state = initialState, action): stateObject<GraphEdgeProps> => {
   switch (action.type) {
     case GraphEdgesActionTypes.ADD_EDGE: {
       const prevState = structuredClone(state);
@@ -29,17 +28,20 @@ const graphEdgesReducer: Reducer<stateObject<GraphEdgeProps>, GraphEdgeAction> =
       return newState;
     }
     case GraphEdgesActionTypes.REMOVE_EDGES_CONNECTING_NODE: {
-      const targetId = action.payload as string;
       const prevState = structuredClone(state);
       const newState: stateObject<GraphEdgeProps> = {};
       for (const id in prevState) {
-        if (!id.split("-").includes(targetId)) {
+        if (!id.split("-").includes(action.payload)) {
           newState[id] = prevState[id];
         }
       }
       return newState;
     }
-
+    case GraphEdgesActionTypes.SET_WEIGHT: {
+      const prevState = structuredClone(state);
+      prevState[action.payload.id].weight = action.payload.weight;
+      return prevState;
+    }
     case GraphEdgesActionTypes.SET_EDGES_IS_ACTIVE: {
       const prevState = structuredClone(state);
       for (const k in prevState) {

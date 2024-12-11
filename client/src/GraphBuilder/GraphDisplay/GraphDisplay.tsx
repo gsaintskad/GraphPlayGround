@@ -108,7 +108,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         }
       }
     },
-    [props.activeHandler, isDraggingNode.current, selectedNodesArr],
+    [props.activeHandler, isDraggingNode.current, selectedNodesArr.length],
   );
 
   const createNodeHandler = useCallback(

@@ -3,20 +3,21 @@ import {GraphNodeProps} from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.ts
 import {Point} from "../../../types.ts";
 
 import {GraphNodeActionTypes,GraphNodeAction} from "./actionTypes.ts";
+import {rootAction} from "@/redux/store.ts";
 
-export const addNode = (nodeDto:GraphNodeProps):GraphNodeAction=>{
+export const addNode = (nodeDto:GraphNodeProps):rootAction=>{
     return {
         type:GraphNodeActionTypes.ADD_NODE,
         payload:nodeDto
     }
 }
-export const setNodesIsActive=(isActive:boolean):GraphNodeAction=>{
+export const setNodesIsActive=(isActive:boolean):rootAction=>{
     return {
         type: GraphNodeActionTypes.SET_NODES_IS_ACTIVE,
         payload:isActive
     }
 }
-export const selectNode = (nodeDto:GraphNodeProps):GraphNodeAction=>{
+export const selectNode = (nodeDto:GraphNodeProps):rootAction=>{
     return {
         type:GraphNodeActionTypes.SELECT_NODE,
         payload:nodeDto
@@ -28,13 +29,13 @@ export const discardSelection=():GraphNodeAction=>{
         payload:null
     }
 }
-export const setNodeCoordinates=(id:string,nodeCoordinates:Point):GraphNodeAction=>{
+export const setNodeCoordinates=(id:string,nodeCoordinates:Point):rootAction=>{
     return {
         type:GraphNodeActionTypes.MOVE_NODE,
         payload:{nodeCoordinates,id}
     }
 }
-export const removeNode=(id:string):GraphNodeAction=>{
+export const removeNode=(id:string):rootAction=>{
     return{
         type:GraphNodeActionTypes.REMOVE_NODE,
         payload:id

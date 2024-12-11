@@ -3,16 +3,17 @@ import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.
 import { AnyAction, Reducer } from "@reduxjs/toolkit";
 import { Point, stateObject } from "../../../types.ts";
 import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
+import {rootAction} from "@/redux/store.ts";
 
 const initialState: stateObject<GraphNodeProps> = {};
 const selectedState: GraphNodeProps[] = [];
 
 export const graphNodesReducer: Reducer<
   stateObject<GraphNodeProps>,
-  GraphNodeAction
+  rootAction
 > = (
   state = initialState,
-  action: GraphNodeAction,
+  action: rootAction,
 ): stateObject<GraphNodeProps> => {
   switch (action.type) {
     case GraphNodeActionTypes.ADD_NODE: {
@@ -54,8 +55,8 @@ export const graphNodesReducer: Reducer<
 };
 export const selectedGraphNodesReducer: Reducer<
   GraphNodeProps[],
-  GraphNodeAction
-> = (state = selectedState, action: GraphNodeAction): GraphNodeProps[] => {
+  rootAction
+> = (state = selectedState, action: rootAction): GraphNodeProps[] => {
   switch (action.type) {
     case GraphNodeActionTypes.SELECT_NODE: {
       const prevState = structuredClone(state);

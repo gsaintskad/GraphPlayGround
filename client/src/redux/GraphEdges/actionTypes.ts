@@ -1,5 +1,6 @@
 import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
 import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
+import { AnyAction } from "@reduxjs/toolkit";
 
 export enum GraphEdgesActionTypes {
   ADD_EDGE = "ADD_EDGE",
@@ -9,27 +10,27 @@ export enum GraphEdgesActionTypes {
   REMOVE_EDGES_CONNECTING_NODE = "REMOVE_EDGES_CONNECTING_NODE",
   SET_WEIGHT = "SET_WEIGHT",
 }
-interface setWeightAction {
+interface setWeightAction extends AnyAction {
   type: GraphEdgesActionTypes.SET_WEIGHT;
   payload: { id: string; weight: number };
 }
-interface addEdgeAction {
+interface addEdgeAction extends AnyAction {
   type: GraphEdgesActionTypes.ADD_EDGE;
   payload: GraphEdgeProps;
 }
-interface setEdgeIsActive {
+interface setEdgeIsActive extends AnyAction {
   type: GraphEdgesActionTypes.SET_EDGES_IS_ACTIVE;
   payload: boolean;
 }
-interface calculateEdgePropsAction {
+interface calculateEdgePropsAction extends AnyAction {
   type: GraphEdgesActionTypes.CALCULATE_PROPS;
   payload: GraphNodeProps;
 }
-interface removeEdgeAction {
+interface removeEdgeAction extends AnyAction {
   type: GraphEdgesActionTypes.REMOVE_EDGE;
   payload: string;
 }
-interface removeEdgesForNodeAction {
+interface removeEdgesForNodeAction extends AnyAction {
   type: GraphEdgesActionTypes.REMOVE_EDGES_CONNECTING_NODE;
   payload: string;
 }

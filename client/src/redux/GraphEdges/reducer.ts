@@ -2,13 +2,14 @@ import { GraphEdgeAction, GraphEdgesActionTypes } from "./actionTypes.ts";
 import { Reducer } from "@reduxjs/toolkit";
 import { stateObject } from "../../../types.ts";
 import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
+import {rootAction} from "@/redux/store.ts";
 
 const initialState: stateObject<GraphEdgeProps> = {};
 
 const graphEdgesReducer: Reducer<
   stateObject<GraphEdgeProps>,
-  GraphEdgeAction
-> = (state = initialState, action): stateObject<GraphEdgeProps> => {
+  rootAction
+> = (state = initialState, action:rootAction): stateObject<GraphEdgeProps> => {
   switch (action.type) {
     case GraphEdgesActionTypes.ADD_EDGE: {
       const prevState = structuredClone(state);

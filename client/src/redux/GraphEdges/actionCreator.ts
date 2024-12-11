@@ -1,34 +1,34 @@
-import * as a from "./actionTypes.ts";
+import {GraphEdgesActionTypes, GraphEdgeAction} from "./actionTypes.ts";
 import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
 import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
 
-export const addEdge = (edgeDto: GraphEdgeProps) => {
+export const addEdge = (edgeDto: GraphEdgeProps):GraphEdgeAction => {
   return {
-    type: a.ADD_EDGE,
+    type: GraphEdgesActionTypes.ADD_EDGE,
     payload: edgeDto,
   };
 };
-export const setEdgesIsActive = (isActive: boolean) => {
+export const setEdgesIsActive = (isActive: boolean):GraphEdgeAction => {
   return {
-    type: a.SET_EDGES_IS_ACTIVE,
+    type: GraphEdgesActionTypes.SET_EDGES_IS_ACTIVE,
     payload: isActive,
   };
 };
-export const calculateEdgeProps = (nodeDto: GraphNodeProps) => {
+export const calculateEdgeProps = (nodeDto: GraphNodeProps):GraphEdgeAction => {
   return {
-    type: a.CALCULATE_PROPS,
+    type: GraphEdgesActionTypes.CALCULATE_PROPS,
     payload: nodeDto,
   };
 };
-export const removeEdge = (id: string) => {
+export const removeEdge = (id: string):GraphEdgeAction => {
   return {
-    type: a.REMOVE_EDGE,
+    type: GraphEdgesActionTypes.REMOVE_EDGE,
     payload: id,
   };
 };
-export const removeEdgesForNode = (id: string) => {
+export const removeEdgesForNode = (nodeId: string):GraphEdgeAction => {
   return {
-    type: a.REMOVE_EDGES_CONNECTING_NODE,
-    payload: id,
+    type: GraphEdgesActionTypes.REMOVE_EDGES_CONNECTING_NODE,
+    payload: nodeId,
   };
 };

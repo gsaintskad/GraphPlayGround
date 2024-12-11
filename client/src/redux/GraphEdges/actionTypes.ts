@@ -1,6 +1,36 @@
-export type GraphEdgesActionsTypes = 'ADD_EDGE' |'CALCULATE_PROPS'| 'REMOVE_EDGE'|'REMOVE_EDGES_CONNECTING_NODE'|'SET_EDGES_IS_ACTIVE';
-export const ADD_EDGE:GraphEdgesActionsTypes = 'ADD_EDGE';
-export const REMOVE_EDGE:GraphEdgesActionsTypes = 'REMOVE_EDGE';
-export const SET_EDGES_IS_ACTIVE:GraphEdgesActionsTypes ='SET_EDGES_IS_ACTIVE';
-export const CALCULATE_PROPS:GraphEdgesActionsTypes = 'CALCULATE_PROPS';
-export const REMOVE_EDGES_CONNECTING_NODE:GraphEdgesActionsTypes='REMOVE_EDGES_CONNECTING_NODE';
+import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
+import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
+
+export enum GraphEdgesActionTypes {
+  ADD_EDGE = "ADD_EDGE",
+  REMOVE_EDGE = "REMOVE_EDGE",
+  SET_EDGES_IS_ACTIVE = "SET_EDGES_IS_ACTIVE",
+  CALCULATE_PROPS = "CALCULATE_PROPS",
+  REMOVE_EDGES_CONNECTING_NODE = "REMOVE_EDGES_CONNECTING_NODE",
+}
+interface addEdgeAction {
+  type: GraphEdgesActionTypes.ADD_EDGE;
+  payload: GraphEdgeProps;
+}
+interface setEdgeIsActive {
+  type: GraphEdgesActionTypes.SET_EDGES_IS_ACTIVE;
+  payload: boolean;
+}
+interface calculateEdgePropsAction {
+  type: GraphEdgesActionTypes.CALCULATE_PROPS;
+  payload: GraphNodeProps;
+}
+interface removeEdgeAction {
+  type: GraphEdgesActionTypes.REMOVE_EDGE;
+  payload: string;
+}
+interface removeEdgesForNodeAction {
+  type: GraphEdgesActionTypes.REMOVE_EDGES_CONNECTING_NODE;
+  payload: string;
+}
+export type GraphEdgeAction =
+  | addEdgeAction
+  | removeEdgeAction
+  | calculateEdgePropsAction
+  | setEdgeIsActive
+  | removeEdgesForNodeAction;

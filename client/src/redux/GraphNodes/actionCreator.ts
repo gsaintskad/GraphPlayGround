@@ -1,41 +1,42 @@
-import * as a from './actionTypes.ts'
+
 import {GraphNodeProps} from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
 import {Point} from "../../../types.ts";
-import {Simulate} from "react-dom/test-utils";
 
-export const addNode = (nodeDto:GraphNodeProps)=>{
+import {GraphNodeActionTypes,GraphNodeAction} from "./actionTypes.ts";
+
+export const addNode = (nodeDto:GraphNodeProps):GraphNodeAction=>{
     return {
-        type:a.ADD_NODE,
+        type:GraphNodeActionTypes.ADD_NODE,
         payload:nodeDto
     }
 }
-export const setNodesIsActive=(isActive:boolean)=>{
+export const setNodesIsActive=(isActive:boolean):GraphNodeAction=>{
     return {
-        type: a.SET_NODES_IS_ACTIVE,
+        type: GraphNodeActionTypes.SET_NODES_IS_ACTIVE,
         payload:isActive
     }
 }
-export const selectNode = (nodeDto:GraphNodeProps)=>{
+export const selectNode = (nodeDto:GraphNodeProps):GraphNodeAction=>{
     return {
-        type:a.SELECT_NODE,
+        type:GraphNodeActionTypes.SELECT_NODE,
         payload:nodeDto
     }
 }
-export const discardSelection=()=>{
+export const discardSelection=():GraphNodeAction=>{
     return {
-        type:a.DISCARD_SELECTION,
+        type:GraphNodeActionTypes.DISCARD_SELECTION,
         payload:null
     }
 }
-export const setNodeCoordinates=(id:string,nodeCoordinates:Point)=>{
+export const setNodeCoordinates=(id:string,nodeCoordinates:Point):GraphNodeAction=>{
     return {
-        type:a.MOVE_NODE,
+        type:GraphNodeActionTypes.MOVE_NODE,
         payload:{nodeCoordinates,id}
     }
 }
-export const removeNode=(id:string)=>{
+export const removeNode=(id:string):GraphNodeAction=>{
     return{
-        type:a.REMOVE_NODE,
+        type:GraphNodeActionTypes.REMOVE_NODE,
         payload:id
     }
 }

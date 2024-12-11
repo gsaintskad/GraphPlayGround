@@ -89,6 +89,12 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     },
     [nodeMap],
   );
+
+  /*
+  page.bundle.js:3 Warning: Maximum update depth exceeded. This can happen when
+  a component calls setState inside useEffect, but useEffect either doesn't
+  have a dependency array, or one of the dependencies changes on every render.
+   */
   const isDraggingNode = useRef(false);
   const dragNodeHandler = useCallback(
     async (e: MouseEvent) => {
@@ -151,7 +157,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         const nodeB = copy.shift() as GraphNodeProps;
         const isDirected: boolean = props.activeHandler === "directConnect";
 
-        if ((nodeA.id !== nodeB.id)) {
+        if (nodeA.id !== nodeB.id) {
           dispatch(
             addEdge({
               nodeA,

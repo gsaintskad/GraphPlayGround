@@ -90,7 +90,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
           )
         ) {
           dispatch(selectNode(node));
-
           break;
         }
       }
@@ -215,12 +214,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       setIsRemovingNode(true);
       changeNodesActiveState(false);
       divElement.addEventListener("click", selectionHandler);
-    } else if (props.activeHandler === "test" && divElement && nodeMap) {
-      //notemptyblocvk:)
-    } else if (props.activeHandler === "disconnect" && divElement && edgeMap) {
-      changeNodesActiveState(false);
-      setIsRemovingAnEdge(true);
-      divElement.addEventListener("click", selectionHandler);
     } else if (props.activeHandler === "drag" && divElement && nodeMap) {
       isDraggingNode.current = true;
       setIsMouseDownListenerActive(true);
@@ -231,6 +224,12 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       changeNodesActiveState(false);
       setIsAddingAnEdge(true);
       divElement.addEventListener("click", selectionHandler);
+    } else if (props.activeHandler === "disconnect" && divElement && edgeMap) {
+      changeNodesActiveState(false);
+      setIsRemovingAnEdge(true);
+      divElement.addEventListener("click", selectionHandler);
+    } else if (props.activeHandler === "test" && divElement && nodeMap) {
+      //notemptyblocvk:)
     } else if (props.activeHandler && divElement) {
       divElement.addEventListener("click", handleEvent);
     }

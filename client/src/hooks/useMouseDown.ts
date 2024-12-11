@@ -1,14 +1,15 @@
-import {setNodesIsActive} from "@/redux/GraphNodes/actionCreator.ts";
-import {setEdgesIsActive} from "@/redux/GraphEdges/actionCreator.ts";
-import {useCallback, useRef} from "react";
+import { setNodesIsActive } from "@/redux/GraphNodes/actionCreator.ts";
+import { setEdgesIsActive } from "@/redux/GraphEdges/actionCreator.ts";
+import { useCallback, useRef } from "react";
 import React from "react";
 
-const useMouseDown = ({divRef:}) => {
-
+const useMouseDown = (
+  divRef: React.MutableRefObject<HTMLDivElement | null>,
+) => {
   const changeNodesActiveState = (isActive: boolean) => {
     const divElement = divRef.current;
-    dispatch(setNodesIsActive(isActive));
-    dispatch(setEdgesIsActive(isActive)); //??????????
+    // dispatch(setNodesIsActive(isActive));
+    // dispatch(setEdgesIsActive(isActive)); //??????????
     divElement?.style.setProperty("z-index", isActive ? "30" : "50");
   };
   const isMouseDown = useRef(false);
@@ -30,5 +31,4 @@ const useMouseDown = ({divRef:}) => {
       }
     }
   };
-
-}
+};

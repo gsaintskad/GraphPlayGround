@@ -98,20 +98,35 @@ const GraphDisplay = (props: GraphDisplayProps) => {
 
   const moveNodeHandler = useCallback(
       (e: MouseEvent) => {
-          if (selectedNodesArr.length > 0) {
-            dispatch(
-              setNodeCoordinates(selectedNodesArr[0].id, {
-                x: e.offsetX - nodeSize / 2,
-                y: e.offsetY - nodeSize / 2,
-              } as Point),
-            );
-            dispatch(calculateEdgeProps(selectedNodesArr[0]));
-            dispatch(discardSelection());
+        new Promise<GraphNodeProps>((resolve, reject) => {
+          if (selectedNodesArr.length === 0) {
+            reject("No nodes selected.");
+            return;
           }
 
-    },
-    [props.activeHandler, selectedNodesArr.length],
+          const nodeId = selectedNodesArr[0].id;
+          const coordinates = {
+            x: e.offsetX - nodeSize / 2,
+            y: e.offsetY - nodeSize / 2,
+          };
+
+          dispatch(setNodeCoordinates(nodeId, coordinates as Point));
+          resolve(selectedNodesArr[0]);
+        })
+            .then((node: GraphNodeProps) => {
+              dispatch(calculateEdgeProps(node));
+              return node;
+            })
+            .then(() => {
+              dispatch(discardSelection());
+            })
+            .catch((error) => {
+              console.log("Error updating node coordinates:", error);
+            });
+      },
+      [dispatch, selectedNodesArr]
   );
+
 
   const createNodeHandler = useCallback(
     (e: MouseEvent) => {

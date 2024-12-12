@@ -63,7 +63,7 @@ export const GraphBuilder = (props:{style:{width:string,height:string}}) => {
           `}
         >
           <Button onClick={() => toggleHandler("pointer")}>pointer</Button>
-          <Button onClick={() => toggleHandler("drag")}>drag</Button>
+          <Button onClick={() => toggleHandler("move")}>move</Button>
           <Button onClick={() => toggleHandler("create")}>create</Button>
           <Button onClick={() => toggleHandler("remove")}>remove</Button>
           <Button onClick={() => toggleHandler("connect")}>connect</Button>

@@ -95,11 +95,9 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   a component calls setState inside useEffect, but useEffect either doesn't
   have a dependency array, or one of the dependencies changes on every render.
    */
-  const isDraggingNode = useRef(false);
-  const dragNodeHandler = useCallback(
-    async (e: MouseEvent) => {
-      if (isDraggingNode.current) {
-        if (isMouseDown.current) {
+
+  const moveNodeHandler = useCallback(
+      (e: MouseEvent) => {
           if (selectedNodesArr.length > 0) {
             dispatch(
               setNodeCoordinates(selectedNodesArr[0].id, {
@@ -108,13 +106,11 @@ const GraphDisplay = (props: GraphDisplayProps) => {
               } as Point),
             );
             dispatch(calculateEdgeProps(selectedNodesArr[0]));
+            dispatch(discardSelection());
           }
-        } else {
-          dispatch(discardSelection());
-        }
-      }
+
     },
-    [props.activeHandler, isDraggingNode.current, selectedNodesArr.length],
+    [props.activeHandler, selectedNodesArr.length],
   );
 
   const createNodeHandler = useCallback(
@@ -147,9 +143,9 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   }, [props.activeHandler, isRemovingNode, selectedNodesArr]);
 
   //addEdgeHandler
-  const [isAddingAnEdge, setIsAddingAnEdge] = useState<boolean>(false);
+  const [isAddingEdge, setIsAddingAnEdge] = useState<boolean>(false);
   useEffect(() => {
-    if (isAddingAnEdge) {
+    if (isAddingEdge) {
       if (selectedNodesArr.length >= 2) {
         const copy = structuredClone(selectedNodesArr);
         const nodeA = copy.shift() as GraphNodeProps;
@@ -173,7 +169,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         dispatch(discardSelection());
       }
     }
-  }, [isAddingAnEdge, selectedNodesArr]);
+  }, [isAddingEdge, selectedNodesArr]);
 
   const [isRemovingAnEdge, setIsRemovingAnEdge] = useState<boolean>(false);
   useEffect(() => {
@@ -216,12 +212,12 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       setIsRemovingNode(true);
       changeNodesActiveState(false);
       divElement.addEventListener("click", selectionHandler);
-    } else if (props.activeHandler === "drag" && divElement && nodeMap) {
-      isDraggingNode.current = true;
+    } else if (props.activeHandler === "move" && divElement && nodeMap) {
+
       setIsMouseDownListenerActive(true);
       changeNodesActiveState(false);
-      divElement.addEventListener("mousemove", dragNodeHandler);
-      divElement.addEventListener("mousedown", selectionHandler);
+      divElement.addEventListener("click", moveNodeHandler);
+      divElement.addEventListener("click", selectionHandler);
     } else if (
       (props.activeHandler === "connect" ||
         props.activeHandler === "directConnect") &&
@@ -245,10 +241,10 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         divElement.removeEventListener("click", createNodeHandler);
         divElement.removeEventListener("click", selectionHandler);
         divElement.removeEventListener("click", handleEvent);
-        divElement.removeEventListener("mousedown", selectionHandler);
-        divElement.removeEventListener("mousemove", dragNodeHandler);
+
+        divElement.removeEventListener("click", moveNodeHandler);
         setIsMouseDownListenerActive(false);
-        isDraggingNode.current = false;
+
         setIsAddingAnEdge(false);
         setIsRemovingNode(false);
         setIsRemovingAnEdge(false);
@@ -257,7 +253,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     };
   }, [
     props.activeHandler,
-    isDraggingNode.current,
+    selectedNodesArr.length,
     isMouseDown.current,
     createNodeHandler,
     handleEvent,

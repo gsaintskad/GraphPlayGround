@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import {
   addNode,
@@ -95,38 +95,27 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   a component calls setState inside useEffect, but useEffect either doesn't
   have a dependency array, or one of the dependencies changes on every render.
    */
-
+  const [batchComplete, setBatchComplete] = useState(false);
   const moveNodeHandler = useCallback(
-      (e: MouseEvent) => {
-        new Promise<GraphNodeProps>((resolve, reject) => {
-          if (selectedNodesArr.length === 0) {
-            reject("No nodes selected.");
-            return;
-          }
+    (e: MouseEvent) => {
+      if (selectedNodesArr.length > 0) {
+        const nodeId = selectedNodesArr[0].id;
+        const coordinates = {
+          x: e.offsetX - nodeSize / 2,
+          y: e.offsetY - nodeSize / 2,
+        };
 
-          const nodeId = selectedNodesArr[0].id;
-          const coordinates = {
-            x: e.offsetX - nodeSize / 2,
-            y: e.offsetY - nodeSize / 2,
-          };
-
+        setBatchComplete(false); // Reset before batching
+        batch(() => {
           dispatch(setNodeCoordinates(nodeId, coordinates as Point));
-          resolve(selectedNodesArr[0]);
-        })
-            .then((node: GraphNodeProps) => {
-              dispatch(calculateEdgeProps(node));
-              return node;
-            })
-            .then(() => {
-              dispatch(discardSelection());
-            })
-            .catch((error) => {
-              console.log("Error updating node coordinates:", error);
-            });
-      },
-      [dispatch, selectedNodesArr]
+          dispatch(calculateEdgeProps(selectedNodesArr[0]));
+          dispatch(discardSelection());
+        });
+        setBatchComplete(true); // Mark batch as complete
+      }
+    },
+    [selectedNodesArr],
   );
-
 
   const createNodeHandler = useCallback(
     (e: MouseEvent) => {
@@ -140,6 +129,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         },
         radius: nodeSize,
         isActive: true,
+        algoritmState: "primary",
       };
       dispatch(addNode(dto));
     },
@@ -228,7 +218,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       changeNodesActiveState(false);
       divElement.addEventListener("click", selectionHandler);
     } else if (props.activeHandler === "move" && divElement && nodeMap) {
-
       setIsMouseDownListenerActive(true);
       changeNodesActiveState(false);
       divElement.addEventListener("click", moveNodeHandler);
@@ -275,11 +264,18 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   ]);
 
   // Render the GraphNodes based on the nodeMap
+
   const renderNodes = useMemo(() => {
-    return Object.values(nodeMap).map((node) => (
-      <GraphNode key={node.id} {...node} />
-    ));
-  }, [nodeMap]);
+    return Object.values(nodeMap).map((node) => {
+      return selectedNodesArr.some(
+        (selectedNode) => node.id === selectedNode.id,
+      ) ? (
+        <GraphNode key={node.id} {...node} algoritmState={"selected"} />
+      ) : (
+        <GraphNode key={node.id} {...node} />
+      );
+    });
+  }, [nodeMap, selectedNodesArr]);
 
   const renderEdges = useMemo(() => {
     return Object.values(edgeMap).map((edge) => (

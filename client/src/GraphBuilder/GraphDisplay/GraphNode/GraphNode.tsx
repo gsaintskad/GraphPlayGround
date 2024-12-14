@@ -25,6 +25,7 @@ export const GraphNode = (props: GraphNodeProps) => {
     stateColorMap.set('secondary','bg-blue-700')
     stateColorMap.set('comparing','bg-yellow-700')
     stateColorMap.set('visited','bg-gray-700')
+    stateColorMap.set('selected','bg-sky-700')
 
     return stateColorMap;
   }, []);

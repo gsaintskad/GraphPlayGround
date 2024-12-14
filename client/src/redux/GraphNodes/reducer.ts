@@ -4,7 +4,10 @@ import { AnyAction, Reducer } from "@reduxjs/toolkit";
 import { Point, stateObject } from "../../../types.ts";
 import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
 import {rootAction} from "@/redux/store.ts";
-
+import {discardSelection} from "@/redux/GraphNodes/actionCreator.ts";
+import {useDispatch} from "react-redux";
+import store from "@/redux/store.ts";
+import {calculateEdgeProps} from "@/redux/GraphEdges/actionCreator.ts";
 const initialState: stateObject<GraphNodeProps> = {};
 const selectedState: GraphNodeProps[] = [];
 
@@ -47,6 +50,7 @@ export const graphNodesReducer: Reducer<
         ...prevState[payload.id],
         coordinates: payload.nodeCoordinates,
       };
+      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
       return prevState;
     }
     default:

@@ -8,6 +8,7 @@ export default {
     "bg-blue-700",
     "bg-gray-700",
     "bg-yellow-700",
+    "bg-sky-700",
   ],
   theme: {
     extend: {

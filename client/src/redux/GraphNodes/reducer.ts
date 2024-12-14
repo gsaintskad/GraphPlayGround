@@ -32,6 +32,9 @@ export const graphNodesReducer: Reducer<
       }
       return newState;
     }
+    case GraphNodeActionTypes.DISCARD_NODE_MAP:{
+      return {} satisfies stateObject<string>
+    }
     case GraphNodeActionTypes.SET_NODES_IS_ACTIVE: {
       const prevState = structuredClone(state);
       for (const k in prevState) {

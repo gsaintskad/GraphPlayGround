@@ -34,6 +34,12 @@ export const setNodeCoordinates=(id:string,nodeCoordinates:Point):rootAction=>{
         payload:{nodeCoordinates,id}
     }
 }
+export const discardNodeMap=():rootAction=>{
+    return {
+        type:GraphNodeActionTypes.DISCARD_NODE_MAP,
+        payload:null
+    }
+}
 export const removeNode=(id:string):rootAction=>{
     return{
         type:GraphNodeActionTypes.REMOVE_NODE,

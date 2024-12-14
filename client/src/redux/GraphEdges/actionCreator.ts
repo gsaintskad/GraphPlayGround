@@ -15,6 +15,12 @@ export const setEdgesIsActive = (isActive: boolean):rootAction => {
     payload: isActive,
   };
 };
+export const discardEdgeMap=()=>{
+  return {
+    type:GraphEdgesActionTypes.DISCARD_EDGE_MAP,
+    payload:null
+  }
+}
 // export const calculateEdgeProps = (nodeDto: GraphNodeProps):rootAction => {
 //   return {
 //     type: GraphEdgesActionTypes.CALCULATE_PROPS,

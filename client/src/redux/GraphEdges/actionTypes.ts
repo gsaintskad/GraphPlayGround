@@ -9,6 +9,7 @@ export enum GraphEdgesActionTypes {
   CALCULATE_PROPS = "CALCULATE_PROPS",
   REMOVE_EDGES_CONNECTING_NODE = "REMOVE_EDGES_CONNECTING_NODE",
   SET_WEIGHT = "SET_WEIGHT",
+  DISCARD_EDGE_MAP = "DISCARD_EDGE_MAP",
 }
 interface setWeightAction extends AnyAction {
   type: GraphEdgesActionTypes.SET_WEIGHT;
@@ -21,6 +22,10 @@ interface addEdgeAction extends AnyAction {
 interface setEdgeIsActive extends AnyAction {
   type: GraphEdgesActionTypes.SET_EDGES_IS_ACTIVE;
   payload: boolean;
+}
+interface discardEdgeMapAction extends AnyAction {
+  type:GraphEdgesActionTypes.DISCARD_EDGE_MAP;
+  payload:null
 }
 interface calculateEdgePropsAction extends AnyAction {
   type: GraphEdgesActionTypes.CALCULATE_PROPS;
@@ -35,6 +40,7 @@ interface removeEdgesForNodeAction extends AnyAction {
   payload: string;
 }
 export type GraphEdgeAction =
+  |discardEdgeMapAction
   | addEdgeAction
   | removeEdgeAction
   | calculateEdgePropsAction

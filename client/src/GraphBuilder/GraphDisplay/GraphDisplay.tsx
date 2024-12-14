@@ -158,6 +158,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
               nodeSize: nodeSize,
               width: 10,
               id,
+              weight:1,
               isActive: true,
               isDirected,
             }),

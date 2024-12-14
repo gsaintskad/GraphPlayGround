@@ -132,9 +132,8 @@ export const GraphEdge = (props: GraphEdgeProps) => {
               //   className={`bg-red-600 shadow-2xl h-full aspect-square rounded-sm m-0`}
               // />
               <span className={'text-gray-300 m-0 p-0'} style={{fontSize:'3em', transform:`translateY(-0.86em) translateX(0.25em)`}}>{'>'}</span>
-            ) : (
-              ""
-            )}
+            ) : <div/>
+            }
 
           </div>
 

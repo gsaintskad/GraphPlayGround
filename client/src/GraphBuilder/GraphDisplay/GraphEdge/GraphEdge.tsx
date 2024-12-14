@@ -12,8 +12,9 @@ import { useEffect, useMemo, useState } from "react";
 import { Point } from "../../../../types.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { setWeight } from "@/redux/GraphEdges/actionCreator.ts";
+import {RootState} from "@/redux/store.ts";
 
 export interface GraphEdgeProps {
   id: string;
@@ -30,6 +31,8 @@ const toDeg = (angle: number): number => {
 };
 
 export const GraphEdge = (props: GraphEdgeProps) => {
+  const nodeMap = useSelector((state: RootState) => state.graphNodes);
+
   const dispatch = useDispatch();
   const [input, setInput] = useState<string>(
     props.weight !== undefined ? props.weight.toString() : "",

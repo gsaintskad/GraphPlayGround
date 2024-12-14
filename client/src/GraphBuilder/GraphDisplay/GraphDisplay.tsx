@@ -48,25 +48,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     dispatch(setEdgesIsActive(isActive)); //??????????
     divElement?.style.setProperty("z-index", isActive ? "30" : "50");
   };
-  const isMouseDown = useRef(false);
-  const mouseDownHandler = useCallback(() => {
-    isMouseDown.current = true;
-  }, []);
-  const mouseUpHandler = useCallback(() => {
-    isMouseDown.current = false;
-  }, []);
-  const setIsMouseDownListenerActive = (addMouseDragEvent: boolean) => {
-    if (divRef) {
-      const divElement = divRef.current!;
-      if (addMouseDragEvent) {
-        divElement.addEventListener("mousedown", mouseDownHandler);
-        divElement.addEventListener("mouseup", mouseUpHandler);
-      } else {
-        divElement.removeEventListener("mousedown", mouseDownHandler);
-        divElement.removeEventListener("mouseup", mouseUpHandler);
-      }
-    }
-  };
+
 
   const selectionHandler = useCallback(
     (e: MouseEvent) => {
@@ -201,7 +183,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     const divElement = divRef.current;
     if (props.activeHandler === "pointer" && divElement) {
       //pointer
-      setIsMouseDownListenerActive(true);
       changeNodesActiveState(true);
     } else if (props.activeHandler === "create" && divElement) {
       divElement.addEventListener("click", createNodeHandler);
@@ -211,7 +192,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       changeNodesActiveState(false);
       divElement.addEventListener("click", selectionHandler);
     } else if (props.activeHandler === "move" && divElement && nodeMap) {
-      setIsMouseDownListenerActive(true);
       changeNodesActiveState(false);
       divElement.addEventListener("click", moveNodeHandler);
       divElement.addEventListener("click", selectionHandler);
@@ -240,18 +220,17 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         divElement.removeEventListener("click", handleEvent);
 
         divElement.removeEventListener("click", moveNodeHandler);
-        setIsMouseDownListenerActive(false);
+
 
         setIsAddingAnEdge(false);
         setIsRemovingNode(false);
         setIsRemovingAnEdge(false);
-        setIsMouseDownListenerActive(false);
+
       }
     };
   }, [
     props.activeHandler,
     selectedNodesArr.length,
-    isMouseDown.current,
     createNodeHandler,
     handleEvent,
   ]);

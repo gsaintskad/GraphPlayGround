@@ -6,12 +6,6 @@ import React from "react";
 const useMouseDown = (
   divRef: React.MutableRefObject<HTMLDivElement | null>,
 ) => {
-  const changeNodesActiveState = (isActive: boolean) => {
-    const divElement = divRef.current;
-    // dispatch(setNodesIsActive(isActive));
-    // dispatch(setEdgesIsActive(isActive)); //??????????
-    divElement?.style.setProperty("z-index", isActive ? "30" : "50");
-  };
   const isMouseDown = useRef(false);
   const mouseDownHandler = useCallback(() => {
     isMouseDown.current = true;

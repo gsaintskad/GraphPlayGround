@@ -600,8 +600,28 @@ body {
   position: relative;
 }
 
+.bottom-6 {
+  bottom: 1.5rem;
+}
+
 .left-2 {
   left: 0.5rem;
+}
+
+.right-6 {
+  right: 1.5rem;
+}
+
+.top-6 {
+  top: 1.5rem;
+}
+
+.bottom-0 {
+  bottom: 0px;
+}
+
+.bottom-10 {
+  bottom: 2.5rem;
 }
 
 .z-40 {

@@ -48,7 +48,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     divElement?.style.setProperty("z-index", isActive ? "30" : "50");
   };
 
-
   const selectionHandler = useCallback(
     (e: MouseEvent) => {
       e.stopPropagation();
@@ -70,7 +69,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     },
     [nodeMap],
   );
-
 
   const moveNodeHandler = useCallback(
     (e: MouseEvent) => {
@@ -129,21 +127,19 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         const copy = structuredClone(selectedNodesArr);
         const nodeA = copy.shift() as GraphNodeProps;
         const nodeB = copy.shift() as GraphNodeProps;
-        const id=`${nodeA.id}-${nodeB.id}`;
-        const reverseId=`${nodeB.id}-${nodeA.id}`
+        const id = `${nodeA.id}-${nodeB.id}`;
+        const reverseId = `${nodeB.id}-${nodeA.id}`;
         const isDirected: boolean = props.activeHandler === "directConnect";
 
         //coincidence check
-        for (const edgeId in edgeMap ) {
-          if(isDirected){
-
-            if(edgeId===id) {
+        for (const edgeId in edgeMap) {
+          if (isDirected) {
+            if (edgeId === id) {
               dispatch(discardSelection());
               return;
-            };
-          }
-          else{
-            if(edgeId===id||reverseId===edgeId){
+            }
+          } else {
+            if (edgeId === id || reverseId === edgeId) {
               dispatch(discardSelection());
               return;
             }
@@ -153,12 +149,12 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         if (nodeA.id !== nodeB.id) {
           dispatch(
             addEdge({
-              nodeAid:nodeA.id,
-              nodeBid:nodeB.id,
+              nodeAid: nodeA.id,
+              nodeBid: nodeB.id,
               nodeSize: nodeSize,
               width: 10,
               id,
-              weight:1,
+              weight: 1,
               isActive: true,
               isDirected,
             }),
@@ -239,11 +235,9 @@ const GraphDisplay = (props: GraphDisplayProps) => {
 
         divElement.removeEventListener("click", moveNodeHandler);
 
-
         setIsAddingAnEdge(false);
         setIsRemovingNode(false);
         setIsRemovingAnEdge(false);
-
       }
     };
   }, [

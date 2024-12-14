@@ -1,8 +1,7 @@
-
 import {GraphNodeProps} from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
 import {Point} from "../../../types.ts";
 
-import {GraphNodeActionTypes,GraphNodeAction} from "./actionTypes.ts";
+import {GraphNodeAction, GraphNodeActionTypes} from "./actionTypes.ts";
 import {rootAction} from "@/redux/store.ts";
 
 export const addNode = (nodeDto:GraphNodeProps):rootAction=>{
@@ -39,5 +38,11 @@ export const removeNode=(id:string):rootAction=>{
     return{
         type:GraphNodeActionTypes.REMOVE_NODE,
         payload:id
+    }
+}
+export const setNodeName=(id:string,name:string):rootAction=>{
+    return {
+        type:GraphNodeActionTypes.SET_NODE_NAME,
+        payload:{id:id,name:name}
     }
 }

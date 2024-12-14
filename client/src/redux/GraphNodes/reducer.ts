@@ -1,13 +1,9 @@
-import { GraphNodeActionTypes, GraphNodeAction } from "./actionTypes.ts";
-import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
-import { AnyAction, Reducer } from "@reduxjs/toolkit";
-import { Point, stateObject } from "../../../types.ts";
-import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
+import {GraphNodeActionTypes} from "./actionTypes.ts";
+import {GraphNodeProps} from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
+import {Reducer} from "@reduxjs/toolkit";
+import {Point, stateObject} from "../../../types.ts";
 import {rootAction} from "@/redux/store.ts";
-import {discardSelection} from "@/redux/GraphNodes/actionCreator.ts";
-import {useDispatch} from "react-redux";
-import store from "@/redux/store.ts";
-import {calculateEdgeProps} from "@/redux/GraphEdges/actionCreator.ts";
+
 const initialState: stateObject<GraphNodeProps> = {};
 const selectedState: GraphNodeProps[] = [];
 
@@ -41,6 +37,11 @@ export const graphNodesReducer: Reducer<
       for (const k in prevState) {
         prevState[k].isActive = !!action.payload;
       }
+      return prevState;
+    }
+    case GraphNodeActionTypes.SET_NODE_NAME:{
+      const prevState = structuredClone(state);
+      prevState[action.payload.id].name = action.payload.name;
       return prevState;
     }
     case GraphNodeActionTypes.MOVE_NODE: {

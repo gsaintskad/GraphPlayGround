@@ -7,7 +7,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { Point, stateObject } from "../../../../types.ts";
-import { useMemo } from "react";
+import {useMemo, useState} from "react";
+import {Input} from "@/components/ui/input.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {setWeight} from "@/redux/GraphEdges/actionCreator.ts";
+import {useDispatch} from "react-redux";
+import {setNodeName} from "@/redux/GraphNodes/actionCreator.ts";
 export type GraphNodeStates =
   | "primary"
   | "secondary"
@@ -24,7 +29,10 @@ export interface GraphNodeProps {
 }
 
 export const GraphNode = (props: GraphNodeProps) => {
+  const dispatch = useDispatch();
+  const [input, setInput] = useState<string>(`${props.name}`);
   const algorithmStateColorMap = useMemo(() => {
+
     const stateColorMap = new Map<GraphNodeStates, string>();
     stateColorMap.set("primary", "bg-green-700");
     stateColorMap.set("secondary", "bg-blue-700");
@@ -41,7 +49,7 @@ export const GraphNode = (props: GraphNodeProps) => {
         left: `${props.coordinates.x}px`,
         top: `${props.coordinates.y}px`,
       }}
-      // onClick={()=>console.log(props.id)}
+
     >
       <DropdownMenu>
         <DropdownMenuTrigger disabled={!props.isActive}>
@@ -58,6 +66,35 @@ export const GraphNode = (props: GraphNodeProps) => {
           <DropdownMenuItem>id: {props.id}</DropdownMenuItem>
           <DropdownMenuItem>x: {props.coordinates.x}</DropdownMenuItem>
           <DropdownMenuItem>y: {props.coordinates.y}</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <div className="flex w-full max-w-sm items-center space-x-2">
+              <Input
+                type="string"
+                onChange={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setInput(e.target.value)
+                }}
+                placeholder="value"
+                value={input}
+              />
+              <Button
+                type="submit"
+                onClick={(e) => {
+
+                    dispatch(setNodeName(props.id, input));
+
+                }}
+              >
+                Set
+              </Button>
+            </div>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

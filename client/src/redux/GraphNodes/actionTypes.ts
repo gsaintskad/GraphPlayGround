@@ -1,6 +1,7 @@
 import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
 import { Point } from "../../../types.ts";
 import {AnyAction} from "@reduxjs/toolkit";
+import {GraphEdgesActionTypes} from "@/redux/GraphEdges/actionTypes.ts";
 
 export enum GraphNodeActionTypes {
   ADD_NODE = "ADD_NODE",
@@ -10,6 +11,11 @@ export enum GraphNodeActionTypes {
   DESELECT_NODE = "DESELECT_NODE",
   DISCARD_SELECTION = "DISCARD_SELECTION",
   MOVE_NODE = "MOVE_NODE",
+  SET_NODE_NAME = "SET_NODE_NAME",
+}
+interface setNodeNameAction extends AnyAction {
+  type: GraphNodeActionTypes.SET_NODE_NAME,
+  payload: {id: string; name: string;};
 }
 interface addNodeAction extends AnyAction{
   type: GraphNodeActionTypes.ADD_NODE;
@@ -41,6 +47,7 @@ interface setNodeCoordinatesAction extends AnyAction{
   payload: { nodeCoordinates: Point; id: string };
 }
 export type GraphNodeAction =
+  | setNodeNameAction
   | addNodeAction
   | removeNodeAction
   | setNodeCoordinatesAction

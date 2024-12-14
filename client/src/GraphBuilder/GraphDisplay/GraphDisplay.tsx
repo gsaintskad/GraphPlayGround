@@ -90,12 +90,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     [nodeMap],
   );
 
-  /*
-  page.bundle.js:3 Warning: Maximum update depth exceeded. This can happen when
-  a component calls setState inside useEffect, but useEffect either doesn't
-  have a dependency array, or one of the dependencies changes on every render.
-   */
-  const [batchComplete, setBatchComplete] = useState(false);
+
   const moveNodeHandler = useCallback(
     (e: MouseEvent) => {
       if (selectedNodesArr.length > 0) {
@@ -105,13 +100,11 @@ const GraphDisplay = (props: GraphDisplayProps) => {
           y: e.offsetY - nodeSize / 2,
         };
 
-        setBatchComplete(false); // Reset before batching
         batch(() => {
           dispatch(setNodeCoordinates(nodeId, coordinates as Point));
-          dispatch(calculateEdgeProps(selectedNodesArr[0]));
+          dispatch(calculateEdgeProps({...selectedNodesArr[0], coordinates}));
           dispatch(discardSelection());
         });
-        setBatchComplete(true); // Mark batch as complete
       }
     },
     [selectedNodesArr],

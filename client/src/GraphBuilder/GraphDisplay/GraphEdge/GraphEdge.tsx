@@ -32,8 +32,20 @@ const toDeg = (angle: number): number => {
 
 export const GraphEdge = (props: GraphEdgeProps) => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
+  const edgeMap = useSelector((state: RootState) => state.graphEdges);
+
   const [nodeA, setNodeA] = useState<GraphNodeProps>(nodeMap[props.nodeAid])
   const [nodeB, setNodeB] = useState<GraphNodeProps>(nodeMap[props.nodeBid])
+  const [isMiddleEdge, setIsMiddleEdge] = useState<boolean>(true)
+  const reverseId = useMemo(() => `${props.nodeBid}-${props.nodeAid}`, []);
+  useEffect(() => {
+    if(edgeMap[reverseId]){
+      setIsMiddleEdge(true)
+    }
+    else{
+      setIsMiddleEdge(false)
+    }
+  }, [edgeMap[reverseId]]);
   useEffect(() => {
     setNodeA(nodeMap[props.nodeAid]);
     setNodeB(nodeMap[props.nodeBid]);
@@ -101,27 +113,31 @@ export const GraphEdge = (props: GraphEdgeProps) => {
       <DropdownMenu>
         <DropdownMenuTrigger
           className={`flex items-center shadow-2xl h-full w-full rounded-sm  m-0
-          ${props.isDirected ? "-translate-y-2.5" : ""}
+          ${isMiddleEdge ? "-translate-y-2.5" : ""}
           `}
           // ${props.isDirected?'-translate-y-2.5':''}
         >
           <div
-            className={`flex justify-center bg-white shadow-2xl h-1/2 w-full border-2 border-gray-300 rounded-sm m-0`}
+            className={`flex justify-between p-0 bg-white shadow-2xl h-1/2 w-full border-2 border-gray-300 rounded-sm m-0`}
           >
+            <div/>
             <label
               style={{ transform: `rotate(${-angle}deg) translateX(-10px)` }}
               className={"font-bold text-white"}
             >
               {props.weight}
             </label>
+            {props.isDirected ? (
+              // <div
+              //   className={`bg-red-600 shadow-2xl h-full aspect-square rounded-sm m-0`}
+              // />
+              <span className={'text-gray-300 m-0 p-0'} style={{fontSize:'3em', transform:`translateY(-0.86em) translateX(0.25em)`}}>{'>'}</span>
+            ) : (
+              ""
+            )}
+
           </div>
-          {props.isDirected ? (
-            <div
-              className={`bg-red-600 shadow-2xl h-full aspect-square rounded-sm m-0`}
-            />
-          ) : (
-            ""
-          )}
+
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>{`${nodeA.name}${props.isDirected! ? "==>" : "<==>"}${nodeB.name}`}</DropdownMenuLabel>

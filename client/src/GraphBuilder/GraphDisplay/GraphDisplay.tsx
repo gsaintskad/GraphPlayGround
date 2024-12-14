@@ -128,9 +128,27 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       if (selectedNodesArr.length >= 2) {
         const copy = structuredClone(selectedNodesArr);
         const nodeA = copy.shift() as GraphNodeProps;
-
         const nodeB = copy.shift() as GraphNodeProps;
+        const id=`${nodeA.id}-${nodeB.id}`;
+        const reverseId=`${nodeB.id}-${nodeA.id}`
         const isDirected: boolean = props.activeHandler === "directConnect";
+
+        //coincidence check
+        for (const edgeId in edgeMap ) {
+          if(isDirected){
+
+            if(edgeId===id) {
+              dispatch(discardSelection());
+              return;
+            };
+          }
+          else{
+            if(edgeId===id||reverseId===edgeId){
+              dispatch(discardSelection());
+              return;
+            }
+          }
+        }
 
         if (nodeA.id !== nodeB.id) {
           dispatch(
@@ -139,7 +157,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
               nodeBid:nodeB.id,
               nodeSize: nodeSize,
               width: 10,
-              id: `${nodeA.id}-${nodeB.id}`,
+              id,
               isActive: true,
               isDirected,
             }),

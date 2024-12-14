@@ -66,13 +66,13 @@ export const GraphBuilder = (props: {
   return (
     <div className={`flex flex-col h-full w-full`}>
       <IconContext.Provider
-        value={{ size: "3rem", color: "green", className: "global-class-name" }}
+        value={{ size: "3rem", color: "white", className: "global-class-name",style:{ fontSize: "30px", width: "30px", height: "30px" } }}
       >
 
         <div
           className={`bg-gray-950 h-12 flex justify-center items-center gap-8`}
         >
-          <Button
+          <Button className="h-10 w-10"
             onClick={() =>
               console.log(
                 "adjacency matrix:",
@@ -84,7 +84,7 @@ export const GraphBuilder = (props: {
           >
             <IoMdSave />
           </Button>
-          <Button
+          <Button className="h-10 w-10"
             onClick={() => {
               dispatch(discardSelection());
               dispatch(discardNodeMap());
@@ -97,12 +97,12 @@ export const GraphBuilder = (props: {
 
         <div className={`bg-gray-700 h-full flex`} style={props.style}>
           <div
-            className={`pt-10 flex flex-col h-full bg-gray-950 w-32 gap-8  gap-x-5
+            className={`pt-10 flex flex-col h-full bg-gray-950 px-2 gap-8  gap-x-5
           //overflow-y-scroll
           `}
           >
-            <Button className="h-10 w-10" onClick={() => toggleHandler("pointer")}>
-              <TbPointer style={{ fontSize: "30px", width: "30px", height: "30px" }} />
+            <Button className="h-10 w-10" variant={'default'} onClick={() => toggleHandler("pointer")}>
+              <TbPointer  />
             </Button>
 
             <Button className="h-10 w-10"  onClick={() => toggleHandler("move")}>

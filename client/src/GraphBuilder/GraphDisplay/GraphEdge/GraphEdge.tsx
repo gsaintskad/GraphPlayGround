@@ -5,13 +5,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu.tsx";
+} from "@/components/shadcnUI/dropdown-menu.tsx";
 
 import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
 import { useEffect, useMemo, useState } from "react";
 import { Point } from "../../../../types.ts";
-import { Input } from "@/components/ui/input.tsx";
-import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/shadcnUI/input.tsx";
+import { Button } from "@/components/shadcnUI/button.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import { setWeight } from "@/redux/GraphEdges/actionCreator.ts";
 import {RootState} from "@/redux/store.ts";

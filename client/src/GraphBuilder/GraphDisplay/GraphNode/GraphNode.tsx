@@ -5,11 +5,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu.tsx";
+} from "@/components/shadcnUI/dropdown-menu.tsx";
 import { Point, stateObject } from "../../../../types.ts";
 import {useMemo, useState} from "react";
-import {Input} from "@/components/ui/input.tsx";
-import {Button} from "@/components/ui/button.tsx";
+import {Input} from "@/components/shadcnUI/input.tsx";
+import {Button} from "@/components/shadcnUI/button.tsx";
 import {setWeight} from "@/redux/GraphEdges/actionCreator.ts";
 import {useDispatch} from "react-redux";
 import {setNodeName} from "@/redux/GraphNodes/actionCreator.ts";

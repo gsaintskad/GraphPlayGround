@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shadcnUI/button";
 import GraphDisplay from "@/GraphBuilder/GraphDisplay/GraphDisplay.tsx";
 import { useMemo, useState } from "react";
 import { GraphBuilderActions } from "./graphBuilderActions.ts";
@@ -18,6 +18,7 @@ import {
   discardSelection,
 } from "@/redux/GraphNodes/actionCreator.ts";
 import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
+import InstrumentButton from "@/components/InstrumentButton.tsx";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
@@ -66,13 +67,13 @@ export const GraphBuilder = (props: {
   return (
     <div className={`flex flex-col h-full w-full`}>
       <IconContext.Provider
-        value={{ size: "3rem", color: "white", className: "global-class-name",style:{ fontSize: "30px", width: "30px", height: "30px" } }}
+        value={{ size: "3rem", color: "white", className: "global-class-name",style:{ fontSize: "3rem", width: "30px", height: "30px" } }}
       >
 
         <div
           className={`bg-gray-950 h-12 flex justify-center items-center gap-8`}
         >
-          <Button className="h-10 w-10"
+          <InstrumentButton name="Save built graph" description="Saves and preparing the graph you've built, than sends it to the server to compute algorithms"
             onClick={() =>
               console.log(
                 "adjacency matrix:",
@@ -83,8 +84,8 @@ export const GraphBuilder = (props: {
             }
           >
             <IoMdSave />
-          </Button>
-          <Button className="h-10 w-10"
+          </InstrumentButton>
+          <InstrumentButton name="Delete built graph" description="Clears the graph display"
             onClick={() => {
               dispatch(discardSelection());
               dispatch(discardNodeMap());
@@ -92,7 +93,7 @@ export const GraphBuilder = (props: {
             }}
           >
             <MdDelete />
-          </Button>
+          </InstrumentButton>
         </div>
 
         <div className={`bg-gray-700 h-full flex`} style={props.style}>
@@ -101,28 +102,29 @@ export const GraphBuilder = (props: {
           //overflow-y-scroll
           `}
           >
-            <Button className="h-10 w-10" variant={'default'} onClick={() => toggleHandler("pointer")}>
-              <TbPointer  />
-            </Button>
 
-            <Button className="h-10 w-10"  onClick={() => toggleHandler("move")}>
+            <InstrumentButton name={'Pointer'} onClick={() => toggleHandler("pointer")} description={'Just a simple pointer :)'}>
+              <TbPointer  />
+            </InstrumentButton>
+
+            <InstrumentButton name="Move" description="Moves a node with its edges" onClick={() => toggleHandler("move")}>
               <IoIosMove />
-            </Button>
-            <Button className="h-10 w-10" onClick={() => toggleHandler("create")}>
+            </InstrumentButton>
+            <InstrumentButton name="Create" description="Creates new nodes and asings them ids" onClick={() => toggleHandler("create")}>
               <TbPointerPlus />
-            </Button>
-            <Button className="h-10 w-10" onClick={() => toggleHandler("remove")}>
+            </InstrumentButton>
+            <InstrumentButton name="Remove" description="Removes a node with its edges" onClick={() => toggleHandler("remove")}>
               <TbPointerMinus />
-            </Button>
-            <Button className="h-10 w-10"  onClick={() => toggleHandler("connect")}>
+            </InstrumentButton>
+            <InstrumentButton name="Connection" description="Connects 2 nodes by clicking on it NOT directly"  onClick={() => toggleHandler("connect")}>
               <BsArrowDownUp />
-            </Button>
-            <Button className="h-10 w-10"  onClick={() => toggleHandler("directConnect")}>
+            </InstrumentButton>
+            <InstrumentButton name="Direct Connection" description="Connects 2 nodes by clicking on it directly"  onClick={() => toggleHandler("directConnect")}>
               <ImArrowUpRight2 />
-            </Button>
-            <Button className="h-10 w-10" onClick={() => toggleHandler("disconnect")}>
+            </InstrumentButton>
+            <InstrumentButton name="Disconnect" description="Disconnects 2 nodes by clicking on it" onClick={() => toggleHandler("disconnect")}>
               <VscDebugDisconnect />
-            </Button>
+            </InstrumentButton>
           </div>
           <GraphDisplay activeHandler={activeHandler} />
         </div>

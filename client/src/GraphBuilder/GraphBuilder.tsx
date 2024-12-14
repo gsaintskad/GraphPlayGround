@@ -27,17 +27,23 @@ export const GraphBuilder = (props:{style:{width:string,height:string}}) => {
     // Populate the matrix based on edgeMap
     for (const id in edgeMap) {
       const edge = edgeMap[id];
-      const fromIndex = vertexes.findIndex((node) => node.id === edge.nodeA.id);
-      const toIndex = vertexes.findIndex((node) => node.id === edge.nodeB.id);
+      const fromIndex = vertexes.findIndex((node) => node.id === edge.nodeAid);
+      const toIndex = vertexes.findIndex((node) => node.id === edge.nodeBid);
 
       if (fromIndex !== -1 && toIndex !== -1) {
-        matrix[fromIndex][toIndex] = edge; // Connection from A to B
-        matrix[toIndex][fromIndex] = edge; // Connection from B to A (if undirected)
+        // Always set the connection from A to B
+        matrix[fromIndex][toIndex] = edge;
+
+        // If the edge is not directed, also set the connection from B to A
+        if (!edge.isDirected) {
+          matrix[toIndex][fromIndex] = edge;
+        }
       }
     }
 
     return matrix;
   }, [vertexes, edgeMap]);
+
 
   const toggleHandler = (state: GraphBuilderActions) => {
     setActiveHandler(state);

@@ -19,7 +19,6 @@ import { isLiesBetween, movePoint, Point } from "../../../types.ts";
 import { RootState } from "../../redux/store.ts";
 import {
   addEdge,
-  calculateEdgeProps,
   removeEdge,
   removeEdgesForNode,
   setEdgesIsActive,
@@ -84,7 +83,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
 
         batch(() => {
           dispatch(setNodeCoordinates(nodeId, coordinates as Point));
-          dispatch(calculateEdgeProps({...selectedNodesArr[0], coordinates}));
+          // dispatch(calculateEdgeProps({...selectedNodesArr[0], coordinates}));
           dispatch(discardSelection());
         });
       }
@@ -104,7 +103,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         },
         radius: nodeSize,
         isActive: true,
-        algoritmState: "primary",
+        algorithmState: "primary",
       };
       dispatch(addNode(dto));
     },
@@ -136,8 +135,8 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         if (nodeA.id !== nodeB.id) {
           dispatch(
             addEdge({
-              nodeA,
-              nodeB,
+              nodeAid:nodeA.id,
+              nodeBid:nodeB.id,
               nodeSize: nodeSize,
               width: 10,
               id: `${nodeA.id}-${nodeB.id}`,
@@ -242,7 +241,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       return selectedNodesArr.some(
         (selectedNode) => node.id === selectedNode.id,
       ) ? (
-        <GraphNode key={node.id} {...node} algoritmState={"selected"} />
+        <GraphNode key={node.id} {...node} algorithmState={"selected"} />
       ) : (
         <GraphNode key={node.id} {...node} />
       );

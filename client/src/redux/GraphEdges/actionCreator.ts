@@ -15,12 +15,12 @@ export const setEdgesIsActive = (isActive: boolean):rootAction => {
     payload: isActive,
   };
 };
-export const calculateEdgeProps = (nodeDto: GraphNodeProps):rootAction => {
-  return {
-    type: GraphEdgesActionTypes.CALCULATE_PROPS,
-    payload: nodeDto,
-  };
-};
+// export const calculateEdgeProps = (nodeDto: GraphNodeProps):rootAction => {
+//   return {
+//     type: GraphEdgesActionTypes.CALCULATE_PROPS,
+//     payload: nodeDto,
+//   };
+// };
 export const removeEdge = (id: string):rootAction => {
   return {
     type: GraphEdgesActionTypes.REMOVE_EDGE,

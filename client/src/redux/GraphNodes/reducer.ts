@@ -65,7 +65,7 @@ export const selectedGraphNodesReducer: Reducer<
     case GraphNodeActionTypes.SELECT_NODE: {
       const prevState = structuredClone(state);
       const payload = structuredClone(action.payload as GraphNodeProps);
-      payload.algoritmState = "selected";
+      payload.algorithmState = "selected";
       prevState.push(payload);
       return prevState;
     }

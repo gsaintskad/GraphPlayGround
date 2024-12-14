@@ -18,8 +18,8 @@ import {RootState} from "@/redux/store.ts";
 
 export interface GraphEdgeProps {
   id: string;
-  nodeA: GraphNodeProps;
-  nodeB: GraphNodeProps;
+  nodeAid: string;
+  nodeBid: string;
   isActive: boolean;
   nodeSize?: number;
   width: number;
@@ -32,23 +32,28 @@ const toDeg = (angle: number): number => {
 
 export const GraphEdge = (props: GraphEdgeProps) => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
-
+  const [nodeA, setNodeA] = useState<GraphNodeProps>(nodeMap[props.nodeAid])
+  const [nodeB, setNodeB] = useState<GraphNodeProps>(nodeMap[props.nodeBid])
+  useEffect(() => {
+    setNodeA(nodeMap[props.nodeAid]);
+    setNodeB(nodeMap[props.nodeBid]);
+  }, [nodeMap[props.nodeAid], nodeMap[props.nodeBid]]);
   const dispatch = useDispatch();
   const [input, setInput] = useState<string>(
     props.weight !== undefined ? props.weight.toString() : "",
   );
   const start: Point = useMemo<Point>(() => {
     return {
-      x: props.nodeA.coordinates.x + props.nodeSize! / 2 || 90,
-      y: props.nodeA.coordinates.y + props.nodeSize! / 2 || 90,
+      x: nodeA.coordinates.x + props.nodeSize! / 2 || 90,
+      y: nodeA.coordinates.y + props.nodeSize! / 2 || 90,
     } as Point;
-  }, [props.nodeA.coordinates]);
+  }, [nodeA.coordinates]);
   const end: Point = useMemo<Point>(() => {
     return {
-      x: props.nodeB.coordinates.x + props.nodeSize! / 2 || 90,
-      y: props.nodeB.coordinates.y + props.nodeSize! / 2 || 90,
+      x: nodeB.coordinates.x + props.nodeSize! / 2 || 90,
+      y: nodeB.coordinates.y + props.nodeSize! / 2 || 90,
     } as Point;
-  }, [props.nodeB.coordinates]);
+  }, [nodeB.coordinates]);
   const positionInfo = useMemo<{ isFurther: boolean; isAbove: boolean }>(() => {
     return { isFurther: start.x < end.x, isAbove: start.y > end.y };
   }, [start, end]);
@@ -59,7 +64,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
   }, [start, end]);
   const trigonometryValue = useMemo<number>(() => {
     const deltaY: number = Math.abs(
-      props.nodeA.coordinates.y - props.nodeB.coordinates.y,
+      nodeA.coordinates.y - nodeB.coordinates.y,
     );
     return deltaY / lenght;
   }, [start, end]);
@@ -119,7 +124,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>{`${props.nodeA.name}${props.isDirected! ? "==>" : "<==>"}${props.nodeB.name}`}</DropdownMenuLabel>
+          <DropdownMenuLabel>{`${nodeA.name}${props.isDirected! ? "==>" : "<==>"}${nodeB.name}`}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>id: {props.id}</DropdownMenuItem>
           <DropdownMenuItem
@@ -148,8 +153,8 @@ export const GraphEdge = (props: GraphEdgeProps) => {
               </Button>
             </div>
           </DropdownMenuItem>
-          <DropdownMenuItem>nodeA.id:{props.nodeA.id}</DropdownMenuItem>
-          <DropdownMenuItem>nodeB.id:{props.nodeB.id}</DropdownMenuItem>
+          <DropdownMenuItem>nodeA.id:{nodeA.id}</DropdownMenuItem>
+          <DropdownMenuItem>nodeB.id:{nodeB.id}</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

@@ -15,11 +15,11 @@ export interface GraphNodeProps {
   coordinates:Point;
   radius?: number;
   isActive: boolean;
-  algoritmState?:GraphNodeStates;
+  algorithmState?:GraphNodeStates;
 }
 
 export const GraphNode = (props: GraphNodeProps) => {
-  const algoritmStateColorMap = useMemo(() => {
+  const algorithmStateColorMap = useMemo(() => {
     const stateColorMap=new Map<GraphNodeStates,string>();
     stateColorMap.set('primary','bg-green-700')
     stateColorMap.set('secondary','bg-blue-700')
@@ -37,7 +37,7 @@ export const GraphNode = (props: GraphNodeProps) => {
     >
       <DropdownMenu>
         <DropdownMenuTrigger disabled={!props.isActive}>
-          <div  className={`${algoritmStateColorMap.get(props.algoritmState||'primary')} flex justify-center items-center shadow-2xl aspect-square overflow-hidden rounded-full w-full text-white text-xl font-bold border-4 border-white`}
+          <div  className={`${algorithmStateColorMap.get(props.algorithmState||'primary')} flex justify-center items-center shadow-2xl aspect-square overflow-hidden rounded-full w-full text-white text-xl font-bold border-4 border-white`}
           style={{width: `${props.radius||90}px`}}>
               {props.name}
           </div>

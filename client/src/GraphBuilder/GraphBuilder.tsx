@@ -9,7 +9,7 @@ import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.
 import { BsArrowDownUp } from "react-icons/bs";
 import { TbPointer, TbPointerMinus, TbPointerPlus } from "react-icons/tb";
 import { ImArrowUpRight2 } from "react-icons/im";
-import { IoIosMove, IoMdSave } from "react-icons/io";
+import {IoIosMove, IoMdSave, IoMdSettings} from "react-icons/io";
 import { VscDebugDisconnect } from "react-icons/vsc";
 import { MdDelete, MdDeleteOutline } from "react-icons/md";
 import { IconContext } from "react-icons";
@@ -68,11 +68,11 @@ export const GraphBuilder = (props: {
   return (
     <div className={`flex flex-col h-full w-full`}>
       <IconContext.Provider
-        value={{ size: "3rem", color: "white", className: "global-class-name",style:{ fontSize: "3rem", width: "30px", height: "30px" } }}
+        value={{ size: "3rem", color: "#FFF", className: "global-class-name",style:{ fontSize: "3rem", width: "30px", height: "30px" } }}
       >
 
         <div
-          className={`bg-gray-950 h-12 flex justify-center items-center gap-8`}
+          className={`bg-gray-950 h-12 flex justify-center items-center gap-8 w-full`}
         >
           <InstrumentButton name="Save built graph" description="Saves and preparing the graph you've built, than sends it to the server to compute algorithms"
             onClick={() =>
@@ -96,13 +96,15 @@ export const GraphBuilder = (props: {
             <MdDelete />
           </InstrumentButton>
 
-            <GraphBuilderSettingsSheet/>
+          {/*<GraphBuilderSettingsSheet>*/}
+          {/*  <IoMdSettings/>*/}
+          {/*</GraphBuilderSettingsSheet>*/}
 
         </div>
 
         <div className={`bg-gray-700 h-full flex`} style={props.style}>
           <div
-            className={`pt-10 flex flex-col h-full bg-gray-950 px-2 gap-8  gap-x-5
+            className={`pt-10 flex flex-col h-full bg-gray-950 px-2 gap-8  gap-x-5 w-16 justify-center items-center
           overflow-y-auto
           `}
           >

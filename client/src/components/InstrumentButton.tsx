@@ -5,7 +5,7 @@ import {Button} from "@/components/shadcnUI/button.tsx";
 interface InstrumentButtonProps {
   children: ReactNode|ReactNode[];
   name: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   description?: string;
 }
 // React.MouseEventHandler<HTMLButtonElement>

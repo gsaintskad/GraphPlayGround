@@ -4,13 +4,14 @@ import { Provider } from "react-redux";
 
 function App() {
   return (
-    <div
-      className={"flex items-center justify-center bg-gray-100 h-full w-full"}
-    >
-      <Provider store={store}>
+    <Provider store={store}>
+      <div
+        className={"flex items-center justify-center bg-gray-100 h-full w-full"}
+      >
+
         <GraphBuilder style={{ height: "100%", width: "100%" }} />
-      </Provider>
-    </div>
+      </div>
+    </Provider>
   );
 }
 

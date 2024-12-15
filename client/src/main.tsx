@@ -5,8 +5,8 @@ import App from "./App.tsx";
 import store from "./redux/store.ts";
 createRoot(document.getElementById("root")!).render(
   <div className={`flex justify-center items-center h-screen`}>
-    <Provider store={store}>
+
       <App />
-    </Provider>
+
   </div>,
 );

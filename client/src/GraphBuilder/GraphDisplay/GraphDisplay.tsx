@@ -107,7 +107,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     },
     [props.activeHandler],
   );
-
   const [isRemovingNode, setIsRemovingNode] = useState<boolean>(false);
   useEffect(() => {
     if (isRemovingNode) {
@@ -267,7 +266,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     ));
   }, [edgeMap, nodeMap]);
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full overflow-auto">
       {/* Render nodes dynamically */}
       {renderNodes}
       {renderEdges}

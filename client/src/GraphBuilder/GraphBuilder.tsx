@@ -19,6 +19,7 @@ import {
 } from "@/redux/GraphNodes/actionCreator.ts";
 import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
 import InstrumentButton from "@/components/InstrumentButton.tsx";
+import GraphBuilderSettingsSheet from "@/components/GraphBuilderSettingsSheet.tsx";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
@@ -94,39 +95,50 @@ export const GraphBuilder = (props: {
           >
             <MdDelete />
           </InstrumentButton>
+
+            <GraphBuilderSettingsSheet/>
+
         </div>
 
         <div className={`bg-gray-700 h-full flex`} style={props.style}>
           <div
             className={`pt-10 flex flex-col h-full bg-gray-950 px-2 gap-8  gap-x-5
-          //overflow-y-scroll
+          overflow-y-auto
           `}
           >
 
-            <InstrumentButton name={'Pointer'} onClick={() => toggleHandler("pointer")} description={'Just a simple pointer :)'}>
-              <TbPointer  />
+            <InstrumentButton name={'Pointer'} onClick={() => toggleHandler("pointer")}
+                              description={'Just a simple pointer :)'}>
+              <TbPointer/>
             </InstrumentButton>
 
-            <InstrumentButton name="Move" description="Moves a node with its edges" onClick={() => toggleHandler("move")}>
-              <IoIosMove />
+            <InstrumentButton name="Move" description="Moves a node with its edges"
+                              onClick={() => toggleHandler("move")}>
+              <IoIosMove/>
             </InstrumentButton>
-            <InstrumentButton name="Create" description="Creates new nodes and asings them ids" onClick={() => toggleHandler("create")}>
-              <TbPointerPlus />
+            <InstrumentButton name="Create" description="Creates new nodes and asings them ids"
+                              onClick={() => toggleHandler("create")}>
+              <TbPointerPlus/>
             </InstrumentButton>
-            <InstrumentButton name="Remove" description="Removes a node with its edges" onClick={() => toggleHandler("remove")}>
-              <TbPointerMinus />
+            <InstrumentButton name="Remove" description="Removes a node with its edges"
+                              onClick={() => toggleHandler("remove")}>
+              <TbPointerMinus/>
             </InstrumentButton>
-            <InstrumentButton name="Connection" description="Connects 2 nodes by clicking on it NOT directly"  onClick={() => toggleHandler("connect")}>
-              <BsArrowDownUp />
+            <InstrumentButton name="Connection" description="Connects 2 nodes by clicking on it NOT directly"
+                              onClick={() => toggleHandler("connect")}>
+              <BsArrowDownUp/>
             </InstrumentButton>
-            <InstrumentButton name="Direct Connection" description="Connects 2 nodes by clicking on it directly"  onClick={() => toggleHandler("directConnect")}>
-              <ImArrowUpRight2 />
+            <InstrumentButton name="Direct Connection" description="Connects 2 nodes by clicking on it directly"
+                              onClick={() => toggleHandler("directConnect")}>
+              <ImArrowUpRight2/>
             </InstrumentButton>
-            <InstrumentButton name="Disconnect" description="Disconnects 2 nodes by clicking on it" onClick={() => toggleHandler("disconnect")}>
-              <VscDebugDisconnect />
+            <InstrumentButton name="Disconnect" description="Disconnects 2 nodes by clicking on it"
+                              onClick={() => toggleHandler("disconnect")}>
+              <VscDebugDisconnect/>
             </InstrumentButton>
           </div>
-          <GraphDisplay activeHandler={activeHandler} />
+          <GraphDisplay activeHandler={activeHandler}/>
+
         </div>
       </IconContext.Provider>
     </div>

@@ -3,7 +3,7 @@ import {HoverCard, HoverCardContent, HoverCardTrigger} from "@/components/shadcn
 import {Button} from "@/components/shadcnUI/button.tsx";
 
 interface InstrumentButtonProps {
-  children: ReactNode|ReactNode[];
+  children: ReactNode | ReactNode[];
   name: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   description?: string;

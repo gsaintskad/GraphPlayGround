@@ -96,9 +96,9 @@ export const GraphBuilder = (props: {
             <MdDelete />
           </InstrumentButton>
 
-          {/*<GraphBuilderSettingsSheet>*/}
-          {/*  <IoMdSettings/>*/}
-          {/*</GraphBuilderSettingsSheet>*/}
+          <GraphBuilderSettingsSheet>
+            <IoMdSettings/>
+          </GraphBuilderSettingsSheet>
 
         </div>
 

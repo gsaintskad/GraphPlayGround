@@ -20,10 +20,10 @@ const GraphBuilderSettingsSheet = ({children}:{children:ReactNode}) => {
   return (
     <Sheet >
       <SheetTrigger asChild>
-
-        <InstrumentButton name="Graph display settings" description="Here you can change display parameters such as node size, node colors etc...">
-          {children}
-        </InstrumentButton>
+        <Button>{children}</Button>
+        {/*<InstrumentButton name="Graph display settings" description="Here you can change display parameters such as node size, node colors etc...">*/}
+        {/*  {children}*/}
+        {/*</InstrumentButton>*/}
       </SheetTrigger>
       <SheetContent className={'bg-gray-800 text-white'}>
         <SheetHeader className={'text-white'}>
@@ -34,7 +34,7 @@ const GraphBuilderSettingsSheet = ({children}:{children:ReactNode}) => {
         </SheetHeader>
         <div className={'flex flex-col gap-y-10 my-10'}>
 
-          <div><Label>Node size:</Label><Slider className={"bg-white rounded-full"} onChange={()=>console.log('sliderValueHasBeenChanged')} defaultValue={[90]} max={200} min={50} step={1}/></div>
+          <div><Label>Node size:</Label><Slider className={"bg-white rounded-full"} onChange={()=>console.log('sliderValueHasBeenChanged')} defaultValue={[90]} max={200} min={50} step={15}/></div>
 
         </div>
 

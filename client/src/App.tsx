@@ -9,7 +9,7 @@ function App() {
         className={"flex items-center justify-center bg-gray-100 h-full w-full"}
       >
 
-        <GraphBuilder style={{ height: "100%", width: "100%" }} />
+        <GraphBuilder style={{ height: "70%", width: "70%" }} />
       </div>
     </Provider>
   );

@@ -66,7 +66,8 @@ export const GraphBuilder = (props: {
   };
 
   return (
-    <div className={`flex flex-col h-full w-full`}>
+
+    <div className={`flex flex-col h-full w-full` } style={props.style}>
       <IconContext.Provider
         value={{ size: "3rem", color: "#FFF", className: "global-class-name",style:{ fontSize: "3rem", width: "30px", height: "30px" } }}
       >
@@ -102,7 +103,7 @@ export const GraphBuilder = (props: {
 
         </div>
 
-        <div className={`bg-gray-700 h-full flex`} style={props.style}>
+        <div className={`bg-gray-700 h-full flex`} >
           <div
             className={`pt-10 flex flex-col h-full bg-gray-950 px-2 gap-8  gap-x-5 w-16 justify-center items-center
           overflow-y-auto

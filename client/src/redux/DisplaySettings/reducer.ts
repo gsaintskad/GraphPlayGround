@@ -14,13 +14,13 @@ export interface DisplaySettingsState {
 }
 
 const initialState: DisplaySettingsState = {
-  nodeSize: 10,
-  nodeColor: "#000000",
-  nodeBorderColor: "#000000",
-  edgeColor: "#000000",
-  edgeBorderColor: "#000000",
-  edgeWidth: 1,
-  weightColor: "#000000",
+  nodeSize: 90,
+  nodeColor: "#027502",
+  nodeBorderColor: "#ffffff",
+  edgeColor: "#ffffff",
+  edgeBorderColor: "#a1a1a1",
+  edgeWidth: 20,
+  weightColor: "#ffffff",
   weightFontSize: 12,
 };
 

@@ -840,16 +840,12 @@ body {
   width: 1.2rem;
 }
 
-.w-\[40em\] {
-  width: 40em;
+.w-\[30em\] {
+  width: 30em;
 }
 
 .w-full {
   width: 100%;
-}
-
-.w-\[30em\] {
-  width: 30em;
 }
 
 .min-w-\[8rem\] {
@@ -1182,16 +1178,17 @@ body {
   padding: 0.25rem;
 }
 
-.p-10 {
-  padding: 2.5rem;
-}
-
 .p-4 {
   padding: 1rem;
 }
 
 .p-6 {
   padding: 1.5rem;
+}
+
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
 }
 
 .px-2 {
@@ -1227,11 +1224,6 @@ body {
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
-
-.px-10 {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
 }
 
 .pl-8 {

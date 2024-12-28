@@ -51,7 +51,7 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
           <Slider
             className={"bg-white rounded-full"}
             onValueChange={(v)=>dispatch(setNodeSize(v[0]))}
-            defaultValue={[90]}
+            defaultValue={[displaySettings.nodeSize]}
             max={200}
             min={50}
             step={15}
@@ -88,8 +88,8 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
 
             }}
             defaultValue={[displaySettings.edgeWidth]}
-            max={5}
-            min={50}
+            max={50}
+            min={5}
             step={5}
           />
         </div>

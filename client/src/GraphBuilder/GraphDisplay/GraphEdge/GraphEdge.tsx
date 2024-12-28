@@ -15,13 +15,14 @@ import { Button } from "@/components/shadcnUI/button.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import { setWeight } from "@/redux/GraphEdges/actionCreator.ts";
 import {RootState} from "@/redux/store.ts";
+import {DisplaySettingsState} from "@/redux/DisplaySettings/reducer.ts";
 
 export interface GraphEdgeProps {
   id: string;
   nodeAid: string;
   nodeBid: string;
   isActive: boolean;
-  nodeSize?: number;
+
   width: number;
   isDirected?: boolean;
   weight?: number;
@@ -51,21 +52,25 @@ export const GraphEdge = (props: GraphEdgeProps) => {
     setNodeB(nodeMap[props.nodeBid]);
   }, [nodeMap[props.nodeAid], nodeMap[props.nodeBid]]);
   const dispatch = useDispatch();
+  const displaySettings: DisplaySettingsState = useSelector(
+    (state: RootState) => state.displaySettings,
+  );
   const [input, setInput] = useState<string>(
     props.weight !== undefined ? props.weight.toString() : "",
   );
+
   const start: Point = useMemo<Point>(() => {
     return {
-      x: nodeA.coordinates.x + props.nodeSize! / 2 || 90,
-      y: nodeA.coordinates.y + props.nodeSize! / 2 || 90,
+      x: nodeA.coordinates.x + displaySettings.nodeSize / 2 || 90,
+      y: nodeA.coordinates.y + displaySettings.nodeSize / 2 || 90,
     } as Point;
-  }, [nodeA.coordinates]);
+  }, [nodeA.coordinates, displaySettings.nodeSize]);
   const end: Point = useMemo<Point>(() => {
     return {
-      x: nodeB.coordinates.x + props.nodeSize! / 2 || 90,
-      y: nodeB.coordinates.y + props.nodeSize! / 2 || 90,
+      x: nodeB.coordinates.x + displaySettings.nodeSize / 2 || 90,
+      y: nodeB.coordinates.y + displaySettings.nodeSize / 2 || 90,
     } as Point;
-  }, [nodeB.coordinates]);
+  }, [nodeB.coordinates , displaySettings.nodeSize]);
   const positionInfo = useMemo<{ isFurther: boolean; isAbove: boolean }>(() => {
     return { isFurther: start.x < end.x, isAbove: start.y > end.y };
   }, [start, end]);
@@ -106,7 +111,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
         width: `${lenght || 300}px`,
         height: `${props.width || 20}px`,
         transform: `rotate(${angle}deg)`,
-        paddingInline: `${(props.nodeSize || 90) / 2}px`,
+        paddingInline: `${(displaySettings.nodeSize || 90) / 2}px`,
         paddingBlock: "0px",
       }}
     >

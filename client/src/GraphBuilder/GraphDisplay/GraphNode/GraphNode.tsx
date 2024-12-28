@@ -7,14 +7,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcnUI/dropdown-menu.tsx";
 import { Point, stateObject } from "../../../../types.ts";
-import {useMemo, useState} from "react";
-import {Input} from "@/components/shadcnUI/input.tsx";
-import {Button} from "@/components/shadcnUI/button.tsx";
-import {setWeight} from "@/redux/GraphEdges/actionCreator.ts";
-import {useDispatch, useSelector} from "react-redux";
-import {setNodeName} from "@/redux/GraphNodes/actionCreator.ts";
-import {DisplaySettingsState} from "@/redux/DisplaySettings/reducer.ts";
-import {RootState} from "@/redux/store.ts";
+import { useMemo, useState } from "react";
+import { Input } from "@/components/shadcnUI/input.tsx";
+import { Button } from "@/components/shadcnUI/button.tsx";
+import { setWeight } from "@/redux/GraphEdges/actionCreator.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { setNodeName } from "@/redux/GraphNodes/actionCreator.ts";
+import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
+import { RootState } from "@/redux/store.ts";
 export type GraphNodeStates =
   | "primary"
   | "secondary"
@@ -32,20 +32,11 @@ export interface GraphNodeProps {
 
 export const GraphNode = (props: GraphNodeProps) => {
   const dispatch = useDispatch();
-  const displaySettings:DisplaySettingsState = useSelector((state: RootState) => state.displaySettings);
+  const displaySettings: DisplaySettingsState = useSelector(
+    (state: RootState) => state.displaySettings,
+  );
 
   const [input, setInput] = useState<string>(`${props.name}`);
-  const algorithmStateColorMap = useMemo(() => {
-
-    const stateColorMap = new Map<GraphNodeStates, string>();
-    stateColorMap.set("primary", "bg-green-700");
-    stateColorMap.set("secondary", "bg-blue-700");
-    stateColorMap.set("comparing", "bg-yellow-700");
-    stateColorMap.set("visited", "bg-gray-600");
-    stateColorMap.set("selected", "bg-sky-600");
-
-    return stateColorMap;
-  }, []);
 
   return (
     <div
@@ -53,16 +44,17 @@ export const GraphNode = (props: GraphNodeProps) => {
       style={{
         left: `${props.coordinates.x}px`,
         top: `${props.coordinates.y}px`,
-
       }}
-
     >
       <DropdownMenu>
         <DropdownMenuTrigger disabled={!props.isActive}>
           <div
-            className={`${algorithmStateColorMap.get(props.algorithmState || "primary")} flex justify-center items-center shadow-2xl aspect-square overflow-hidden rounded-full w-full text-white text-xl font-bold border-4 border-white`}
-            style={{ width: `${props.radius || 90}px`,
-              backgroundColor:displaySettings.nodeColor}}
+            className={`flex justify-center items-center shadow-2xl overflow-hidden aspect-square rounded-full w-full text-white text-xl font-bold border-4`}
+            style={{
+              width: `${displaySettings.nodeSize || 90}px`,
+              backgroundColor: displaySettings.nodeColor,
+              borderColor: displaySettings.nodeBorderColor,
+            }}
           >
             {props.name}
           </div>
@@ -85,7 +77,7 @@ export const GraphNode = (props: GraphNodeProps) => {
                 onChange={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setInput(e.target.value)
+                  setInput(e.target.value);
                 }}
                 placeholder="value"
                 value={input}
@@ -93,9 +85,7 @@ export const GraphNode = (props: GraphNodeProps) => {
               <Button
                 type="submit"
                 onClick={(e) => {
-
-                    dispatch(setNodeName(props.id, input));
-
+                  dispatch(setNodeName(props.id, input));
                 }}
               >
                 Set

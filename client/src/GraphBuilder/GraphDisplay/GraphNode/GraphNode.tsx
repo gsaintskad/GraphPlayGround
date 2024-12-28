@@ -11,8 +11,10 @@ import {useMemo, useState} from "react";
 import {Input} from "@/components/shadcnUI/input.tsx";
 import {Button} from "@/components/shadcnUI/button.tsx";
 import {setWeight} from "@/redux/GraphEdges/actionCreator.ts";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setNodeName} from "@/redux/GraphNodes/actionCreator.ts";
+import {DisplaySettingsState} from "@/redux/DisplaySettings/reducer.ts";
+import {RootState} from "@/redux/store.ts";
 export type GraphNodeStates =
   | "primary"
   | "secondary"
@@ -30,6 +32,8 @@ export interface GraphNodeProps {
 
 export const GraphNode = (props: GraphNodeProps) => {
   const dispatch = useDispatch();
+  const displaySettings:DisplaySettingsState = useSelector((state: RootState) => state.displaySettings);
+
   const [input, setInput] = useState<string>(`${props.name}`);
   const algorithmStateColorMap = useMemo(() => {
 
@@ -42,12 +46,14 @@ export const GraphNode = (props: GraphNodeProps) => {
 
     return stateColorMap;
   }, []);
+
   return (
     <div
       className={`absolute z-40`}
       style={{
         left: `${props.coordinates.x}px`,
         top: `${props.coordinates.y}px`,
+
       }}
 
     >
@@ -55,7 +61,8 @@ export const GraphNode = (props: GraphNodeProps) => {
         <DropdownMenuTrigger disabled={!props.isActive}>
           <div
             className={`${algorithmStateColorMap.get(props.algorithmState || "primary")} flex justify-center items-center shadow-2xl aspect-square overflow-hidden rounded-full w-full text-white text-xl font-bold border-4 border-white`}
-            style={{ width: `${props.radius || 90}px` }}
+            style={{ width: `${props.radius || 90}px`,
+              backgroundColor:displaySettings.nodeColor}}
           >
             {props.name}
           </div>

@@ -19,7 +19,7 @@ import {
 } from "@/redux/GraphNodes/actionCreator.ts";
 import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
 import InstrumentButton from "@/components/InstrumentButton.tsx";
-import GraphBuilderSettingsSheet from "@/components/GraphBuilderSettingsSheet.tsx";
+
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
 import {
   Tabs,
@@ -29,7 +29,8 @@ import {
 } from "@/components/shadcnUI/tabs.tsx";
 import { Label } from "@/components/shadcnUI/label.tsx";
 import { Slider } from "@/components/shadcnUI/slider.tsx";
-import {ColorPickerDemo} from "@/components/shadcnUI/color-picker/color-picker-demo.tsx";
+import { ColorPicker } from "@/components/shadcnUI/color-picker.tsx";
+import DisplaySettingsTab from "@/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
@@ -87,7 +88,7 @@ export const GraphBuilder = (props: {
           size: "3rem",
           color: theme.theme === "dark" ? "#000" : "#FFF",
           className: "global-class-name",
-          style: {fontSize: "3rem", width: "30px", height: "30px"},
+          style: { fontSize: "3rem", width: "30px", height: "30px" },
         }}
       >
         <div className={`h-12  flex justify-center items-center gap-8 w-full`}>
@@ -103,7 +104,7 @@ export const GraphBuilder = (props: {
               )
             }
           >
-            <IoMdSave/>
+            <IoMdSave />
           </InstrumentButton>
           <InstrumentButton
             name="Delete built graph"
@@ -114,7 +115,7 @@ export const GraphBuilder = (props: {
               dispatch(discardEdgeMap());
             }}
           >
-            <MdDelete/>
+            <MdDelete />
           </InstrumentButton>
 
           <InstrumentButton
@@ -124,7 +125,7 @@ export const GraphBuilder = (props: {
               setIsSettingsHidden(() => !isSettingsHidden);
             }}
           >
-            <IoMdSettings/>
+            <IoMdSettings />
           </InstrumentButton>
         </div>
 
@@ -139,7 +140,7 @@ export const GraphBuilder = (props: {
               onClick={() => toggleHandler("pointer")}
               description={"Just a simple pointer :)"}
             >
-              <TbPointer/>
+              <TbPointer />
             </InstrumentButton>
 
             <InstrumentButton
@@ -147,89 +148,51 @@ export const GraphBuilder = (props: {
               description="Moves a node with its edges"
               onClick={() => toggleHandler("move")}
             >
-              <IoIosMove/>
+              <IoIosMove />
             </InstrumentButton>
             <InstrumentButton
               name="Create"
               description="Creates new nodes and asings them ids"
               onClick={() => toggleHandler("create")}
             >
-              <TbPointerPlus/>
+              <TbPointerPlus />
             </InstrumentButton>
             <InstrumentButton
               name="Remove"
               description="Removes a node with its edges"
               onClick={() => toggleHandler("remove")}
             >
-              <TbPointerMinus/>
+              <TbPointerMinus />
             </InstrumentButton>
             <InstrumentButton
               name="Connection"
               description="Connects 2 nodes by clicking on it NOT directly"
               onClick={() => toggleHandler("connect")}
             >
-              <BsArrowDownUp/>
+              <BsArrowDownUp />
             </InstrumentButton>
             <InstrumentButton
               name="Direct Connection"
               description="Connects 2 nodes by clicking on it directly"
               onClick={() => toggleHandler("directConnect")}
             >
-              <ImArrowUpRight2/>
+              <ImArrowUpRight2 />
             </InstrumentButton>
             <InstrumentButton
               name="Disconnect"
               description="Disconnects 2 nodes by clicking on it"
               onClick={() => toggleHandler("disconnect")}
             >
-              <VscDebugDisconnect/>
+              <VscDebugDisconnect />
             </InstrumentButton>
           </div>
           <GraphDisplay
             className={`rounded-tl-md ${theme.theme === "dark" ? "bg-zinc-800" : "bg-zinc-400"}`}
             activeHandler={activeHandler}
           />
-          <Tabs
-            defaultValue="account"
-            className={`w-[400px] `}
-            hidden={isSettingsHidden}
-          >
-            <TabsList hidden={isSettingsHidden} className={`flex items-center justify-center px-2`}>
-              <TabsTrigger value="GraphInfo">Graph Info</TabsTrigger>
-              <TabsTrigger value="DisplaySettings">Display Settings</TabsTrigger>
-            </TabsList>
-            <TabsContent value="GraphInfo" className="p-10 gap-y-6 flex flex-col">
-              <div>
-                <Label>Node size:</Label>
-                <Slider
-                  className={"bg-white rounded-full"}
-                  onChange={() => console.log("sliderValueHasBeenChanged")}
-                  defaultValue={[90]}
-                  max={200}
-                  min={50}
-                  step={15}
-                />
-              </div>
-            </TabsContent>
-            <TabsContent value="DisplaySettings" className="p-10 gap-y-6 flex flex-col">
-              <div>
-                <Label>Node size:</Label>
-                <Slider
-                  className={"bg-white rounded-full"}
-                  onChange={() => console.log("sliderValueHasBeenChanged")}
-                  defaultValue={[90]}
-                  max={200}
-                  min={50}
-                  step={15}
-                />
-              </div>
-              <ColorPickerDemo/>
-
-            </TabsContent>
-          </Tabs>
+         <DisplaySettingsTab className={""} isSettingsHidden={isSettingsHidden}/>
         </div>
       </IconContext.Provider>
-
     </div>
   );
 };

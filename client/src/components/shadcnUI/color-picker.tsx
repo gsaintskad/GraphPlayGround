@@ -4,14 +4,14 @@ import { forwardRef, useMemo, useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { cn } from '@/lib/utils.ts';
 import { useForwardedRef } from '@/lib/use-forwarded-ref.tsx';
-import type { ButtonProps } from '@/components/shadcnUI/color-picker/ui/button.tsx';
-import { Button } from '@/components/shadcnUI/color-picker/ui/button.tsx';
+import type { ButtonProps } from '@/components/shadcnUI/button.tsx';
+import { Button } from '@/components/shadcnUI/button.tsx';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/shadcnUI/color-picker/ui/popover.tsx';
-import { Input } from '@/components/shadcnUI/color-picker/ui/input.tsx';
+} from '@/components/shadcnUI/popover.tsx';
+import { Input } from '@/components/shadcnUI/input.tsx';
 
 interface ColorPickerProps {
   value: string;

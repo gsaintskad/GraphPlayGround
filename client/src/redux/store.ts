@@ -17,13 +17,17 @@ import {
   GraphEdgesActionTypes,
   GraphEdgeAction,
 } from "@/redux/GraphEdges/actionTypes.ts";
+import {DisplaySettingsAction} from "@/redux/DisplaySettings/actionTypes.ts";
+import {DisplaySettingsState} from "@/redux/DisplaySettings/reducer.ts";
+import displaySettingsReducer from "@/redux/DisplaySettings/reducer.ts";
 
-export type rootAction = GraphEdgeAction | GraphNodeAction;
+export type rootAction = GraphEdgeAction | GraphNodeAction|DisplaySettingsAction;
 const store: ToolkitStore<
   {
     graphNodes: stateObject<GraphNodeProps>;
     graphEdges: stateObject<GraphEdgeProps>;
     selectedGraphNodes: GraphNodeProps[];
+    displaySettings:DisplaySettingsState
   },
   rootAction,
   []
@@ -32,6 +36,7 @@ const store: ToolkitStore<
     graphNodes: graphNodesReducer,
     graphEdges: graphEdgesReducer,
     selectedGraphNodes: selectedGraphNodesReducer,
+    displaySettings:displaySettingsReducer
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

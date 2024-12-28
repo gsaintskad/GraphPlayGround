@@ -13,7 +13,7 @@ function App() {
             "flex bg-background text-foreground h-full w-full"
           }
         >
-          {/*<GraphBuilder style={{ height: "70%", width: "70%" }} />*/}
+          <GraphBuilder style={{ height: "100%", width: "100%" }} />
         </div>
         <ModeToggle/>
       </Provider>

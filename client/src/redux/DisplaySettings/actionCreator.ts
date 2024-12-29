@@ -14,7 +14,18 @@ export const setNodeColor = (color: string): rootAction => {
     payload: color,
   } as DisplaySettingsAction;
 };
-
+export const setNodeFontColor=(color:string)=>{
+  return {
+    type: DisplaySettingsActionTypes.SET_NODE_FONT_COLOR,
+    payload: color,
+  } as DisplaySettingsAction;
+}
+export const setNodeFontSize=(textSize:number)=>{
+  return {
+    type: DisplaySettingsActionTypes.SET_NODE_FONT_SIZE,
+    payload: textSize,
+  } as DisplaySettingsAction;
+}
 export const setNodeBorderColor = (color: string): rootAction => {
   return {
     type: DisplaySettingsActionTypes.SET_NODE_BORDER_COLOR,

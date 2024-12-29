@@ -151,7 +151,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
             addEdge({
               nodeAid: nodeA.id,
               nodeBid: nodeB.id,
-              nodeSize: nodeSize,
+              // nodeSize: nodeSize,
               width: 10,
               id,
               weight: 1,

@@ -1,6 +1,6 @@
-import { DisplaySettingsActionTypes } from "./actionTypes.ts";
-import { Reducer } from "@reduxjs/toolkit";
-import { rootAction } from "@/redux/store.ts";
+import {DisplaySettingsActionTypes} from "./actionTypes.ts";
+import {Reducer} from "@reduxjs/toolkit";
+import {rootAction} from "@/redux/store.ts";
 
 export interface DisplaySettingsState {
   nodeSize: number;
@@ -11,17 +11,21 @@ export interface DisplaySettingsState {
   edgeWidth: number;
   weightColor: string;
   weightFontSize: number;
+  nodeFontColor: string;
+  nodeFontSize: number;
 }
 
 const initialState: DisplaySettingsState = {
   nodeSize: 90,
-  nodeColor: "#027502",
+  nodeColor: "#219421",
   nodeBorderColor: "#ffffff",
   edgeColor: "#ffffff",
   edgeBorderColor: "#a1a1a1",
   edgeWidth: 20,
   weightColor: "#ffffff",
-  weightFontSize: 12,
+  weightFontSize: 20,
+  nodeFontColor:"#ffffff",
+  nodeFontSize: 20,
 };
 
 const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (
@@ -29,6 +33,18 @@ const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (
   action: rootAction
 ): DisplaySettingsState => {
   switch (action.type) {
+    case DisplaySettingsActionTypes.SET_NODE_FONT_COLOR:{
+      return {
+        ...state,
+        nodeFontColor: action.payload,
+      }
+    }
+    case DisplaySettingsActionTypes.SET_NODE_FONT_SIZE:{
+      return {
+        ...state,
+        nodeFontSize: action.payload,
+      }
+    }
     case DisplaySettingsActionTypes.SET_NODE_SIZE: {
       return {
         ...state,

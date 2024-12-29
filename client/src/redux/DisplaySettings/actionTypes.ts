@@ -1,16 +1,24 @@
-
 import { AnyAction } from "@reduxjs/toolkit";
 
 export enum DisplaySettingsActionTypes {
   SET_NODE_SIZE = "SET_NODE_SIZE",
   SET_NODE_COLOR = "SET_NODE_COLOR",
   SET_NODE_BORDER_COLOR = "SET_NODE_BORDER_COLOR",
+  SET_NODE_FONT_COLOR = "SET_NODE_FONT_COLOR",
+  SET_NODE_FONT_SIZE = "SET_NODE_FONT_SIZE",
   SET_EDGE_COLOR = "SET_EDGE_COLOR",
   SET_EDGE_BORDER_COLOR = "SET_EDGE_BORDER_COLOR",
   SET_EDGE_WIDTH = "SET_EDGE_WIDTH",
-  SET_WEIGHT_COLOR="SET_WEIGHT_COLOR",
+  SET_WEIGHT_COLOR = "SET_WEIGHT_COLOR",
   SET_WEIGHT_FONT_SIZE = "SET_WEIGHT_FONT_SIZE",
-
+}
+export interface SetNodeFontSize extends AnyAction {
+  type: DisplaySettingsActionTypes.SET_NODE_FONT_SIZE;
+  payload: number;
+}
+export interface SetNodeFontColor extends AnyAction {
+  type: DisplaySettingsActionTypes.SET_NODE_FONT_COLOR;
+  payload: string;
 }
 export interface SetNodeSizeAction extends AnyAction {
   type: DisplaySettingsActionTypes.SET_NODE_SIZE;
@@ -54,6 +62,8 @@ export interface SetWeightFontSizeAction extends AnyAction {
 
 // Union type for all actions
 export type DisplaySettingsAction =
+  | SetNodeFontSize
+  | SetNodeFontColor
   | SetNodeSizeAction
   | SetNodeColorAction
   | SetNodeBorderColorAction
@@ -62,4 +72,3 @@ export type DisplaySettingsAction =
   | SetEdgeWidthAction
   | SetWeightColorAction
   | SetWeightFontSizeAction;
-

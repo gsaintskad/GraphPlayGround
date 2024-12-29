@@ -109,7 +109,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
         left: `${start.x}px`,
         top: `${start.y}px`,
         width: `${lenght || 300}px`,
-        height: `${props.width || 20}px`,
+        height: `10px`,
         transform: `rotate(${angle}deg)`,
         paddingInline: `${(displaySettings.nodeSize || 90) / 2}px`,
         paddingBlock: "0px",
@@ -123,12 +123,16 @@ export const GraphEdge = (props: GraphEdgeProps) => {
           // ${props.isDirected?'-translate-y-2.5':''}
         >
           <div
-            className={`flex justify-between p-0 bg-white shadow-2xl h-1/2 w-full border-2 border-gray-300 rounded-sm m-0`}
+            className={`flex justify-between p-0 shadow-2xl h-1/2 w-full border-2  rounded-sm m-0`}
+            style={{backgroundColor:displaySettings.edgeColor, borderColor:displaySettings.edgeBorderColor}}
           >
             <div/>
             <label
-              style={{ transform: `rotate(${-angle}deg) translateX(-10px)` }}
-              className={"font-bold text-white"}
+              style={{ transform: `rotate(${-angle}deg) translateX(-10px)`,
+                fontSize: `${displaySettings.weightFontSize}px`,
+                color: displaySettings.weightColor,
+              }}
+
             >
               {props.weight}
             </label>
@@ -136,7 +140,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
               // <div
               //   className={`bg-red-600 shadow-2xl h-full aspect-square rounded-sm m-0`}
               // />
-              <span className={'text-gray-300 m-0 p-0'} style={{fontSize:'3em', transform:`translateY(-0.86em) translateX(0.25em)`}}>{'>'}</span>
+              <span className={' m-0 p-0'} style={{fontSize:'3em', transform:`translateY(-0.86em) translateX(0.25em)`, color:displaySettings.edgeBorderColor}}>{'>'}</span>
             ) : <div/>
             }
 

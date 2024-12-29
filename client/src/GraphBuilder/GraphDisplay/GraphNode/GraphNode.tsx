@@ -49,11 +49,13 @@ export const GraphNode = (props: GraphNodeProps) => {
       <DropdownMenu>
         <DropdownMenuTrigger disabled={!props.isActive}>
           <div
-            className={`flex justify-center items-center shadow-2xl overflow-hidden aspect-square rounded-full w-full text-white text-xl font-bold border-4`}
+            className={`flex justify-center font-bold items-center shadow-2xl overflow-hidden aspect-square rounded-full w-full border-4`}
             style={{
               width: `${displaySettings.nodeSize || 90}px`,
               backgroundColor: displaySettings.nodeColor,
               borderColor: displaySettings.nodeBorderColor,
+              color: displaySettings.nodeFontColor,
+              fontSize:displaySettings.nodeFontSize,
             }}
           >
             {props.name}

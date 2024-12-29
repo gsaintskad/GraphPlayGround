@@ -1,25 +1,37 @@
-import React from 'react';
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/shadcnUI/tabs.tsx";
-import {Label} from "@/components/shadcnUI/label.tsx";
-import {Slider} from "@/components/shadcnUI/slider.tsx";
-import {ColorPicker} from "@/components/shadcnUI/color-picker.tsx";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/redux/store.ts";
-import {DisplaySettingsState} from "@/redux/DisplaySettings/reducer.ts";
+import React, {useMemo, useState} from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcnUI/tabs.tsx";
+import { Label } from "@/components/shadcnUI/label.tsx";
+import { Slider } from "@/components/shadcnUI/slider.tsx";
+import { ColorPicker } from "@/components/shadcnUI/color-picker.tsx";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store.ts";
+import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
 import {
   setEdgeBorderColor,
-  setEdgeColor, setEdgeWidth,
+  setEdgeColor,
   setNodeBorderColor,
-  setNodeColor, setNodeSize, setNodeFontColor, setNodeFontSize, setWeightFontSize, setWeightColor
+  setNodeColor,
+  setNodeSize,
+  setNodeFontColor,
+  setNodeFontSize,
+  setWeightFontSize,
+  setWeightColor,
 } from "@/redux/DisplaySettings/actionCreator.ts";
 
-interface DisplaySettingsTabProps{
-  className?:string,
-  isSettingsHidden:boolean,
+import {i18n} from "@/lib/i18n.ts";
+interface DisplaySettingsTabProps {
+  className?: string;
+  isSettingsHidden: boolean;
 }
-const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
-  const dispatch=useDispatch()
-  const displaySettings:DisplaySettingsState = useSelector((state: RootState) => state.displaySettings);
+
+const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
+
+  const dispatch = useDispatch();
+  const displaySettings: DisplaySettingsState = useSelector((state: RootState) => state.displaySettings);
+  const language = useMemo(
+    () => i18n[displaySettings.language],
+    [displaySettings.language],
+  );
   return (
     <Tabs
       defaultValue="GraphInfo"
@@ -28,26 +40,22 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
     >
       <TabsList
         hidden={props.isSettingsHidden}
-        className={` flex items-center justify-center px-2`}
+        className={`flex items-center justify-center px-2`}
       >
-        <TabsTrigger value="GraphInfo">Graph Info</TabsTrigger>
-        <TabsTrigger value="DisplaySettings">
-          Display Settings
-        </TabsTrigger>
+        <TabsTrigger value="GraphInfo">{language.displaySettingsTab.tabs.graphInfo}</TabsTrigger>
+        <TabsTrigger value="DisplaySettings">{language.displaySettingsTab.tabs.displaySettings}</TabsTrigger>
       </TabsList>
       <TabsContent
         value="GraphInfo"
         className="px-10 gap-y-6 flex flex-col relative"
-      >
-
-      </TabsContent>
+      ></TabsContent>
       <TabsContent
         value="DisplaySettings"
         className="px-10 gap-y-6 flex flex-col relative "
       >
-        <h1>Node customization</h1>
+        <h1>{language.displaySettingsTab.headings.nodeCustomization}</h1>
         <div>
-          <Label>Node size:</Label>
+          <Label>{language.displaySettingsTab.labels.nodeSize}</Label>
           <Slider
             className={"bg-white rounded-full"}
             onValueChange={(v) => dispatch(setNodeSize(v[0]))}
@@ -58,7 +66,7 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
           />
         </div>
         <div className="flex items-center">
-          <Label className="w-20 text-nowrap mr-3">Node color:</Label>
+          <Label className="w-20 text-nowrap mr-3">{language.displaySettingsTab.labels.nodeColor}</Label>
           <ColorPicker
             onChange={(v) => {
               dispatch(setNodeColor(v));
@@ -68,7 +76,7 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
           />
         </div>
         <div className="flex items-center">
-          <Label className="w-20  mr-3">Node border color:</Label>
+          <Label className="w-20 mr-3">{language.displaySettingsTab.labels.nodeBorderColor}</Label>
           <ColorPicker
             onChange={(v) => {
               dispatch(setNodeBorderColor(v));
@@ -78,7 +86,7 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
           />
         </div>
         <div className="flex items-center">
-          <Label className="w-20 mr-3">Node text color:</Label>
+          <Label className="w-20 mr-3">{language.displaySettingsTab.labels.nodeTextColor}</Label>
           <ColorPicker
             onChange={(v) => {
               dispatch(setNodeFontColor(v));
@@ -88,7 +96,7 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
           />
         </div>
         <div>
-          <Label>Node Font size:</Label>
+          <Label>{language.displaySettingsTab.labels.nodeFontSize}</Label>
           <Slider
             className={"bg-white rounded-full"}
             onValueChange={(v) => dispatch(setNodeFontSize(v[0]))}
@@ -98,11 +106,11 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
             step={1}
           />
         </div>
-        <br/>
-        <h1>Edge customization</h1>
+        <br />
+        <h1>{language.displaySettingsTab.headings.edgeCustomization}</h1>
 
         <div className="flex items-center">
-          <Label className="w-20 text-nowrap mr-3">Edge color:</Label>
+          <Label className="w-20 text-nowrap mr-3">{language.displaySettingsTab.labels.edgeColor}</Label>
           <ColorPicker
             onChange={(v) => {
               dispatch(setEdgeColor(v));
@@ -112,7 +120,7 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
           />
         </div>
         <div className="flex items-center">
-          <Label className="w-20  mr-3">Edge border color:</Label>
+          <Label className="w-20 mr-3">{language.displaySettingsTab.labels.edgeBorderColor}</Label>
           <ColorPicker
             onChange={(v) => {
               dispatch(setEdgeBorderColor(v));
@@ -122,7 +130,7 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
           />
         </div>
         <div className="flex items-center">
-          <Label className="w-20 mr-3">Weight font color:</Label>
+          <Label className="w-20 mr-3">{language.displaySettingsTab.labels.weightFontColor}</Label>
           <ColorPicker
             onChange={(v) => {
               dispatch(setWeightColor(v));
@@ -132,7 +140,7 @@ const DisplaySettingsTab = (props:DisplaySettingsTabProps) => {
           />
         </div>
         <div>
-          <Label>Weight Font size:</Label>
+          <Label>{language.displaySettingsTab.labels.weightFontSize}</Label>
           <Slider
             className={"bg-white rounded-full"}
             onValueChange={(v) => dispatch(setWeightFontSize(v[0]))}

@@ -1,4 +1,3 @@
-import { Button } from "@/components/shadcnUI/button";
 import GraphDisplay from "@/GraphBuilder/GraphDisplay/GraphDisplay.tsx";
 import React, { useMemo, useState } from "react";
 import { GraphBuilderActions } from "./graphBuilderActions.ts";
@@ -11,7 +10,7 @@ import { TbPointer, TbPointerMinus, TbPointerPlus } from "react-icons/tb";
 import { ImArrowUpRight2 } from "react-icons/im";
 import { IoIosMove, IoMdSave, IoMdSettings } from "react-icons/io";
 import { VscDebugDisconnect } from "react-icons/vsc";
-import { MdDelete, MdDeleteOutline } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { IconContext } from "react-icons";
 import {
   discardNodeMap,
@@ -21,22 +20,23 @@ import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
 import InstrumentButton from "@/components/InstrumentButton.tsx";
 
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/shadcnUI/tabs.tsx";
-import { Label } from "@/components/shadcnUI/label.tsx";
-import { Slider } from "@/components/shadcnUI/slider.tsx";
-import { ColorPicker } from "@/components/shadcnUI/color-picker.tsx";
 import DisplaySettingsTab from "@/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
+import { i18n } from "@/lib/i18n.ts";
+import displaySettingsTab from "@/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
 }) => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
+  const displaySettings = useSelector(
+    (state: RootState) => state.displaySettings,
+  );
+
+  const language = useMemo(
+    () => i18n[displaySettings.language],
+    [displaySettings.language],
+  );
   const [activeHandler, setActiveHandler] = useState<GraphBuilderActions>("");
   const vertexes = useMemo(() => {
     const arr: GraphNodeProps[] = [];
@@ -47,22 +47,18 @@ export const GraphBuilder = (props: {
   }, [nodeMap]);
   const dispatch = useDispatch();
   const adjMatrix = useMemo(() => {
-    // Initialize an empty matrix
     const matrix: (GraphEdgeProps | null)[][] = Array(vertexes.length)
       .fill(null)
       .map(() => Array(vertexes.length).fill(null));
 
-    // Populate the matrix based on edgeMap
     for (const id in edgeMap) {
       const edge = edgeMap[id];
       const fromIndex = vertexes.findIndex((node) => node.id === edge.nodeAid);
       const toIndex = vertexes.findIndex((node) => node.id === edge.nodeBid);
 
       if (fromIndex !== -1 && toIndex !== -1) {
-        // Always set the connection from A to B
         matrix[fromIndex][toIndex] = edge;
 
-        // If the edge is not directed, also set the connection from B to A
         if (!edge.isDirected) {
           matrix[toIndex][fromIndex] = edge;
         }
@@ -93,8 +89,8 @@ export const GraphBuilder = (props: {
       >
         <div className={`h-12  flex justify-center items-center gap-8 w-full`}>
           <InstrumentButton
-            name="Save built graph"
-            description="Saves and preparing the graph you've built, than sends it to the server to compute algorithms"
+            name={language.instrumentButtons.saveGraph.name}
+            description={language.instrumentButtons.saveGraph.description}
             onClick={() =>
               console.log(
                 "adjacency matrix:",
@@ -107,8 +103,8 @@ export const GraphBuilder = (props: {
             <IoMdSave />
           </InstrumentButton>
           <InstrumentButton
-            name="Delete built graph"
-            description="Clears the graph display"
+            name={language.instrumentButtons.deleteGraph.name}
+            description={language.instrumentButtons.deleteGraph.description}
             onClick={() => {
               dispatch(discardSelection());
               dispatch(discardNodeMap());
@@ -119,8 +115,8 @@ export const GraphBuilder = (props: {
           </InstrumentButton>
 
           <InstrumentButton
-            name="Delete built graph"
-            description="Clears the graph display"
+            name={language.instrumentButtons.settings.name}
+            description={language.instrumentButtons.settings.description}
             onClick={() => {
               setIsSettingsHidden(() => !isSettingsHidden);
             }}
@@ -129,58 +125,57 @@ export const GraphBuilder = (props: {
           </InstrumentButton>
         </div>
 
-        <div className={`h-full flex  `}>
+        <div className={`h-full flex`}>
           <div
-            className={` pt-10 flex flex-col h-full px-2 gap-8  gap-x-5 w-16 justify-center items-center
-          overflow-y-auto
-          `}
+            className={`pt-10 flex flex-col h-full px-2 gap-8 w-16 justify-center items-center overflow-y-auto`}
           >
             <InstrumentButton
-              name={"Pointer"}
+              name={language.instrumentButtons.pointer.name}
+              description={language.instrumentButtons.pointer.description}
               onClick={() => toggleHandler("pointer")}
-              description={"Just a simple pointer :)"}
             >
               <TbPointer />
             </InstrumentButton>
-
             <InstrumentButton
-              name="Move"
-              description="Moves a node with its edges"
+              name={language.instrumentButtons.move.name}
+              description={language.instrumentButtons.move.description}
               onClick={() => toggleHandler("move")}
             >
               <IoIosMove />
             </InstrumentButton>
             <InstrumentButton
-              name="Create"
-              description="Creates new nodes and asings them ids"
+              name={language.instrumentButtons.create.name}
+              description={language.instrumentButtons.create.description}
               onClick={() => toggleHandler("create")}
             >
               <TbPointerPlus />
             </InstrumentButton>
             <InstrumentButton
-              name="Remove"
-              description="Removes a node with its edges"
+              name={language.instrumentButtons.remove.name}
+              description={language.instrumentButtons.remove.description}
               onClick={() => toggleHandler("remove")}
             >
               <TbPointerMinus />
             </InstrumentButton>
             <InstrumentButton
-              name="Connection"
-              description="Connects 2 nodes by clicking on it NOT directly"
+              name={language.instrumentButtons.connection.name}
+              description={language.instrumentButtons.connection.description}
               onClick={() => toggleHandler("connect")}
             >
               <BsArrowDownUp />
             </InstrumentButton>
             <InstrumentButton
-              name="Direct Connection"
-              description="Connects 2 nodes by clicking on it directly"
+              name={language.instrumentButtons.directConnection.name}
+              description={
+                language.instrumentButtons.directConnection.description
+              }
               onClick={() => toggleHandler("directConnect")}
             >
               <ImArrowUpRight2 />
             </InstrumentButton>
             <InstrumentButton
-              name="Disconnect"
-              description="Disconnects 2 nodes by clicking on it"
+              name={language.instrumentButtons.disconnect.name}
+              description={language.instrumentButtons.disconnect.description}
               onClick={() => toggleHandler("disconnect")}
             >
               <VscDebugDisconnect />
@@ -190,7 +185,10 @@ export const GraphBuilder = (props: {
             className={`rounded-tl-md ${theme.theme === "dark" ? "bg-zinc-800" : "bg-zinc-400"}`}
             activeHandler={activeHandler}
           />
-         <DisplaySettingsTab className={""} isSettingsHidden={isSettingsHidden}/>
+          <DisplaySettingsTab
+            className=""
+            isSettingsHidden={isSettingsHidden}
+          />
         </div>
       </IconContext.Provider>
     </div>

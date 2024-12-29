@@ -1,4 +1,5 @@
 import { AnyAction } from "@reduxjs/toolkit";
+export type Language = "ua" | "de" | "en" | "ru" | "pl";
 
 export enum DisplaySettingsActionTypes {
   SET_NODE_SIZE = "SET_NODE_SIZE",
@@ -11,6 +12,11 @@ export enum DisplaySettingsActionTypes {
   SET_EDGE_WIDTH = "SET_EDGE_WIDTH",
   SET_WEIGHT_COLOR = "SET_WEIGHT_COLOR",
   SET_WEIGHT_FONT_SIZE = "SET_WEIGHT_FONT_SIZE",
+  SET_LANGUAGE = "SET_LANGUAGE",
+}
+export interface SetLanguage extends AnyAction {
+  type: DisplaySettingsActionTypes.SET_LANGUAGE;
+  payload: Language;
 }
 export interface SetNodeFontSize extends AnyAction {
   type: DisplaySettingsActionTypes.SET_NODE_FONT_SIZE;
@@ -62,6 +68,7 @@ export interface SetWeightFontSizeAction extends AnyAction {
 
 // Union type for all actions
 export type DisplaySettingsAction =
+  | SetLanguage
   | SetNodeFontSize
   | SetNodeFontColor
   | SetNodeSizeAction

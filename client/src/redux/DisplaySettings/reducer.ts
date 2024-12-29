@@ -1,4 +1,4 @@
-import {DisplaySettingsActionTypes} from "./actionTypes.ts";
+import {DisplaySettingsActionTypes, Language} from "./actionTypes.ts";
 import {Reducer} from "@reduxjs/toolkit";
 import {rootAction} from "@/redux/store.ts";
 
@@ -13,6 +13,7 @@ export interface DisplaySettingsState {
   weightFontSize: number;
   nodeFontColor: string;
   nodeFontSize: number;
+  language:Language;
 }
 
 const initialState: DisplaySettingsState = {
@@ -26,6 +27,7 @@ const initialState: DisplaySettingsState = {
   weightFontSize: 20,
   nodeFontColor:"#ffffff",
   nodeFontSize: 20,
+  language:'en'
 };
 
 const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (
@@ -37,6 +39,12 @@ const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (
       return {
         ...state,
         nodeFontColor: action.payload,
+      }
+    }
+    case DisplaySettingsActionTypes.SET_LANGUAGE:{
+      return{
+        ...state,
+        language:(action.payload as Language),
       }
     }
     case DisplaySettingsActionTypes.SET_NODE_FONT_SIZE:{

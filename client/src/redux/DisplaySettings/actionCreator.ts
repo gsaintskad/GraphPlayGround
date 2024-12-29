@@ -1,4 +1,4 @@
-import {DisplaySettingsAction, DisplaySettingsActionTypes} from "@/redux/DisplaySettings/actionTypes.ts";
+import {DisplaySettingsAction, DisplaySettingsActionTypes, Language} from "@/redux/DisplaySettings/actionTypes.ts";
 import {rootAction} from "@/redux/store.ts";
 // Action creators for DisplaySettings
 export const setNodeSize = (size: number): rootAction => {
@@ -7,7 +7,12 @@ export const setNodeSize = (size: number): rootAction => {
     payload: size,
   } as DisplaySettingsAction;
 };
-
+export const setLanguage=(language:Language)=>{
+  return {
+    type: DisplaySettingsActionTypes.SET_LANGUAGE,
+    payload: language,
+  }
+}
 export const setNodeColor = (color: string): rootAction => {
   return {
     type: DisplaySettingsActionTypes.SET_NODE_COLOR,

@@ -12,16 +12,21 @@ function App() {
       <Provider store={store}>
         <div
           className={
-            "flex bg-background text-foreground h-full w-full"
+            "flex flex-col bg-background text-foreground h-full w-full"
           }
         >
-          <GraphBuilder style={{ height: "100%", width: "100%" }} />
-        </div>
-        <ModeToggle/>
-        <LanguageSelect/>
+          <div
+            className={
+              "flex justify-end bg-background text-foreground "
+            }
+          >
+            <ModeToggle/>
+            <LanguageSelect/></div>
+            <GraphBuilder style={{height: "100%", width: "100%"}}/>
+          </div>
       </Provider>
     </ThemeProvider>
-  );
+);
 }
 
 export default App;

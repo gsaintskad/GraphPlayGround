@@ -822,6 +822,14 @@ body {
   width: 100%;
 }
 
+.w-\[32em\] {
+  width: 32em;
+}
+
+.w-28 {
+  width: 7rem;
+}
+
 .min-w-\[8rem\] {
   min-width: 8rem;
 }

@@ -111,7 +111,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
   return (
     <Tabs
       defaultValue="GraphInfo"
-      className={`w-[30em]  overflow-y-auto`}
+      className={`w-[32em]  overflow-y-auto`}
       hidden={props.isSettingsHidden}
     >
       <TabsList
@@ -171,7 +171,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                           handleChange("nodeColors", { primary: v })
                         }
                         value={localSettings.nodeColors.primary}
-                        className={"w-40"}
+                        className={"w-28"}
                       />
                     </div>
                     <div className="flex items-center">
@@ -183,7 +183,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                           handleChange("nodeColors", { secondary: v })
                         }
                         value={localSettings.nodeColors.secondary}
-                        className={"w-40"}
+                        className={"w-28"}
                       />
                     </div>
                     <div className="flex items-center">
@@ -193,7 +193,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                           handleChange("nodeColors", { selected: v })
                         }
                         value={localSettings.nodeColors.selected}
-                        className={"w-40"}
+                        className={"w-28"}
                       />
                     </div>
                     <div className="flex items-center">
@@ -205,7 +205,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                           handleChange("nodeColors", { comparing: v })
                         }
                         value={localSettings.nodeColors.comparing}
-                        className={"w-40"}
+                        className={"w-28"}
                       />
                     </div>
                     <div className="flex items-center">
@@ -215,7 +215,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                           handleChange("nodeColors", { visited: v })
                         }
                         value={localSettings.nodeColors.visited}
-                        className={"w-40"}
+                        className={"w-28"}
                       />
                     </div>
                   </AccordionContent>
@@ -228,7 +228,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("nodeBorderColor", v)}
                   value={localSettings.nodeBorderColor}
-                  className={"w-40"}
+                  className={"w-28"}
                 />
               </div>
               <div className="flex items-center">
@@ -238,7 +238,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("nodeFontColor", v)}
                   value={localSettings.nodeFontColor}
-                  className={"w-40"}
+                  className={"w-28"}
                 />
               </div>
               <div>
@@ -275,7 +275,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("edgeColor", v)}
                   value={localSettings.edgeColor}
-                  className={"w-40"}
+                  className={"w-28"}
                 />
               </div>
               <div className="flex items-center">
@@ -285,7 +285,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("edgeBorderColor", v)}
                   value={localSettings.edgeBorderColor}
-                  className={"w-40"}
+                  className={"w-28"}
                 />
               </div>
               <button
@@ -314,7 +314,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("weightColor", v)}
                   value={localSettings.weightColor}
-                  className={"w-40"}
+                  className={"w-28"}
                 />
               </div>
               <div>

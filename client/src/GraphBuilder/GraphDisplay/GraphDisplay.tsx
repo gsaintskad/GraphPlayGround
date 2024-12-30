@@ -37,10 +37,10 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   const selectedNodesArr = useSelector((state: RootState) => {
     return state.selectedGraphNodes;
   });
-
+  const displaySettings =useSelector((state:RootState)=>state.displaySettings);
   const divRef = useRef<HTMLDivElement | null>(null);
 
-  const [nodeSize, setNodeSize] = useState<number>(90);
+
 
   const changeNodesActiveState = (isActive: boolean) => {
     const divElement = divRef.current;
@@ -60,7 +60,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
           isLiesBetween(
             clickCoords,
             node.coordinates,
-            movePoint(node.coordinates, { x: nodeSize, y: nodeSize }),
+            movePoint(node.coordinates, { x: displaySettings.nodeSize, y: displaySettings.nodeSize }),
           )
         ) {
           dispatch(selectNode(node));
@@ -68,7 +68,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         }
       }
     },
-    [nodeMap],
+    [nodeMap, displaySettings.nodeSize],
   );
 
   const moveNodeHandler = useCallback(
@@ -76,8 +76,8 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       if (selectedNodesArr.length > 0) {
         const nodeId = selectedNodesArr[0].id;
         const coordinates = {
-          x: e.offsetX - nodeSize / 2,
-          y: e.offsetY - nodeSize / 2,
+          x: e.offsetX - displaySettings.nodeSize / 2,
+          y: e.offsetY - displaySettings.nodeSize / 2,
         };
 
         batch(() => {
@@ -97,10 +97,10 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         id,
         name: `Node ${id}`, // Optional name for the node
         coordinates: {
-          x: e.offsetX - nodeSize / 2,
-          y: e.offsetY - nodeSize / 2,
+          x: e.offsetX - displaySettings.nodeSize / 2,
+          y: e.offsetY - displaySettings.nodeSize / 2,
         },
-        radius: nodeSize,
+        radius: displaySettings.nodeSize,
         isActive: true,
         algorithmState: "primary",
       };
@@ -151,7 +151,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
             addEdge({
               nodeAid: nodeA.id,
               nodeBid: nodeB.id,
-              // nodeSize: nodeSize,
+              // displaySettings.nodeSize: displaySettings.nodeSize,
               width: 10,
               id,
               weight: 1,

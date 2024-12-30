@@ -131,7 +131,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         const reverseId = `${nodeB.id}-${nodeA.id}`;
         const isDirected: boolean = props.activeHandler === "directConnect";
 
-        //coincidence check
+
         for (const edgeId in edgeMap) {
           if (isDirected) {
             if (edgeId === id) {
@@ -147,6 +147,20 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         }
 
         if (nodeA.id !== nodeB.id) {
+          dispatch(
+            addEdge({
+              nodeAid: nodeA.id,
+              nodeBid: nodeB.id,
+              // displaySettings.nodeSize: displaySettings.nodeSize,
+              width: 10,
+              id,
+              weight: 1,
+              isActive: true,
+              isDirected,
+            }),
+          );
+        }
+        else{
           dispatch(
             addEdge({
               nodeAid: nodeA.id,

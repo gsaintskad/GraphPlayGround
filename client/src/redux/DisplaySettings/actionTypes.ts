@@ -3,7 +3,7 @@ export type Language = "ua" | "de" | "en" | "ru" | "pl";
 
 export enum DisplaySettingsActionTypes {
   SET_NODE_SIZE = "SET_NODE_SIZE",
-  SET_NODE_COLOR = "SET_NODE_COLOR",
+  SET_NODE_COLORS = "SET_NODE_COLORS",
   SET_NODE_BORDER_COLOR = "SET_NODE_BORDER_COLOR",
   SET_NODE_FONT_COLOR = "SET_NODE_FONT_COLOR",
   SET_NODE_FONT_SIZE = "SET_NODE_FONT_SIZE",
@@ -32,8 +32,14 @@ export interface SetNodeSizeAction extends AnyAction {
 }
 
 export interface SetNodeColorAction extends AnyAction {
-  type: DisplaySettingsActionTypes.SET_NODE_COLOR;
-  payload: string; // Assuming color is represented as a string (e.g., hex or color name)
+  type: DisplaySettingsActionTypes.SET_NODE_COLORS;
+  payload: {
+    primary:string;
+    secondary:string;
+    selected:string;
+    comparing:string;
+    visited:string;
+  }; // Assuming color is represented as a string (e.g., hex or color name)
 }
 
 export interface SetNodeBorderColorAction extends AnyAction {

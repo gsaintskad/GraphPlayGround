@@ -15,7 +15,7 @@ import {
   setEdgeBorderColor,
   setEdgeColor,
   setNodeBorderColor,
-  setNodeColor,
+  setNodeColors,
   setNodeSize,
   setNodeFontColor,
   setNodeFontSize,
@@ -29,7 +29,6 @@ import {
   AccordionTrigger,
 } from "@/components/shadcnUI/accordion";
 import { i18n } from "@/lib/i18n.ts";
-import { Button } from "@/components/shadcnUI/button.tsx";
 
 interface DisplaySettingsTabProps {
   className?: string;
@@ -47,32 +46,66 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
   );
 
   // Local state for settings
-  const [localSettings, setLocalSettings] = useState({
+  const [localSettings, setLocalSettings] = useState<DisplaySettingsState>({
     nodeSize: displaySettings.nodeSize,
-    nodeColor: displaySettings.nodeColor,
+    nodeColors: { ...displaySettings.nodeColors },
     nodeBorderColor: displaySettings.nodeBorderColor,
-    nodeFontColor: displaySettings.nodeFontColor,
-    nodeFontSize: displaySettings.nodeFontSize,
     edgeColor: displaySettings.edgeColor,
     edgeBorderColor: displaySettings.edgeBorderColor,
-    weightFontSize: displaySettings.weightFontSize,
+    edgeWidth: displaySettings.edgeWidth,
     weightColor: displaySettings.weightColor,
+    weightFontSize: displaySettings.weightFontSize,
+    nodeFontColor: displaySettings.nodeFontColor,
+    nodeFontSize: displaySettings.nodeFontSize,
+    language: displaySettings.language,
   });
 
-  const handleSubmit = () => {
+  const handleNodeSettingsSubmit = () => {
     dispatch(setNodeSize(localSettings.nodeSize));
-    dispatch(setNodeColor(localSettings.nodeColor));
+    dispatch(setNodeColors(localSettings.nodeColors));
     dispatch(setNodeBorderColor(localSettings.nodeBorderColor));
     dispatch(setNodeFontColor(localSettings.nodeFontColor));
     dispatch(setNodeFontSize(localSettings.nodeFontSize));
-    dispatch(setEdgeColor(localSettings.edgeColor));
-    dispatch(setEdgeBorderColor(localSettings.edgeBorderColor));
-    dispatch(setWeightFontSize(localSettings.weightFontSize));
-    dispatch(setWeightColor(localSettings.weightColor));
   };
 
-  const handleChange = (field: string, value: unknown) => {
-    setLocalSettings((prev) => ({ ...prev, [field]: value }));
+  const handleEdgeSettingsSubmit = () => {
+    dispatch(setEdgeColor(localSettings.edgeColor));
+    dispatch(setEdgeBorderColor(localSettings.edgeBorderColor));
+  };
+
+  const handleWeightSettingsSubmit = () => {
+    dispatch(setWeightColor(localSettings.weightColor));
+    dispatch(setWeightFontSize(localSettings.weightFontSize));
+  };
+
+  const handleSubmitAll = () => {
+    handleNodeSettingsSubmit();
+    handleEdgeSettingsSubmit();
+    handleWeightSettingsSubmit();
+  };
+
+  const handleChange = (
+    field: keyof DisplaySettingsState,
+    value:
+      | number
+      | string
+      | {
+          primary?: string;
+          secondary?: string;
+          selected?: string;
+          comparing?: string;
+          visited?: string;
+        },
+  ) => {
+    setLocalSettings((prev) => {
+      if (field === "nodeColors" && typeof value === "object") {
+        return {
+          ...prev,
+          nodeColors: { ...prev.nodeColors, ...value },
+        };
+      }
+      return { ...prev, [field]: value };
+    });
   };
 
   return (
@@ -109,7 +142,6 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
         value="DisplaySettings"
         className="px-10 gap-y-6 flex flex-col relative "
       >
-        <Button onClick={handleSubmit}>save</Button>
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>
@@ -135,9 +167,11 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                     <div className="flex items-center">
                       <Label className="w-20 text-nowrap mr-3">Primary:</Label>
                       <ColorPicker
-                        onChange={(v) => handleChange("nodeColor", v)}
-                        value={localSettings.nodeColor}
-                        className={"w-28"}
+                        onChange={(v) =>
+                          handleChange("nodeColors", { primary: v })
+                        }
+                        value={localSettings.nodeColors.primary}
+                        className={"w-40"}
                       />
                     </div>
                     <div className="flex items-center">
@@ -145,17 +179,21 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                         Secondary:
                       </Label>
                       <ColorPicker
-                        onChange={(v) => handleChange("nodeColor", v)}
-                        value={localSettings.nodeColor}
-                        className={"w-28"}
+                        onChange={(v) =>
+                          handleChange("nodeColors", { secondary: v })
+                        }
+                        value={localSettings.nodeColors.secondary}
+                        className={"w-40"}
                       />
                     </div>
                     <div className="flex items-center">
                       <Label className="w-20 text-nowrap mr-3">Selected:</Label>
                       <ColorPicker
-                        onChange={(v) => handleChange("nodeColor", v)}
-                        value={localSettings.nodeColor}
-                        className={"w-28"}
+                        onChange={(v) =>
+                          handleChange("nodeColors", { selected: v })
+                        }
+                        value={localSettings.nodeColors.selected}
+                        className={"w-40"}
                       />
                     </div>
                     <div className="flex items-center">
@@ -163,17 +201,21 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                         Comparing:
                       </Label>
                       <ColorPicker
-                        onChange={(v) => handleChange("nodeColor", v)}
-                        value={localSettings.nodeColor}
-                        className={"w-28"}
+                        onChange={(v) =>
+                          handleChange("nodeColors", { comparing: v })
+                        }
+                        value={localSettings.nodeColors.comparing}
+                        className={"w-40"}
                       />
                     </div>
                     <div className="flex items-center">
                       <Label className="w-20 text-nowrap mr-3">Visited:</Label>
                       <ColorPicker
-                        onChange={(v) => handleChange("nodeColor", v)}
-                        value={localSettings.nodeColor}
-                        className={"w-28"}
+                        onChange={(v) =>
+                          handleChange("nodeColors", { visited: v })
+                        }
+                        value={localSettings.nodeColors.visited}
+                        className={"w-40"}
                       />
                     </div>
                   </AccordionContent>
@@ -186,7 +228,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("nodeBorderColor", v)}
                   value={localSettings.nodeBorderColor}
-                  className={"w-28"}
+                  className={"w-40"}
                 />
               </div>
               <div className="flex items-center">
@@ -196,7 +238,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("nodeFontColor", v)}
                   value={localSettings.nodeFontColor}
-                  className={"w-28"}
+                  className={"w-40"}
                 />
               </div>
               <div>
@@ -210,6 +252,12 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                   step={1}
                 />
               </div>
+              <button
+                onClick={handleNodeSettingsSubmit}
+                className="mt-4 p-2 bg-green-500 text-white rounded"
+              >
+                Save Node Settings
+              </button>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -227,7 +275,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("edgeColor", v)}
                   value={localSettings.edgeColor}
-                  className={"w-28"}
+                  className={"w-40"}
                 />
               </div>
               <div className="flex items-center">
@@ -237,9 +285,15 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("edgeBorderColor", v)}
                   value={localSettings.edgeBorderColor}
-                  className={"w-28"}
+                  className={"w-40"}
                 />
               </div>
+              <button
+                onClick={handleEdgeSettingsSubmit}
+                className="mt-4 p-2 bg-green-500 text-white rounded"
+              >
+                Save Edge Settings
+              </button>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -248,7 +302,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           <AccordionItem value="item-1">
             <AccordionTrigger>
               <h1>
-                headings.weightCustomization
+                displaySettingsTab.weightCustomization
                 {/*{language.displaySettingsTab.headings.weightCustomization}*/}
               </h1>
             </AccordionTrigger>
@@ -260,7 +314,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                 <ColorPicker
                   onChange={(v) => handleChange("weightColor", v)}
                   value={localSettings.weightColor}
-                  className={"w-28"}
+                  className={"w-40"}
                 />
               </div>
               <div>
@@ -276,9 +330,21 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                   step={1}
                 />
               </div>
+              <button
+                onClick={handleWeightSettingsSubmit}
+                className="mt-4 p-2 bg-green-500 text-white rounded"
+              >
+                Save Weight Settings
+              </button>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+        <button
+          onClick={handleSubmitAll}
+          className="mt-4 p-2 bg-blue-500 text-white rounded"
+        >
+          Submit All
+        </button>
       </TabsContent>
     </Tabs>
   );

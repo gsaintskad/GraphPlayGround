@@ -4,7 +4,13 @@ import {rootAction} from "@/redux/store.ts";
 
 export interface DisplaySettingsState {
   nodeSize: number;
-  nodeColor: string;
+  nodeColors: {
+    primary:string;
+    secondary:string;
+    selected:string;
+    comparing:string;
+    visited:string;
+  }
   nodeBorderColor: string;
   edgeColor: string;
   edgeBorderColor: string;
@@ -18,7 +24,13 @@ export interface DisplaySettingsState {
 
 const initialState: DisplaySettingsState = {
   nodeSize: 90,
-  nodeColor: "#219421",
+  nodeColors: {
+    primary:"#219421",
+    secondary:"#dfcc00",
+    selected:"#00b4df",
+    comparing:"#de0000",
+    visited:"#546367",
+  },
   nodeBorderColor: "#ffffff",
   edgeColor: "#ffffff",
   edgeBorderColor: "#a1a1a1",
@@ -59,10 +71,10 @@ const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (
         nodeSize: action.payload as number,
       };
     }
-    case DisplaySettingsActionTypes.SET_NODE_COLOR: {
+    case DisplaySettingsActionTypes.SET_NODE_COLORS: {
       return {
         ...state,
-        nodeColor: action.payload as string,
+        nodeColors: action.payload ,
       };
     }
     case DisplaySettingsActionTypes.SET_NODE_BORDER_COLOR: {

@@ -790,6 +790,10 @@ body {
   width: 1rem;
 }
 
+.w-40 {
+  width: 10rem;
+}
+
 .w-64 {
   width: 16rem;
 }
@@ -816,14 +820,6 @@ body {
 
 .w-full {
   width: 100%;
-}
-
-.w-40 {
-  width: 10rem;
-}
-
-.w-28 {
-  width: 7rem;
 }
 
 .min-w-\[8rem\] {
@@ -1043,6 +1039,11 @@ body {
 .bg-gray-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
+}
+
+.bg-green-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
 }
 
 .bg-green-700 {

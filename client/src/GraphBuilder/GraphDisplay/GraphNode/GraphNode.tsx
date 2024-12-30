@@ -52,7 +52,7 @@ export const GraphNode = (props: GraphNodeProps) => {
             className={`flex justify-center font-bold items-center shadow-2xl overflow-hidden aspect-square rounded-full w-full border-4`}
             style={{
               width: `${displaySettings.nodeSize || 90}px`,
-              backgroundColor: displaySettings.nodeColor,
+              backgroundColor: displaySettings.nodeColors[props.algorithmState||"primary"],
               borderColor: displaySettings.nodeBorderColor,
               color: displaySettings.nodeFontColor,
               fontSize:displaySettings.nodeFontSize,

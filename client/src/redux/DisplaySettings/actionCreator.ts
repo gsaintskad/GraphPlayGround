@@ -1,5 +1,9 @@
-import {DisplaySettingsAction, DisplaySettingsActionTypes, Language} from "@/redux/DisplaySettings/actionTypes.ts";
-import {rootAction} from "@/redux/store.ts";
+import {
+  DisplaySettingsAction,
+  DisplaySettingsActionTypes,
+  Language,
+} from "@/redux/DisplaySettings/actionTypes.ts";
+import { rootAction } from "@/redux/store.ts";
 // Action creators for DisplaySettings
 export const setNodeSize = (size: number): rootAction => {
   return {
@@ -7,30 +11,36 @@ export const setNodeSize = (size: number): rootAction => {
     payload: size,
   } as DisplaySettingsAction;
 };
-export const setLanguage=(language:Language)=>{
+export const setLanguage = (language: Language) => {
   return {
     type: DisplaySettingsActionTypes.SET_LANGUAGE,
     payload: language,
-  }
-}
-export const setNodeColor = (color: string): rootAction => {
+  };
+};
+export const setNodeColors = (colors: {
+  primary: string;
+  secondary: string;
+  selected: string;
+  comparing: string;
+  visited: string;
+}): rootAction => {
   return {
-    type: DisplaySettingsActionTypes.SET_NODE_COLOR,
-    payload: color,
+    type: DisplaySettingsActionTypes.SET_NODE_COLORS,
+    payload: colors,
   } as DisplaySettingsAction;
 };
-export const setNodeFontColor=(color:string)=>{
+export const setNodeFontColor = (color: string) => {
   return {
     type: DisplaySettingsActionTypes.SET_NODE_FONT_COLOR,
     payload: color,
   } as DisplaySettingsAction;
-}
-export const setNodeFontSize=(textSize:number)=>{
+};
+export const setNodeFontSize = (textSize: number) => {
   return {
     type: DisplaySettingsActionTypes.SET_NODE_FONT_SIZE,
     payload: textSize,
   } as DisplaySettingsAction;
-}
+};
 export const setNodeBorderColor = (color: string): rootAction => {
   return {
     type: DisplaySettingsActionTypes.SET_NODE_BORDER_COLOR,

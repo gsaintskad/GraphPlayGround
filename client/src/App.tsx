@@ -4,8 +4,8 @@ import { Provider } from "react-redux";
 import { ThemeProvider } from "@/components/shadcnUI/ThemeProvider.tsx";
 import { ModeToggle } from "@/components/shadcnUI/ModeToggle.tsx";
 import { Select } from "@/components/shadcnUI/select.tsx";
-import LanguageSelect from "@/components/LanguageSelect.tsx";
-import HomePage from "@/HomePage/HomePage.tsx";
+import LanguageSelect from "@/components/NavigationBar/LanguageSelect.tsx";
+import HomePage from "@/components/HomePage/HomePage.tsx";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.tsx";
 
 function App() {

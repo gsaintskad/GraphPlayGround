@@ -17,7 +17,7 @@ import {
   discardSelection,
 } from "@/redux/GraphNodes/actionCreator.ts";
 import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
-import InstrumentButton from "@/components/InstrumentButton.tsx";
+import InstrumentButton from "@/components/GraphBuilder/InstrumentButton.tsx";
 
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
 import DisplaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";

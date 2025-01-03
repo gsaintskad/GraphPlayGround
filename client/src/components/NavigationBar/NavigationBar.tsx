@@ -1,6 +1,6 @@
 import React from "react";
 import { ModeToggle } from "@/components/shadcnUI/ModeToggle.tsx";
-import LanguageSelect from "@/components/LanguageSelect.tsx";
+import LanguageSelect from "@/components/NavigationBar/LanguageSelect.tsx";
 import {
   NavigationMenu, NavigationMenuContent,
   NavigationMenuItem, NavigationMenuLink,

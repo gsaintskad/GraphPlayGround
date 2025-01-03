@@ -6,7 +6,7 @@ import {
 } from "@/redux/GraphNodes/reducer.ts";
 import graphEdgesReducer from "@/redux/GraphEdges/reducer.ts";
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
-import { stateObject } from "../../types.ts";
+import { stateObject } from "../lib/types.ts";
 import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 import { GraphEdgeProps } from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
 import {

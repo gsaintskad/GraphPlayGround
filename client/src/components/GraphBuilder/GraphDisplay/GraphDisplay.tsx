@@ -15,7 +15,7 @@ import {
   GraphNode,
 } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 import { GraphEdge } from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
-import { isLiesBetween, movePoint, Point } from "../../../../types.ts";
+import { isLiesBetween, movePoint, Point } from "../../../lib/types.ts";
 import { RootState } from "../../../redux/store.ts";
 import {
   addEdge,

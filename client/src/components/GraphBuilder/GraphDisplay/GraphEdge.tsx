@@ -9,7 +9,7 @@ import {
 
 import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 import { useEffect, useMemo, useState } from "react";
-import { Point } from "../../../../types.ts";
+import { Point } from "../../../lib/types.ts";
 import { Input } from "@/components/shadcnUI/input.tsx";
 import { Button } from "@/components/shadcnUI/button.tsx";
 import { useDispatch, useSelector } from "react-redux";

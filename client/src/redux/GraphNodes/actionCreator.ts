@@ -1,5 +1,5 @@
 import {GraphNodeProps} from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
-import {Point} from "../../../types.ts";
+import {Point} from "../../lib/types.ts";
 
 import {GraphNodeAction, GraphNodeActionTypes} from "./actionTypes.ts";
 import {rootAction} from "@/redux/store.ts";

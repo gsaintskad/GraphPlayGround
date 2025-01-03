@@ -1,5 +1,5 @@
 import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
-import { Point } from "../../../types.ts";
+import { Point } from "../../lib/types.ts";
 import { AnyAction } from "@reduxjs/toolkit";
 import { GraphEdgesActionTypes } from "@/redux/GraphEdges/actionTypes.ts";
 

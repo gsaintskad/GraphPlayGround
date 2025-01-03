@@ -6,7 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/shadcnUI/dropdown-menu.tsx";
-import { Point, stateObject } from "../../../../types.ts";
+import { Point, stateObject } from "../../../lib/types.ts";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/shadcnUI/input.tsx";
 import { Button } from "@/components/shadcnUI/button.tsx";

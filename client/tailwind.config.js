@@ -12,7 +12,11 @@ export default {
   ],
   theme: {
   	extend: {
-  		borderRadius: {
+		fontFamily: {
+			sans: ['Montserrat', 'sans-serif'], // Default font for the project
+		},
+
+		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'

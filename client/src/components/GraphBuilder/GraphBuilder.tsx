@@ -1,10 +1,10 @@
-import GraphDisplay from "@/GraphBuilder/GraphDisplay/GraphDisplay.tsx";
+import GraphDisplay from "@/components/GraphBuilder/GraphDisplay/GraphDisplay.tsx";
 import React, { useMemo, useState } from "react";
 import { GraphBuilderActions } from "./graphBuilderActions.ts";
-import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
+import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store.ts";
-import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
+import { GraphEdgeProps } from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
 import { BsArrowDownUp } from "react-icons/bs";
 import { TbPointer, TbPointerMinus, TbPointerPlus } from "react-icons/tb";
 import { ImArrowUpRight2 } from "react-icons/im";
@@ -20,9 +20,9 @@ import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
 import InstrumentButton from "@/components/InstrumentButton.tsx";
 
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
-import DisplaySettingsTab from "@/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
+import DisplaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
 import { i18n } from "@/lib/i18n.ts";
-import displaySettingsTab from "@/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
+import displaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };

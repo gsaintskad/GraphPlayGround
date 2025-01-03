@@ -7,8 +7,8 @@ import {
 import graphEdgesReducer from "@/redux/GraphEdges/reducer.ts";
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 import { stateObject } from "../../types.ts";
-import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
-import { GraphEdgeProps } from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
+import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
+import { GraphEdgeProps } from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
 import {
   GraphNodeActionTypes,
   GraphNodeAction,

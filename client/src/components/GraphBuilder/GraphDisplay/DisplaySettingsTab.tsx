@@ -27,7 +27,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/shadcnUI/accordion";
+} from "@/components/shadcnUI/accordion.tsx";
 import { i18n } from "@/lib/i18n.ts";
 
 interface DisplaySettingsTabProps {

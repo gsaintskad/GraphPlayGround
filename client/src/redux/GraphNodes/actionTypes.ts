@@ -1,4 +1,4 @@
-import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
+import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 import { Point } from "../../../types.ts";
 import { AnyAction } from "@reduxjs/toolkit";
 import { GraphEdgesActionTypes } from "@/redux/GraphEdges/actionTypes.ts";

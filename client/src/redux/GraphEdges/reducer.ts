@@ -1,7 +1,7 @@
 import {GraphEdgesActionTypes} from "./actionTypes.ts";
 import {Reducer} from "@reduxjs/toolkit";
 import {stateObject} from "../../../types.ts";
-import {GraphEdgeProps} from "@/GraphBuilder/GraphDisplay/GraphEdge/GraphEdge.tsx";
+import {GraphEdgeProps} from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
 import {rootAction} from "@/redux/store.ts";
 
 const initialState: stateObject<GraphEdgeProps> = {};

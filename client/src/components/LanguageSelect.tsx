@@ -7,7 +7,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue
-} from "@/components/ui/select.tsx";
+} from "@/components/shadcnUI/select.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {setLanguage} from "@/redux/DisplaySettings/actionCreator.ts";
 import {Language} from "@/redux/DisplaySettings/actionTypes.ts";

@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcnUI/dropdown-menu.tsx";
 
-import { GraphNodeProps } from "@/GraphBuilder/GraphDisplay/GraphNode/GraphNode.tsx";
+import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 import { useEffect, useMemo, useState } from "react";
 import { Point } from "../../../../types.ts";
 import { Input } from "@/components/shadcnUI/input.tsx";

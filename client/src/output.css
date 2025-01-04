@@ -554,6 +554,11 @@ video {
   display: none;
 }
 
+* {
+  scrollbar-color: initial;
+  scrollbar-width: initial;
+}
+
 :root {
   --background: 0 0% 100%;
   --foreground: 224 71.4% 4.1%;
@@ -770,8 +775,8 @@ body {
   height: 2.5rem;
 }
 
-.h-12 {
-  height: 3rem;
+.h-16 {
+  height: 4rem;
 }
 
 .h-2 {
@@ -802,6 +807,10 @@ body {
   height: 1.2rem;
 }
 
+.h-\[100vh\] {
+  height: 100vh;
+}
+
 .h-\[var\(--radix-navigation-menu-viewport-height\)\] {
   height: var(--radix-navigation-menu-viewport-height);
 }
@@ -818,20 +827,20 @@ body {
   height: 1px;
 }
 
-.h-screen {
-  height: 100vh;
-}
-
 .max-h-96 {
   max-height: 24rem;
 }
 
-.w-10 {
-  width: 2.5rem;
+.max-h-\[80vh\] {
+  max-height: 80vh;
 }
 
-.w-16 {
-  width: 4rem;
+.max-h-\[90vh\] {
+  max-height: 90vh;
+}
+
+.w-10 {
+  width: 2.5rem;
 }
 
 .w-2 {
@@ -880,6 +889,10 @@ body {
 
 .w-\[32em\] {
   width: 32em;
+}
+
+.w-\[80px\] {
+  width: 80px;
 }
 
 .w-full {
@@ -978,6 +991,14 @@ body {
   list-style-type: none;
 }
 
+.grid-cols-\[100px_1fr_auto\] {
+  grid-template-columns: 100px 1fr auto;
+}
+
+.grid-rows-\[auto_1fr\] {
+  grid-template-rows: auto 1fr;
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -1010,17 +1031,27 @@ body {
   gap: 0.5rem;
 }
 
-.gap-8 {
-  gap: 2rem;
+.gap-x-5 {
+  -moz-column-gap: 1.25rem;
+       column-gap: 1.25rem;
+}
+
+.gap-x-6 {
+  -moz-column-gap: 1.5rem;
+       column-gap: 1.5rem;
+}
+
+.gap-x-8 {
+  -moz-column-gap: 2rem;
+       column-gap: 2rem;
 }
 
 .gap-y-6 {
   row-gap: 1.5rem;
 }
 
-.gap-x-6 {
-  -moz-column-gap: 1.5rem;
-       column-gap: 1.5rem;
+.gap-y-8 {
+  row-gap: 2rem;
 }
 
 .space-x-1 > :not([hidden]) ~ :not([hidden]) {
@@ -1045,6 +1076,10 @@ body {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
+}
+
+.self-center {
+  align-self: center;
 }
 
 .overflow-auto {
@@ -1095,8 +1130,8 @@ body {
   border-radius: calc(var(--radius) - 4px);
 }
 
-.rounded-tl-md {
-  border-top-left-radius: calc(var(--radius) - 2px);
+.rounded-xl {
+  border-radius: 0.75rem;
 }
 
 .rounded-tl-sm {
@@ -1227,6 +1262,10 @@ body {
   background-color: rgb(113 113 122 / var(--tw-bg-opacity, 1));
 }
 
+.bg-zinc-700\/10 {
+  background-color: rgb(63 63 70 / 0.1);
+}
+
 .bg-zinc-700\/40 {
   background-color: rgb(63 63 70 / 0.4);
 }
@@ -1239,18 +1278,6 @@ body {
 .bg-zinc-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(24 24 27 / var(--tw-bg-opacity, 1));
-}
-
-.bg-zinc-700\/60 {
-  background-color: rgb(63 63 70 / 0.6);
-}
-
-.bg-zinc-700\/30 {
-  background-color: rgb(63 63 70 / 0.3);
-}
-
-.bg-zinc-700\/10 {
-  background-color: rgb(63 63 70 / 0.1);
 }
 
 .fill-current {
@@ -1341,6 +1368,10 @@ body {
   padding-bottom: 0.5em;
 }
 
+.pb-10 {
+  padding-bottom: 2.5rem;
+}
+
 .pb-4 {
   padding-bottom: 1rem;
 }
@@ -1365,16 +1396,16 @@ body {
   padding-top: 0px;
 }
 
-.pt-10 {
-  padding-top: 2.5rem;
-}
-
 .text-left {
   text-align: left;
 }
 
-.text-\[8em\] {
-  font-size: 8em;
+.text-\[40px\] {
+  font-size: 40px;
+}
+
+.text-\[7em\] {
+  font-size: 7em;
 }
 
 .text-base {
@@ -1513,6 +1544,10 @@ body {
   --tw-ring-offset-color: hsl(var(--background));
 }
 
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
 .transition {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
@@ -1567,6 +1602,121 @@ body {
 
 .duration-300 {
   animation-duration: 300ms;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
+  border-radius: var(--scrollbar-track-radius);
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: var(--scrollbar-thumb-radius);
+}
+
+.scrollbar::-webkit-scrollbar-corner {
+  background-color: var(--scrollbar-corner);
+  border-radius: var(--scrollbar-corner-radius);
+}
+
+.scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: var(--scrollbar-thumb, initial) var(--scrollbar-track, initial);
+}
+
+.scrollbar::-webkit-scrollbar {
+  display: block;
+  width: var(--scrollbar-width, 16px);
+  height: var(--scrollbar-height, 16px);
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
+  border-radius: var(--scrollbar-track-radius);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: var(--scrollbar-thumb-radius);
+}
+
+.scrollbar-thin::-webkit-scrollbar-corner {
+  background-color: var(--scrollbar-corner);
+  border-radius: var(--scrollbar-corner-radius);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb, initial) var(--scrollbar-track, initial);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-track-zinc-800 {
+  --scrollbar-track: #27272a;
+}
+
+.scrollbar-thumb-gray-950 {
+  --scrollbar-thumb: #030712;
+}
+
+/* Custom scrollbar for the entire page */
+
+html::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
+  border-radius: var(--scrollbar-track-radius);
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: var(--scrollbar-thumb-radius);
+}
+
+html::-webkit-scrollbar-corner {
+  background-color: var(--scrollbar-corner);
+  border-radius: var(--scrollbar-corner-radius);
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb, initial) var(--scrollbar-track, initial);
+}
+
+html::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+
+html {
+  --scrollbar-track: #e5e7eb;
+  --scrollbar-thumb: #6b7280;
+  /* Tailwind classes */
+}
+
+/* Adjust hover effects */
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #4b5563;
+  /* Darker gray for hover */
+}
+
+/* Customize scrollbar width */
+
+html::-webkit-scrollbar {
+  width: 12px;
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+}
+
+html::-webkit-scrollbar-track {
+  border-radius: 8px;
 }
 
 @font-face {

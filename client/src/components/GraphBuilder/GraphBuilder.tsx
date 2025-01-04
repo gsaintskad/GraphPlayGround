@@ -18,11 +18,9 @@ import {
 } from "@/redux/GraphNodes/actionCreator.ts";
 import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
 import InstrumentButton from "@/components/GraphBuilder/InstrumentButton.tsx";
-
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
 import DisplaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
 import { i18n } from "@/lib/i18n.ts";
-import displaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
@@ -30,12 +28,12 @@ export const GraphBuilder = (props: {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
   const displaySettings = useSelector(
-    (state: RootState) => state.displaySettings,
+    (state: RootState) => state.displaySettings
   );
 
   const language = useMemo(
     () => i18n[displaySettings.language],
-    [displaySettings.language],
+    [displaySettings.language]
   );
   const [activeHandler, setActiveHandler] = useState<GraphBuilderActions>("");
   const vertexes = useMemo(() => {
@@ -76,7 +74,9 @@ export const GraphBuilder = (props: {
 
   return (
     <div
-      className={`flex flex-col h-full w-full ${theme.theme === "dark" ? "bg-zinc-900" : "bg-zinc-500"}`}
+      className={`grid grid-rows-[auto_1fr]   h-full w-full pb-10 px-10 ${
+        theme.theme === "dark" ? "bg-zinc-900" : "bg-zinc-500"
+      }`}
       style={props.style}
     >
       <IconContext.Provider
@@ -87,7 +87,9 @@ export const GraphBuilder = (props: {
           style: { fontSize: "3rem", width: "30px", height: "30px" },
         }}
       >
-        <div className={`h-12  flex justify-center items-center gap-8 w-full`}>
+        <div
+          className={`flex h-16 max-h-[90vh]   gap-x-8 w-full items-center justify-center`}
+        >
           <InstrumentButton
             name={language.instrumentButtons.saveGraph.name}
             description={language.instrumentButtons.saveGraph.description}
@@ -96,7 +98,7 @@ export const GraphBuilder = (props: {
                 "adjacency matrix:",
                 adjMatrix,
                 "\nvertexes:",
-                vertexes,
+                vertexes
               )
             }
           >
@@ -125,9 +127,9 @@ export const GraphBuilder = (props: {
           </InstrumentButton>
         </div>
 
-        <div className={`h-full flex`}>
+        <div className={`grid grid-cols-[100px_1fr_auto] h-full `}>
           <div
-            className={`pt-10 flex flex-col h-full px-2 gap-8 w-16 justify-center items-center overflow-y-auto`}
+            className={`flex flex-col justify-center px-2 gap-y-8 w-[80px] max-h-[80vh] items-center overflow-y-auto  scrollbar scrollbar-thin scrollbar-thumb-gray-950 scrollbar-track-zinc-800`}
           >
             <InstrumentButton
               name={language.instrumentButtons.pointer.name}
@@ -182,7 +184,11 @@ export const GraphBuilder = (props: {
             </InstrumentButton>
           </div>
           <GraphDisplay
-            className={`rounded-tl-md ${theme.theme === "dark" ? "bg-zinc-800" : "bg-zinc-400"}`}
+            className={`rounded-xl 
+             max-h-[90vh]
+             ${
+              theme.theme === "dark" ? "bg-zinc-800" : "bg-zinc-400"
+            }`}
             activeHandler={activeHandler}
           />
           <DisplaySettingsTab

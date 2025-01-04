@@ -4,19 +4,27 @@ import LanguageSelect from "@/components/NavigationBar/LanguageSelect.tsx";
 import {Button} from "@/components/shadcnUI/button.tsx";
 import BreadCrumb from "@/components/NavigationBar/BreadCrumb.tsx";
 import {Link} from "react-router-dom";
+import NavLink from "@/components/NavigationBar/NavLink.tsx";
+import {PiGraphBold} from "react-icons/pi";
 
 const NavigationBar = () => {
 
   return (
     <div className={"flex justify-between items-center bg-zinc-700/10 text-foreground px-[2em] py-[0.5em] m-[1em] rounded-3xl"}>
-     <BreadCrumb/>
+     {/*<BreadCrumb/>*/}
+      <div className="flex justify-center items-center space-x-2">
+        <PiGraphBold className="text-[40px]" />
+        <NavLink to="/">Algorithmer</NavLink>
+      </div>
+          <div className="flex items-center gap-x-5">
 
-          <Link to="/">Home</Link>
 
-          <Link to="/GraphBuilder">Graph Builder</Link>
+            <NavLink to="/GraphBuilder" >Graph Builder</NavLink>
 
 
-          <Link to="/BTreeBuilder">BTree Builder</Link>
+            <NavLink to="/BTreeBuilder">BTree Builder</NavLink>
+            <NavLink to="/About">About</NavLink>
+          </div>
 
 
       <div className={"flex gap-x-6"}>

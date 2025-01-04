@@ -109,244 +109,247 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
   };
 
   return (
-    <Tabs
-      defaultValue="GraphInfo"
-      className={`w-[32em]  overflow-y-auto`}
-      hidden={props.isSettingsHidden}
-    >
-      <TabsList
+    <div className=" px-5 overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-950 scrollbar-track-zinc-800 max-h-[80vh]">
+      <Tabs
+        defaultValue="GraphInfo"
+        className={`w-[32em]  overflow-y-auto`}
         hidden={props.isSettingsHidden}
-        className={`flex items-center justify-center px-2`}
       >
-        <TabsTrigger value="GraphInfo">
-          {language.displaySettingsTab.tabs.graphInfo}
-        </TabsTrigger>
-        <TabsTrigger value="DisplaySettings">
-          {language.displaySettingsTab.tabs.displaySettings}
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent
-        value="GraphInfo"
-        className="px-10 gap-y-6 flex flex-col relative"
-      >
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Is it accessible?</AccordionTrigger>
-            <AccordionContent>
-              Yes. It adheres to the WAI-ARIA design pattern.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </TabsContent>
-      <TabsContent
-        value="DisplaySettings"
-        className="px-10 gap-y-6 flex flex-col relative "
-      >
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>
-              <h1>{language.displaySettingsTab.headings.nodeCustomization}</h1>
-            </AccordionTrigger>
-            <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
-              <div>
-                <Label>{language.displaySettingsTab.labels.nodeSize}</Label>
-                <Slider
-                  className={"bg-white rounded-full"}
-                  onValueChange={(v) => handleChange("nodeSize", v[0])}
-                  defaultValue={[localSettings.nodeSize]}
-                  max={200}
-                  min={50}
-                  step={15}
-                />
-              </div>
-              <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>Node colors</AccordionTrigger>
-
-                  <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
-                    <div className="flex items-center">
-                      <Label className="w-20 text-nowrap mr-3">Primary:</Label>
-                      <ColorPicker
-                        onChange={(v) =>
-                          handleChange("nodeColors", { primary: v })
-                        }
-                        value={localSettings.nodeColors.primary}
-                        className={"w-28"}
-                      />
-                    </div>
-                    <div className="flex items-center">
-                      <Label className="w-20 text-nowrap mr-3">
-                        Secondary:
-                      </Label>
-                      <ColorPicker
-                        onChange={(v) =>
-                          handleChange("nodeColors", { secondary: v })
-                        }
-                        value={localSettings.nodeColors.secondary}
-                        className={"w-28"}
-                      />
-                    </div>
-                    <div className="flex items-center">
-                      <Label className="w-20 text-nowrap mr-3">Selected:</Label>
-                      <ColorPicker
-                        onChange={(v) =>
-                          handleChange("nodeColors", { selected: v })
-                        }
-                        value={localSettings.nodeColors.selected}
-                        className={"w-28"}
-                      />
-                    </div>
-                    <div className="flex items-center">
-                      <Label className="w-20 text-nowrap mr-3">
-                        Comparing:
-                      </Label>
-                      <ColorPicker
-                        onChange={(v) =>
-                          handleChange("nodeColors", { comparing: v })
-                        }
-                        value={localSettings.nodeColors.comparing}
-                        className={"w-28"}
-                      />
-                    </div>
-                    <div className="flex items-center">
-                      <Label className="w-20 text-nowrap mr-3">Visited:</Label>
-                      <ColorPicker
-                        onChange={(v) =>
-                          handleChange("nodeColors", { visited: v })
-                        }
-                        value={localSettings.nodeColors.visited}
-                        className={"w-28"}
-                      />
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-              <div className="flex items-center">
-                <Label className="w-20 mr-3">
-                  {language.displaySettingsTab.labels.nodeBorderColor}
-                </Label>
-                <ColorPicker
-                  onChange={(v) => handleChange("nodeBorderColor", v)}
-                  value={localSettings.nodeBorderColor}
-                  className={"w-28"}
-                />
-              </div>
-              <div className="flex items-center">
-                <Label className="w-20 mr-3">
-                  {language.displaySettingsTab.labels.nodeTextColor}
-                </Label>
-                <ColorPicker
-                  onChange={(v) => handleChange("nodeFontColor", v)}
-                  value={localSettings.nodeFontColor}
-                  className={"w-28"}
-                />
-              </div>
-              <div>
-                <Label>{language.displaySettingsTab.labels.nodeFontSize}</Label>
-                <Slider
-                  className={"bg-white rounded-full"}
-                  onValueChange={(v) => handleChange("nodeFontSize", v[0])}
-                  defaultValue={[localSettings.nodeFontSize]}
-                  max={50}
-                  min={2}
-                  step={1}
-                />
-              </div>
-              <button
-                onClick={handleNodeSettingsSubmit}
-                className="mt-4 p-2 bg-green-500 text-white rounded"
-              >
-                Save Node Settings
-              </button>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-        <br />
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>
-              <h1>{language.displaySettingsTab.headings.edgeCustomization}</h1>
-            </AccordionTrigger>
-            <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
-              <div className="flex items-center">
-                <Label className="w-20 text-nowrap mr-3">
-                  {language.displaySettingsTab.labels.edgeColor}
-                </Label>
-                <ColorPicker
-                  onChange={(v) => handleChange("edgeColor", v)}
-                  value={localSettings.edgeColor}
-                  className={"w-28"}
-                />
-              </div>
-              <div className="flex items-center">
-                <Label className="w-20 text-nowrap mr-3">
-                  {language.displaySettingsTab.labels.edgeBorderColor}
-                </Label>
-                <ColorPicker
-                  onChange={(v) => handleChange("edgeBorderColor", v)}
-                  value={localSettings.edgeBorderColor}
-                  className={"w-28"}
-                />
-              </div>
-              <button
-                onClick={handleEdgeSettingsSubmit}
-                className="mt-4 p-2 bg-green-500 text-white rounded"
-              >
-                Save Edge Settings
-              </button>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-        <br />
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>
-              <h1>
-                displaySettingsTab.weightCustomization
-                {/*{language.displaySettingsTab.headings.weightCustomization}*/}
-              </h1>
-            </AccordionTrigger>
-            <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
-              <div className="flex items-center">
-                <Label className="w-20 mr-3">
-                  {language.displaySettingsTab.labels.weightFontColor}
-                </Label>
-                <ColorPicker
-                  onChange={(v) => handleChange("weightColor", v)}
-                  value={localSettings.weightColor}
-                  className={"w-28"}
-                />
-              </div>
-              <div>
-                <Label>
-                  {language.displaySettingsTab.labels.weightFontSize}
-                </Label>
-                <Slider
-                  className={"bg-white rounded-full"}
-                  onValueChange={(v) => handleChange("weightFontSize", v[0])}
-                  defaultValue={[localSettings.weightFontSize]}
-                  max={50}
-                  min={2}
-                  step={1}
-                />
-              </div>
-              <button
-                onClick={handleWeightSettingsSubmit}
-                className="mt-4 p-2 bg-green-500 text-white rounded"
-              >
-                Save Weight Settings
-              </button>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-        <button
-          onClick={handleSubmitAll}
-          className="mt-4 p-2 bg-blue-500 text-white rounded"
+        <TabsList
+          hidden={props.isSettingsHidden}
+          className={`flex items-center justify-center px-2`}
         >
-          Submit All
-        </button>
-      </TabsContent>
-    </Tabs>
+          <TabsTrigger value="GraphInfo">
+            {language.displaySettingsTab.tabs.graphInfo}
+          </TabsTrigger>
+          <TabsTrigger value="DisplaySettings">
+            {language.displaySettingsTab.tabs.displaySettings}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent
+          value="GraphInfo"
+          className="px-10 gap-y-6 flex flex-col relative"
+        >
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Is it accessible?</AccordionTrigger>
+              <AccordionContent>
+                Yes. It adheres to the WAI-ARIA design pattern.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </TabsContent>
+        <TabsContent
+          value="DisplaySettings"
+          className="px-10 gap-y-6 flex flex-col relative "
+        >
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                <h1>{language.displaySettingsTab.headings.nodeCustomization}</h1>
+              </AccordionTrigger>
+              <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
+                <div>
+                  <Label>{language.displaySettingsTab.labels.nodeSize}</Label>
+                  <Slider
+                    className={"bg-white rounded-full"}
+                    onValueChange={(v) => handleChange("nodeSize", v[0])}
+                    defaultValue={[localSettings.nodeSize]}
+                    max={200}
+                    min={50}
+                    step={15}
+                  />
+                </div>
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Node colors</AccordionTrigger>
+
+                    <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
+                      <div className="flex items-center">
+                        <Label className="w-20 text-nowrap mr-3">Primary:</Label>
+                        <ColorPicker
+                          onChange={(v) =>
+                            handleChange("nodeColors", { primary: v })
+                          }
+                          value={localSettings.nodeColors.primary}
+                          className={"w-28"}
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        <Label className="w-20 text-nowrap mr-3">
+                          Secondary:
+                        </Label>
+                        <ColorPicker
+                          onChange={(v) =>
+                            handleChange("nodeColors", { secondary: v })
+                          }
+                          value={localSettings.nodeColors.secondary}
+                          className={"w-28"}
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        <Label className="w-20 text-nowrap mr-3">Selected:</Label>
+                        <ColorPicker
+                          onChange={(v) =>
+                            handleChange("nodeColors", { selected: v })
+                          }
+                          value={localSettings.nodeColors.selected}
+                          className={"w-28"}
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        <Label className="w-20 text-nowrap mr-3">
+                          Comparing:
+                        </Label>
+                        <ColorPicker
+                          onChange={(v) =>
+                            handleChange("nodeColors", { comparing: v })
+                          }
+                          value={localSettings.nodeColors.comparing}
+                          className={"w-28"}
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        <Label className="w-20 text-nowrap mr-3">Visited:</Label>
+                        <ColorPicker
+                          onChange={(v) =>
+                            handleChange("nodeColors", { visited: v })
+                          }
+                          value={localSettings.nodeColors.visited}
+                          className={"w-28"}
+                        />
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <div className="flex items-center">
+                  <Label className="w-20 mr-3">
+                    {language.displaySettingsTab.labels.nodeBorderColor}
+                  </Label>
+                  <ColorPicker
+                    onChange={(v) => handleChange("nodeBorderColor", v)}
+                    value={localSettings.nodeBorderColor}
+                    className={"w-28"}
+                  />
+                </div>
+                <div className="flex items-center">
+                  <Label className="w-20 mr-3">
+                    {language.displaySettingsTab.labels.nodeTextColor}
+                  </Label>
+                  <ColorPicker
+                    onChange={(v) => handleChange("nodeFontColor", v)}
+                    value={localSettings.nodeFontColor}
+                    className={"w-28"}
+                  />
+                </div>
+                <div>
+                  <Label>{language.displaySettingsTab.labels.nodeFontSize}</Label>
+                  <Slider
+                    className={"bg-white rounded-full"}
+                    onValueChange={(v) => handleChange("nodeFontSize", v[0])}
+                    defaultValue={[localSettings.nodeFontSize]}
+                    max={50}
+                    min={2}
+                    step={1}
+                  />
+                </div>
+                <button
+                  onClick={handleNodeSettingsSubmit}
+                  className="mt-4 p-2 bg-green-500 text-white rounded"
+                >
+                  Save Node Settings
+                </button>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <br />
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                <h1>{language.displaySettingsTab.headings.edgeCustomization}</h1>
+              </AccordionTrigger>
+              <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
+                <div className="flex items-center">
+                  <Label className="w-20 text-nowrap mr-3">
+                    {language.displaySettingsTab.labels.edgeColor}
+                  </Label>
+                  <ColorPicker
+                    onChange={(v) => handleChange("edgeColor", v)}
+                    value={localSettings.edgeColor}
+                    className={"w-28"}
+                  />
+                </div>
+                <div className="flex items-center">
+                  <Label className="w-20 text-nowrap mr-3">
+                    {language.displaySettingsTab.labels.edgeBorderColor}
+                  </Label>
+                  <ColorPicker
+                    onChange={(v) => handleChange("edgeBorderColor", v)}
+                    value={localSettings.edgeBorderColor}
+                    className={"w-28"}
+                  />
+                </div>
+                <button
+                  onClick={handleEdgeSettingsSubmit}
+                  className="mt-4 p-2 bg-green-500 text-white rounded"
+                >
+                  Save Edge Settings
+                </button>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <br />
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                <h1>
+                  displaySettingsTab.weightCustomization
+                  {/*{language.displaySettingsTab.headings.weightCustomization}*/}
+                </h1>
+              </AccordionTrigger>
+              <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
+                <div className="flex items-center">
+                  <Label className="w-20 mr-3">
+                    {language.displaySettingsTab.labels.weightFontColor}
+                  </Label>
+                  <ColorPicker
+                    onChange={(v) => handleChange("weightColor", v)}
+                    value={localSettings.weightColor}
+                    className={"w-28"}
+                  />
+                </div>
+                <div>
+                  <Label>
+                    {language.displaySettingsTab.labels.weightFontSize}
+                  </Label>
+                  <Slider
+                    className={"bg-white rounded-full"}
+                    onValueChange={(v) => handleChange("weightFontSize", v[0])}
+                    defaultValue={[localSettings.weightFontSize]}
+                    max={50}
+                    min={2}
+                    step={1}
+                  />
+                </div>
+                <button
+                  onClick={handleWeightSettingsSubmit}
+                  className="mt-4 p-2 bg-green-500 text-white rounded"
+                >
+                  Save Weight Settings
+                </button>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <button
+            onClick={handleSubmitAll}
+            className="mt-4 p-2 bg-blue-500 text-white rounded"
+          >
+            Submit All
+          </button>
+        </TabsContent>
+      </Tabs>
+
+    </div>
   );
 };
 

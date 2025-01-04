@@ -281,7 +281,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
     ));
   }, [edgeMap, nodeMap]);
   return (
-    <div className={`overflow-auto ${props.className} w-full h-full  relative`}>
+    <div className={`overflow-auto ${props.className} w-full h-full  relative `}  >
       {/* Render nodes dynamically */}
       {renderNodes}
       {renderEdges}

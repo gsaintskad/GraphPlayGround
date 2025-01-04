@@ -1,17 +1,8 @@
 import GraphDisplay from "@/components/GraphBuilder/GraphDisplay/GraphDisplay.tsx";
 import React, { useMemo, useState } from "react";
 import { GraphBuilderActions } from "./graphBuilderActions.ts";
-import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store.ts";
-import { GraphEdgeProps } from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
-import { BsArrowDownUp } from "react-icons/bs";
-import { TbPointer, TbPointerMinus, TbPointerPlus } from "react-icons/tb";
-import { ImArrowUpRight2 } from "react-icons/im";
-import { IoIosMove, IoMdSave, IoMdSettings } from "react-icons/io";
-import { VscDebugDisconnect } from "react-icons/vsc";
-import { MdDelete } from "react-icons/md";
-import { IconContext } from "react-icons";
 import {
   discardNodeMap,
   discardSelection,
@@ -20,93 +11,59 @@ import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
 import InstrumentButton from "@/components/GraphBuilder/InstrumentButton.tsx";
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
 import DisplaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
-import { i18n } from "@/lib/i18n.ts";
+import { IconContext } from "react-icons";
+import { IoMdSave, IoMdSettings } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
+import {
+  TbPointer,
+  TbPointerMinus,
+  TbPointerPlus,
+} from "react-icons/tb";
+import { BsArrowDownUp } from "react-icons/bs";
+import { ImArrowUpRight2 } from "react-icons/im";
+import { VscDebugDisconnect } from "react-icons/vsc";
 
-export const GraphBuilder = (props: {
-  style: { width: string; height: string };
-}) => {
+export const GraphBuilder = (props: { style: { width: string; height: string } }) => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
   const displaySettings = useSelector(
     (state: RootState) => state.displaySettings
   );
-
-  const language = useMemo(
-    () => i18n[displaySettings.language],
-    [displaySettings.language]
-  );
   const [activeHandler, setActiveHandler] = useState<GraphBuilderActions>("");
-  const vertexes = useMemo(() => {
-    const arr: GraphNodeProps[] = [];
-    for (const id in nodeMap) {
-      arr.push(nodeMap[id]);
-    }
-    return arr;
-  }, [nodeMap]);
   const dispatch = useDispatch();
-  const adjMatrix = useMemo(() => {
-    const matrix: (GraphEdgeProps | null)[][] = Array(vertexes.length)
-      .fill(null)
-      .map(() => Array(vertexes.length).fill(null));
-
-    for (const id in edgeMap) {
-      const edge = edgeMap[id];
-      const fromIndex = vertexes.findIndex((node) => node.id === edge.nodeAid);
-      const toIndex = vertexes.findIndex((node) => node.id === edge.nodeBid);
-
-      if (fromIndex !== -1 && toIndex !== -1) {
-        matrix[fromIndex][toIndex] = edge;
-
-        if (!edge.isDirected) {
-          matrix[toIndex][fromIndex] = edge;
-        }
-      }
-    }
-
-    return matrix;
-  }, [vertexes, edgeMap]);
-  const toggleHandler = (state: GraphBuilderActions) => {
-    setActiveHandler(state);
-  };
-
   const theme = useTheme();
   const [isSettingsHidden, setIsSettingsHidden] = useState<boolean>(true);
 
+  const backgroundGradient =
+    theme.theme === "dark"
+      ? "bg-gradient-to-br from-blue-800 via-purple-800 to-gray-900"
+      : "bg-gradient-to-br from-blue-300 via-purple-300 to-gray-200";
+
   return (
     <div
-      className={`grid grid-rows-[auto_1fr]   h-full w-full pb-10 px-10 ${
-        theme.theme === "dark" ? "bg-zinc-900" : "bg-zinc-500"
-      }`}
+      className={`grid grid-rows-[auto_1fr] h-full w-full pb-10 px-10 ${backgroundGradient} text-white`}
       style={props.style}
     >
       <IconContext.Provider
         value={{
-          size: "3rem",
+          size: "5rem",
           color: theme.theme === "dark" ? "#000" : "#FFF",
-          className: "global-class-name",
-          style: { fontSize: "3rem", width: "30px", height: "30px" },
+          style: { fontSize: "3rem" },
         }}
       >
-        <div
-          className={`flex h-16 max-h-[90vh]   gap-x-8 w-full items-center justify-center`}
-        >
+        <div className="flex h-16 gap-x-8 w-full items-center justify-center">
           <InstrumentButton
-            name={language.instrumentButtons.saveGraph.name}
-            description={language.instrumentButtons.saveGraph.description}
+            name="Save Graph"
+            description="Save the current graph"
             onClick={() =>
-              console.log(
-                "adjacency matrix:",
-                adjMatrix,
-                "\nvertexes:",
-                vertexes
-              )
+              console.log("Saving graph...")
             }
           >
             <IoMdSave />
           </InstrumentButton>
           <InstrumentButton
-            name={language.instrumentButtons.deleteGraph.name}
-            description={language.instrumentButtons.deleteGraph.description}
+            name="Delete Graph"
+            description="Delete the current graph"
             onClick={() => {
               dispatch(discardSelection());
               dispatch(discardNodeMap());
@@ -115,88 +72,73 @@ export const GraphBuilder = (props: {
           >
             <MdDelete />
           </InstrumentButton>
-
           <InstrumentButton
-            name={language.instrumentButtons.settings.name}
-            description={language.instrumentButtons.settings.description}
-            onClick={() => {
-              setIsSettingsHidden(() => !isSettingsHidden);
-            }}
+            name="Settings"
+            description="Open graph settings"
+            onClick={() => setIsSettingsHidden(!isSettingsHidden)}
           >
             <IoMdSettings />
           </InstrumentButton>
         </div>
 
-        <div className={`grid grid-cols-[100px_1fr_auto] h-full `}>
-          <div
-            className={`flex flex-col justify-center px-2 gap-y-8 w-[80px] max-h-[80vh] items-center overflow-y-auto  scrollbar scrollbar-thin scrollbar-thumb-gray-950 scrollbar-track-zinc-800`}
-          >
+        <div className="grid grid-cols-[100px_1fr_auto] h-full">
+          <div className="flex flex-col gap-y-4 items-center overflow-y-auto scrollbar-thin">
             <InstrumentButton
-              name={language.instrumentButtons.pointer.name}
-              description={language.instrumentButtons.pointer.description}
-              onClick={() => toggleHandler("pointer")}
+              name="Pointer"
+              onClick={() => setActiveHandler("pointer")}
             >
               <TbPointer />
             </InstrumentButton>
             <InstrumentButton
-              name={language.instrumentButtons.move.name}
-              description={language.instrumentButtons.move.description}
-              onClick={() => toggleHandler("move")}
-            >
-              <IoIosMove />
-            </InstrumentButton>
-            <InstrumentButton
-              name={language.instrumentButtons.create.name}
-              description={language.instrumentButtons.create.description}
-              onClick={() => toggleHandler("create")}
-            >
-              <TbPointerPlus />
-            </InstrumentButton>
-            <InstrumentButton
-              name={language.instrumentButtons.remove.name}
-              description={language.instrumentButtons.remove.description}
-              onClick={() => toggleHandler("remove")}
+              name="Move"
+              onClick={() => setActiveHandler("move")}
             >
               <TbPointerMinus />
             </InstrumentButton>
             <InstrumentButton
-              name={language.instrumentButtons.connection.name}
-              description={language.instrumentButtons.connection.description}
-              onClick={() => toggleHandler("connect")}
+              name="Create Node"
+              onClick={() => setActiveHandler("create")}
+            >
+              <TbPointerPlus />
+            </InstrumentButton>
+            <InstrumentButton
+              name="Delete Node"
+              onClick={() => setActiveHandler("remove")}
+            >
+              <MdDelete />
+            </InstrumentButton>
+            <InstrumentButton
+              name="Connect Nodes"
+              onClick={() => setActiveHandler("connect")}
             >
               <BsArrowDownUp />
             </InstrumentButton>
             <InstrumentButton
-              name={language.instrumentButtons.directConnection.name}
-              description={
-                language.instrumentButtons.directConnection.description
-              }
-              onClick={() => toggleHandler("directConnect")}
+              name="Direct Connect"
+              onClick={() => setActiveHandler("directConnect")}
             >
               <ImArrowUpRight2 />
             </InstrumentButton>
             <InstrumentButton
-              name={language.instrumentButtons.disconnect.name}
-              description={language.instrumentButtons.disconnect.description}
-              onClick={() => toggleHandler("disconnect")}
+              name="Disconnect Nodes"
+              onClick={() => setActiveHandler("disconnect")}
             >
               <VscDebugDisconnect />
             </InstrumentButton>
           </div>
+
           <GraphDisplay
-            className={`rounded-xl 
-             max-h-[90vh]
-             ${
-              theme.theme === "dark" ? "bg-zinc-800" : "bg-zinc-400"
+            className={`rounded-xl ${
+              theme.theme === "dark" ? "bg-gray-800" : "bg-gray-200"
             }`}
             activeHandler={activeHandler}
           />
-          <DisplaySettingsTab
-            className=""
-            isSettingsHidden={isSettingsHidden}
-          />
+
+          <DisplaySettingsTab isSettingsHidden={isSettingsHidden} />
         </div>
       </IconContext.Provider>
     </div>
   );
 };
+
+export default GraphBuilder;

@@ -109,7 +109,8 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
   };
 
   return (
-    <div className=" px-5 overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-950 scrollbar-track-zinc-800 max-h-[80vh]">
+    <div className="bg-zinc-700/20  mx-5 rounded-xl overflow-y-auto scrollbar scrollbar-thin dark:scrollbar-thumb-gray-950 dark:scrollbar-track-zinc-800
+     light:scrollbar-thumb-gray-200 light:scrollbar-track-zinc-100 max-h-[80vh]">
       <Tabs
         defaultValue="GraphInfo"
         className={`w-[32em]  overflow-y-auto`}

@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div
-      className={"flex flex-col bg-background text-foreground h-[100vh]  self-center overflow-hidden"}
+      className={"flex flex-col bg-background text-foreground h-[100vh]  self-center "}
     >
       <NavigationBar />
       <Routes>

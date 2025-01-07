@@ -11,13 +11,41 @@ export enum GraphNodeActionTypes {
   SET_NODE_AS_SECONDARY = "SET_NODE_AS_SECONDARY",
   SET_NODE_AS_COMPARING = "SET_NODE_AS_COMPARING",
   SET_NODE_AS_PRIMARY = "SET_NODE_AS_PRIMARY",
-  MARK_AS_VISITED = "MARK_AS_VISITED",
+  MARK_NODE_AS_VISITED = "MARK_NODE_AS_VISITED",
+  RESET_NODE_MAP_STATE = "RESET_NODE_MAP_STATE",
   DESELECT_NODE = "DESELECT_NODE",
   DISCARD_SELECTION = "DISCARD_SELECTION",
   MOVE_NODE = "MOVE_NODE",
   SET_NODE_NAME = "SET_NODE_NAME",
   DISCARD_NODE_MAP = "DISCARD_NODE_MAP",
 }
+interface setNodeAsSecondaryAction extends AnyAction {
+  type: GraphNodeActionTypes.SET_NODE_AS_SECONDARY;
+  payload:string; // ID of the node
+
+}
+
+interface setNodeAsComparingAction extends AnyAction {
+  type: GraphNodeActionTypes.SET_NODE_AS_COMPARING;
+  payload: string; // ID of the node
+
+}
+
+interface setNodeAsPrimaryAction extends AnyAction {
+  type: GraphNodeActionTypes.SET_NODE_AS_PRIMARY;
+  payload:string; // ID of the node
+}
+
+interface markNodeAsVisitedAction extends AnyAction {
+  type: GraphNodeActionTypes.MARK_NODE_AS_VISITED;
+  payload: string; // ID of the node
+}
+
+interface resetNodeMapStateAction extends AnyAction {
+  type: GraphNodeActionTypes.RESET_NODE_MAP_STATE;
+  payload: null; // No payload needed for resetting
+}
+
 interface discardNodeMapAction {
   type: GraphNodeActionTypes.DISCARD_NODE_MAP;
   payload: null;
@@ -64,4 +92,9 @@ export type GraphNodeAction =
   | selectNodeAction
   | discardNodeSelectionAction
   | deselectNodeAction
-  | setNodesIsActiveAction;
+  | setNodesIsActiveAction
+  | setNodeAsSecondaryAction
+  | setNodeAsComparingAction
+  | setNodeAsPrimaryAction
+  | markNodeAsVisitedAction
+  | resetNodeMapStateAction;

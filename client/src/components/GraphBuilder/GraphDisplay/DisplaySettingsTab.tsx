@@ -20,7 +20,7 @@ import {
   setNodeFontColor,
   setNodeFontSize,
   setWeightFontSize,
-  setWeightColor,
+  setWeightColor, setAnimationSpeed,
 } from "@/redux/DisplaySettings/actionCreator.ts";
 import {
   Accordion,
@@ -29,6 +29,7 @@ import {
   AccordionTrigger,
 } from "@/components/shadcnUI/accordion.tsx";
 import { i18n } from "@/lib/i18n.ts";
+import AlgorithmTab from "@/components/GraphBuilder/GraphDisplay/AlgorithmTab.tsx";
 
 interface DisplaySettingsTabProps {
   className?: string;
@@ -58,6 +59,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
     nodeFontColor: displaySettings.nodeFontColor,
     nodeFontSize: displaySettings.nodeFontSize,
     language: displaySettings.language,
+    animationSpeed:displaySettings.animationSpeed,
   });
 
   const handleNodeSettingsSubmit = () => {
@@ -67,6 +69,9 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
     dispatch(setNodeFontColor(localSettings.nodeFontColor));
     dispatch(setNodeFontSize(localSettings.nodeFontSize));
   };
+  const handleAnimationSettingSubmit=()=>{
+    dispatch(setAnimationSpeed(localSettings.animationSpeed));
+  }
 
   const handleEdgeSettingsSubmit = () => {
     dispatch(setEdgeColor(localSettings.edgeColor));
@@ -120,11 +125,15 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           hidden={props.isSettingsHidden}
           className={`flex items-center justify-center px-2`}
         >
+
           <TabsTrigger value="GraphInfo">
             {language.displaySettingsTab.tabs.graphInfo}
           </TabsTrigger>
           <TabsTrigger value="DisplaySettings">
             {language.displaySettingsTab.tabs.displaySettings}
+          </TabsTrigger>
+          <TabsTrigger value="AnimationSettings">
+            Animation Settings
           </TabsTrigger>
         </TabsList>
         <TabsContent
@@ -347,6 +356,30 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           >
             Submit All
           </button>
+        </TabsContent>
+        <TabsContent
+          value="AnimationSettings"
+          className="px-10 pb-5 gap-y-6 flex flex-col relative"
+        >
+
+          <div>
+            <Label>Set animation speed : {localSettings.animationSpeed} ms</Label>
+            <Slider
+              className={"bg-white rounded-full"}
+              onValueChange={(v) => handleChange("animationSpeed", v[0])}
+              defaultValue={[localSettings.animationSpeed]}
+              max={5000}
+              min={100}
+              step={100}
+            />
+          </div>
+          <button
+            onClick={handleAnimationSettingSubmit}
+            className="mt-1 p-2 bg-blue-500 text-white rounded"
+          >
+            Save Animation Settings
+          </button>
+          <AlgorithmTab />
         </TabsContent>
       </Tabs>
 

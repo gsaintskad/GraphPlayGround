@@ -174,7 +174,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
                   className={" m-0 p-0"}
                   style={{
                     fontSize: "3em",
-                    transform: `translateY(-0.86em) translateX(0.25em)`,
+                    transform: `translateY(-0.75em) translateX(0.25em)`,
                     color: displaySettings.edgeBorderColor,
                   }}
                 >

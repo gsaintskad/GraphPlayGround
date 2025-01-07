@@ -12,8 +12,8 @@ import InstrumentButton from "@/components/GraphBuilder/InstrumentButton.tsx";
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
 import DisplaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
 import { IconContext } from "react-icons";
-import { IoMdSave, IoMdSettings } from "react-icons/io";
-import { MdDelete } from "react-icons/md";
+import { IoMdPlay, IoMdSave, IoMdSettings } from "react-icons/io";
+import { MdDelete, MdStarOutline } from "react-icons/md";
 import { TbPointer, TbPointerMinus, TbPointerPlus } from "react-icons/tb";
 import { BsArrowDownUp } from "react-icons/bs";
 import { ImArrowUpRight2 } from "react-icons/im";
@@ -31,11 +31,11 @@ export const GraphBuilder = (props: {
   const [activeHandler, setActiveHandler] = useState<GraphBuilderActions>("");
   const dispatch = useDispatch();
   const theme = useTheme();
-  const [isSettingsHidden, setIsSettingsHidden] = useState<boolean>(true);
+  const [isSettingsHidden, setisSettingsHidden] = useState<boolean>(true);
 
   const backgroundGradient =
     theme.theme === "dark"
-      ? "bg-gradient-to-br from-blue-800 via-purple-800 to-gray-900"
+      ? "bg-gradient-to-br from-blue-800 via-teal-900 to-zinc-800"
       : "bg-gradient-to-br from-blue-300 via-purple-300 to-gray-200";
 
   return (
@@ -54,58 +54,7 @@ export const GraphBuilder = (props: {
           <InstrumentButton
             name="Save Graph"
             description="Save the current graph"
-            onClick={() => {
-              // Prepare Graph to be sent
-              const nodeDtoMap: stateObject<nodeDto> = {};
-              const edgeDtoMap: stateObject<edgeDto> = {};
-              let lastId:string='';
-              for (const id in nodeMap) {
-                nodeDtoMap[id] = {
-                  displayValue: nodeMap[id].displayValue,
-                  id,
-                } as nodeDto;
-                lastId=id;
-              }
-              for (const id in edgeMap) {
-                const { nodeAid, nodeBid, weight, isDirected } = edgeMap[id];
-
-                edgeDtoMap[id] = {
-                  nodeAid,
-                  nodeBid,
-                  weight,
-                  id,
-                  isDirected: !!isDirected,
-                };
-              }
-
-              // Log the data
-              console.log(edgeDtoMap, nodeDtoMap);
-
-              // Send the data via a POST request
-              fetch("http://localhost:3000/graph", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  nodes: nodeDtoMap,
-                  edges: edgeDtoMap,
-                  startNodeId:lastId
-                }),
-              })
-                .then((response) => {
-                  if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                  }
-                  return response.json();
-                })
-                .then((data) => {
-                  console.log("Graph saved successfully:", data);
-                })
-                .catch((error) => {
-                  console.error("Error saving graph:", error);
-                });
-            }}
+            onClick={() => console.log("Graph has been saved!")}
           >
             <IoMdSave />
           </InstrumentButton>
@@ -124,7 +73,7 @@ export const GraphBuilder = (props: {
           <InstrumentButton
             name="Settings"
             description="Open graph settings"
-            onClick={() => setIsSettingsHidden(!isSettingsHidden)}
+            onClick={() => setisSettingsHidden(!isSettingsHidden)}
           >
             <IoMdSettings />
           </InstrumentButton>
@@ -177,7 +126,7 @@ export const GraphBuilder = (props: {
           </div>
 
           <GraphDisplay
-            className={`rounded-xl ${
+            className={`rounded-xl  ${
               theme.theme === "dark" ? "bg-gray-800" : "bg-gray-200"
             }`}
             activeHandler={activeHandler}

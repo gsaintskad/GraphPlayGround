@@ -57,6 +57,46 @@ export const graphNodesReducer: Reducer<
       // store.dispatch(calculateEdgeProps(prevState[payload.id]));
       return prevState;
     }
+    case GraphNodeActionTypes.SET_NODE_AS_PRIMARY:{
+      const prevState = structuredClone(state);
+      const payload = action.payload // payload = id
+      prevState[payload] = {
+        ...prevState[payload],
+        algorithmState:"primary",
+      };
+      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
+      return prevState;
+    }
+    case GraphNodeActionTypes.SET_NODE_AS_SECONDARY:{
+      const prevState = structuredClone(state);
+      const payload = action.payload // payload = id
+      prevState[payload] = {
+        ...prevState[payload],
+        algorithmState:"secondary",
+      };
+      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
+      return prevState;
+    }
+    case GraphNodeActionTypes.SET_NODE_AS_COMPARING:{
+      const prevState = structuredClone(state);
+      const payload = action.payload // payload = id
+      prevState[payload] = {
+        ...prevState[payload],
+        algorithmState:"comparing",
+      };
+      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
+      return prevState;
+    }
+    case GraphNodeActionTypes.MARK_NODE_AS_VISITED:{
+      const prevState = structuredClone(state);
+      const payload = action.payload // payload = id
+      prevState[payload] = {
+        ...prevState[payload],
+        algorithmState:"visited",
+      };
+      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
+      return prevState;
+    }
     default:
       return state;
   }

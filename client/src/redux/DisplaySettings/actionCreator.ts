@@ -15,7 +15,13 @@ export const setLanguage = (language: Language) => {
   return {
     type: DisplaySettingsActionTypes.SET_LANGUAGE,
     payload: language,
-  };
+  } as DisplaySettingsAction;
+};
+export const setAnimationSpeed = (speed:number) => {
+  return {
+    type: DisplaySettingsActionTypes.SET_ANIMATION_SPEED,
+    payload: speed,
+  } as DisplaySettingsAction;
 };
 export const setNodeColors = (colors: {
   primary: string;

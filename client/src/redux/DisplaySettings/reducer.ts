@@ -20,6 +20,7 @@ export interface DisplaySettingsState {
   nodeFontColor: string;
   nodeFontSize: number;
   language:Language;
+  animationSpeed: number;
 }
 
 const initialState: DisplaySettingsState = {
@@ -39,7 +40,8 @@ const initialState: DisplaySettingsState = {
   weightFontSize: 20,
   nodeFontColor:"#ffffff",
   nodeFontSize: 20,
-  language:'en'
+  language:'en',
+  animationSpeed:500,
 };
 
 const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (
@@ -47,6 +49,12 @@ const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (
   action: rootAction
 ): DisplaySettingsState => {
   switch (action.type) {
+    case DisplaySettingsActionTypes.SET_ANIMATION_SPEED:{
+      return {
+        ...state,
+        animationSpeed:action.payload
+      }
+    }
     case DisplaySettingsActionTypes.SET_NODE_FONT_COLOR:{
       return {
         ...state,

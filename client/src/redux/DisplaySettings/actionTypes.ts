@@ -13,6 +13,11 @@ export enum DisplaySettingsActionTypes {
   SET_WEIGHT_COLOR = "SET_WEIGHT_COLOR",
   SET_WEIGHT_FONT_SIZE = "SET_WEIGHT_FONT_SIZE",
   SET_LANGUAGE = "SET_LANGUAGE",
+  SET_ANIMATION_SPEED = "SET_ANIMATION_SPEED",
+}
+export interface SetAnimationSpeed extends AnyAction {
+  type: DisplaySettingsActionTypes.SET_ANIMATION_SPEED;
+  payload: number;
 }
 export interface SetLanguage extends AnyAction {
   type: DisplaySettingsActionTypes.SET_LANGUAGE;
@@ -74,6 +79,7 @@ export interface SetWeightFontSizeAction extends AnyAction {
 
 // Union type for all actions
 export type DisplaySettingsAction =
+  | SetAnimationSpeed
   | SetLanguage
   | SetNodeFontSize
   | SetNodeFontColor

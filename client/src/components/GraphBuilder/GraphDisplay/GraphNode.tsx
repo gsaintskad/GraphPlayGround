@@ -21,8 +21,9 @@ export type GraphNodeStates =
   | "selected"
   | "comparing"
   | "visited";
-export interface GraphNodeProps {
-  name?: string;
+export interface GraphNodeProps{
+  displayValue: string;
+
   id: string;
   coordinates: Point;
   radius?: number;
@@ -36,7 +37,7 @@ export const GraphNode = (props: GraphNodeProps) => {
     (state: RootState) => state.displaySettings,
   );
 
-  const [input, setInput] = useState<string>(`${props.name}`);
+  const [input, setInput] = useState<string>(`${props.displayValue}`);
 
   return (
     <div
@@ -58,11 +59,11 @@ export const GraphNode = (props: GraphNodeProps) => {
               fontSize:displaySettings.nodeFontSize,
             }}
           >
-            {props.name}
+            {props.displayValue}
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>{props.name}</DropdownMenuLabel>
+          <DropdownMenuLabel>{props.displayValue}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>id: {props.id}</DropdownMenuItem>
           <DropdownMenuItem>x: {props.coordinates.x}</DropdownMenuItem>

@@ -14,20 +14,19 @@ import DisplaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySe
 import { IconContext } from "react-icons";
 import { IoMdSave, IoMdSettings } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
-import {
-  TbPointer,
-  TbPointerMinus,
-  TbPointerPlus,
-} from "react-icons/tb";
+import { TbPointer, TbPointerMinus, TbPointerPlus } from "react-icons/tb";
 import { BsArrowDownUp } from "react-icons/bs";
 import { ImArrowUpRight2 } from "react-icons/im";
 import { VscDebugDisconnect } from "react-icons/vsc";
+import { edgeDto, nodeDto, stateObject } from "@/lib/types.ts";
 
-export const GraphBuilder = (props: { style: { width: string; height: string } }) => {
+export const GraphBuilder = (props: {
+  style: { width: string; height: string };
+}) => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
   const displaySettings = useSelector(
-    (state: RootState) => state.displaySettings
+    (state: RootState) => state.displaySettings,
   );
   const [activeHandler, setActiveHandler] = useState<GraphBuilderActions>("");
   const dispatch = useDispatch();
@@ -55,12 +54,62 @@ export const GraphBuilder = (props: { style: { width: string; height: string } }
           <InstrumentButton
             name="Save Graph"
             description="Save the current graph"
-            onClick={() =>
-              console.log("Saving graph...")
-            }
+            onClick={() => {
+              // Prepare Graph to be sent
+              const nodeDtoMap: stateObject<nodeDto> = {};
+              const edgeDtoMap: stateObject<edgeDto> = {};
+              let lastId:string='';
+              for (const id in nodeMap) {
+                nodeDtoMap[id] = {
+                  displayValue: nodeMap[id].displayValue,
+                  id,
+                } as nodeDto;
+                lastId=id;
+              }
+              for (const id in edgeMap) {
+                const { nodeAid, nodeBid, weight, isDirected } = edgeMap[id];
+
+                edgeDtoMap[id] = {
+                  nodeAid,
+                  nodeBid,
+                  weight,
+                  id,
+                  isDirected: !!isDirected,
+                };
+              }
+
+              // Log the data
+              console.log(edgeDtoMap, nodeDtoMap);
+
+              // Send the data via a POST request
+              fetch("http://localhost:3000/graph", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  nodes: nodeDtoMap,
+                  edges: edgeDtoMap,
+                  startNodeId:lastId
+                }),
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then((data) => {
+                  console.log("Graph saved successfully:", data);
+                })
+                .catch((error) => {
+                  console.error("Error saving graph:", error);
+                });
+            }}
           >
             <IoMdSave />
           </InstrumentButton>
+
           <InstrumentButton
             name="Delete Graph"
             description="Delete the current graph"

@@ -26,7 +26,7 @@ export interface GraphEdgeProps {
 
   width: number;
   isDirected?: boolean;
-  weight?: number;
+  weight: number;
 }
 const toDeg = (angle: number): number => {
   return (angle * 180) / Math.PI;
@@ -187,7 +187,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>{`${nodeA.name}${props.isDirected! ? "==>" : "<==>"}${nodeB.name}`}</DropdownMenuLabel>
+          <DropdownMenuLabel>{`${nodeA.displayValue}${props.isDirected! ? "==>" : "<==>"}${nodeB.displayValue}`}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>id: {props.id}</DropdownMenuItem>
           <DropdownMenuItem

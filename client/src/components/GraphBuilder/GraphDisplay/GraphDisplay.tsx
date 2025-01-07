@@ -95,7 +95,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       const id = uuidv4().slice(0, 5);
       const dto: GraphNodeProps = {
         id,
-        name: `Node ${id}`, // Optional name for the node
+        displayValue: `Node ${id}`, // Optional name for the node
         coordinates: {
           x: e.offsetX - displaySettings.nodeSize / 2,
           y: e.offsetY - displaySettings.nodeSize / 2,

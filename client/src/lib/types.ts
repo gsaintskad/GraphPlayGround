@@ -5,7 +5,17 @@ export interface Point {
 export interface stateObject<T> {
   [key: string]: T;
 }
-
+export interface nodeDto{
+  id: string;
+  displayValue: string;
+}
+export interface edgeDto{
+  id: string;
+  weight: number;
+  nodeAid: string;
+  nodeBid: string;
+  isDirected: boolean;
+}
 export const isLiesBetween=(p:Point,a: Point , b: Point ): boolean=> {
     if (p.x > a.x && p.x < b.x) {
       if (p.y > a.y && p.y < b.y) {

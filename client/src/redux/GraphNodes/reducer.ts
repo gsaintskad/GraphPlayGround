@@ -44,7 +44,7 @@ export const graphNodesReducer: Reducer<
     }
     case GraphNodeActionTypes.SET_NODE_NAME:{
       const prevState = structuredClone(state);
-      prevState[action.payload.id].name = action.payload.name;
+      prevState[action.payload.id].displayValue = action.payload.name;
       return prevState;
     }
     case GraphNodeActionTypes.MOVE_NODE: {

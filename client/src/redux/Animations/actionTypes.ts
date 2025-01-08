@@ -26,4 +26,7 @@ export interface SetAlgorithmAction {
   type: AnimationActionTypes;
   payload: AlgorithmStep[];
 }
-export type AnimationAction  =SetAlgorithmAction|AlgorithmState|AlgorithmStep;
+export interface AnimationAction  {
+  type: AnimationActionTypes;
+  payload: unknown;
+}

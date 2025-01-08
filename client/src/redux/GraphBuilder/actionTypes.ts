@@ -10,18 +10,22 @@ export enum GraphBuilderTool {
   PLAY_ANIMATION = "PLAY_ANIMATION",
   REMOVE = "REMOVE",
 }
+
 export interface SetRemoveToolAction extends AnyAction {
   type: GraphBuilderTool.REMOVE;
   payload: null;
 }
+
 export interface SetPointerToolAction extends AnyAction {
   type: GraphBuilderTool.POINTER;
   payload: null;
 }
+
 export interface SetCreateToolAction extends AnyAction {
   type: GraphBuilderTool.CREATE;
   payload: null;
 }
+
 export interface SetConnectToolAction extends AnyAction {
   type: GraphBuilderTool.CONNECT;
   payload: null;

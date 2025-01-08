@@ -24,8 +24,7 @@ import {
   setCreateTool,
   setDirectConnectTool, setDisconnectTool,
   setMoveTool,
-  setPointerTool,
-  setRemoveTool
+  setPointerTool, setRemoveTool
 } from "@/redux/GraphBuilder/actionCreator.ts";
 
 export const GraphBuilder = (props: {
@@ -132,7 +131,6 @@ export const GraphBuilder = (props: {
               <VscDebugDisconnect/>
             </ToolButton>
           </div>
-
 
           <GraphDisplay
             className={`rounded-xl  ${

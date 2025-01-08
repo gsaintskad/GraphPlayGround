@@ -1,18 +1,24 @@
-import { GraphBuilderTool, GraphBuilderAction } from "./actionTypes";
+
+import {Reducer} from "@reduxjs/toolkit";
+
 import {rootAction} from "@/redux/store.ts";
+import {GraphBuilderTool} from "@/redux/GraphBuilder/actionTypes.ts";
+import {stateObject} from "@/lib/types.ts";
+import {GraphEdgeProps} from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
+import {GraphEdgesActionTypes} from "@/redux/GraphEdges/actionTypes.ts";
 
 export interface GraphBuilderState {
   currentTool: GraphBuilderTool;
 }
 
-const initialState: GraphBuilderState = {
+ const initialState: GraphBuilderState = {
   currentTool: GraphBuilderTool.POINTER, // Default tool
 };
-
-export const graphBuilderReducer = (
-  state: GraphBuilderState = initialState,
-  action: GraphBuilderAction|rootAction
-): GraphBuilderState => {
+const graphBuilderReducer: Reducer<
+  GraphBuilderState,
+  rootAction
+> = (state = initialState, action:rootAction): GraphBuilderState => {
+  console.log(action.type.toString())
   switch (action.type) {
     case GraphBuilderTool.POINTER:
     case GraphBuilderTool.CREATE:
@@ -30,3 +36,4 @@ export const graphBuilderReducer = (
       return state;
   }
 };
+export default graphBuilderReducer;

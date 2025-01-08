@@ -7,7 +7,7 @@ interface NavLinkProps {
 }
 const NavLink = ({to,children}:NavLinkProps) => {
   const location = useLocation();
-  console.log(location);
+
   const classes=location.pathname===to?"font-bold":""
   return (
     <Link to={to} className={classes}>

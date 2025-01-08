@@ -1,4 +1,3 @@
-
 import {
   GraphBuilderTool,
   GraphBuilderAction
@@ -6,10 +5,6 @@ import {
 
 export const setPointerTool = (): GraphBuilderAction => ({
   type: GraphBuilderTool.POINTER,
-  payload: null,
-});
-export const setRemoveTool = (): GraphBuilderAction => ({
-  type: GraphBuilderTool.REMOVE,
   payload: null,
 });
 
@@ -37,7 +32,10 @@ export const setMoveTool = (): GraphBuilderAction => ({
   type: GraphBuilderTool.MOVE,
   payload: null,
 });
-
+export const setRemoveTool = (): GraphBuilderAction => ({
+  type: GraphBuilderTool.REMOVE,
+  payload: null,
+});
 export const setPlayAnimationTool = (): GraphBuilderAction => ({
   type: GraphBuilderTool.PLAY_ANIMATION,
   payload: null,

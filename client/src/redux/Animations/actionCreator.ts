@@ -3,7 +3,7 @@ export const chooseCurrentAlgorithm=(algorithm: AlgorithmType) => {
   return {
     type: AnimationActionTypes.CHOOSE_CURRENT_ALGORITHM,
     payload: algorithm,
-  }
+  } as AnimationAction
 }
 export const setAlgorithmStep = (algorithm:AlgorithmType,stepNum:number=0) => {
   return{

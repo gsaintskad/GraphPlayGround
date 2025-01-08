@@ -22,8 +22,9 @@ import {DisplaySettingsState} from "@/redux/DisplaySettings/reducer.ts";
 import displaySettingsReducer from "@/redux/DisplaySettings/reducer.ts";
 import animationReducer, {AnimationState} from "@/redux/Animations/reducer.ts";
 import {AnimationAction} from "@/redux/Animations/actionTypes.ts";
-import {graphBuilderReducer, GraphBuilderState} from "@/redux/GraphBuilder/reducer.ts";
 import {GraphBuilderAction} from "@/redux/GraphBuilder/actionTypes.ts";
+import graphBuilderReducer, {GraphBuilderState} from "@/redux/GraphBuilder/reducer.ts";
+
 
 export type rootAction = GraphEdgeAction | GraphNodeAction|DisplaySettingsAction|AnimationAction|GraphBuilderAction;
 const store: ToolkitStore<
@@ -34,6 +35,7 @@ const store: ToolkitStore<
     displaySettings:DisplaySettingsState;
     animations:AnimationState;
     graphBuilderTool:GraphBuilderState
+
   },
   rootAction,
   []

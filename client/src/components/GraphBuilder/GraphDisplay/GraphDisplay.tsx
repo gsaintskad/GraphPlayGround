@@ -23,7 +23,6 @@ import {
   removeEdgesForNode,
   setEdgesIsActive,
 } from "@/redux/GraphEdges/actionCreator.ts";
-import {GraphBuilderTool} from "@/redux/GraphBuilder/actionTypes.ts";
 
 interface GraphDisplayProps {
   activeHandler: GraphBuilderActions;
@@ -35,7 +34,6 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   const dispatch = useDispatch();
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
-  const activeTool = useSelector((state: RootState) => state.graphBuilderTool);
   const selectedNodesArr = useSelector((state: RootState) => {
     return state.selectedGraphNodes;
   });
@@ -108,7 +106,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       };
       dispatch(addNode(dto));
     },
-    [activeTool],
+    [props.activeHandler],
   );
   const [isRemovingNode, setIsRemovingNode] = useState<boolean>(false);
   useEffect(() => {
@@ -119,7 +117,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         dispatch(discardSelection());
       }
     }
-  }, [activeTool, isRemovingNode, selectedNodesArr]);
+  }, [props.activeHandler, isRemovingNode, selectedNodesArr]);
 
   //addEdgeHandler
   const [isAddingEdge, setIsAddingAnEdge] = useState<boolean>(false);
@@ -131,7 +129,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
         const nodeB = copy.shift() as GraphNodeProps;
         const id = `${nodeA.id}-${nodeB.id}`;
         const reverseId = `${nodeB.id}-${nodeA.id}`;
-        const isDirected: boolean = activeTool === GraphBuilderTool.DIRECT_CONNECT;
+        const isDirected: boolean = props.activeHandler === "directConnect";
 
 
         for (const edgeId in edgeMap) {
@@ -202,42 +200,44 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   const handleEvent = useCallback(
     (e: MouseEvent) => {
       console.log(
-        `Mouse clicked at coordinates: (${e.offsetX}, ${e.offsetY}) during ${activeTool}`,
+        `Mouse clicked at coordinates: (${e.offsetX}, ${e.offsetY}) during ${props.activeHandler}`,
       );
     },
-    [activeTool],
+    [props.activeHandler],
   );
 
   // Attach and remove event listener on the parent div
   useEffect(() => {
     const divElement = divRef.current;
-    if (activeTool === GraphBuilderTool.POINTER && divElement) {
+    if (props.activeHandler === "pointer" && divElement) {
       //pointer
       changeNodesActiveState(true);
-    } else if (activeTool === GraphBuilderTool.CREATE && divElement) {
+    } else if (props.activeHandler === "create" && divElement) {
       divElement.addEventListener("click", createNodeHandler);
       changeNodesActiveState(true);
-    } else if (activeTool === GraphBuilderTool.REMOVE && divElement && nodeMap) {
+    } else if (props.activeHandler === "remove" && divElement && nodeMap) {
       setIsRemovingNode(true);
       changeNodesActiveState(false);
       divElement.addEventListener("click", selectionHandler);
-    } else if (activeTool === GraphBuilderTool.MOVE && divElement && nodeMap) {
+    } else if (props.activeHandler === "move" && divElement && nodeMap) {
       changeNodesActiveState(false);
       divElement.addEventListener("click", moveNodeHandler);
       divElement.addEventListener("click", selectionHandler);
     } else if (
-      (activeTool === GraphBuilderTool.CONNECT ||
-        activeTool === GraphBuilderTool.DIRECT_CONNECT) &&
+      (props.activeHandler === "connect" ||
+        props.activeHandler === "directConnect") &&
       divElement
     ) {
       changeNodesActiveState(false);
       setIsAddingAnEdge(true);
       divElement.addEventListener("click", selectionHandler);
-    } else if (activeTool === GraphBuilderTool.DISCONNECT && divElement && edgeMap) {
+    } else if (props.activeHandler === "disconnect" && divElement && edgeMap) {
       changeNodesActiveState(false);
       setIsRemovingAnEdge(true);
       divElement.addEventListener("click", selectionHandler);
-    }  else if (activeTool && divElement) {
+    } else if (props.activeHandler === "test" && divElement && nodeMap) {
+      //notemptyblocvk:)
+    } else if (props.activeHandler && divElement) {
       divElement.addEventListener("click", handleEvent);
     }
 
@@ -255,7 +255,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       }
     };
   }, [
-    activeTool,
+    props.activeHandler,
     selectedNodesArr.length,
     createNodeHandler,
     handleEvent,

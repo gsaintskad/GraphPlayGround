@@ -1,6 +1,5 @@
 import GraphDisplay from "@/components/GraphBuilder/GraphDisplay/GraphDisplay.tsx";
 import React, { useMemo, useState } from "react";
-import { GraphBuilderActions } from "./graphBuilderActions.ts";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store.ts";
 import {
@@ -10,7 +9,7 @@ import {
 import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
 import ToolButton from "@/components/GraphBuilder/ToolButton.tsx";
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
-import DisplaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
+import DisplaySettingsTab from "@/components/GraphBuilder/Tabs/DisplaySettingsTab.tsx";
 import { IconContext } from "react-icons";
 import { IoMdPlay, IoMdSave, IoMdSettings } from "react-icons/io";
 import { MdDelete, MdStarOutline } from "react-icons/md";
@@ -35,7 +34,7 @@ export const GraphBuilder = (props: {
   const displaySettings = useSelector(
     (state: RootState) => state.displaySettings,
   );
-  const [activeHandler, setActiveHandler] = useState<GraphBuilderActions>("");
+
   const dispatch = useDispatch();
   const theme = useTheme();
   const [isSettingsHidden, setisSettingsHidden] = useState<boolean>(true);
@@ -136,7 +135,7 @@ export const GraphBuilder = (props: {
             className={`rounded-xl  ${
               theme.theme === "dark" ? "bg-gray-800" : "bg-gray-200"
             }`}
-            activeHandler={activeHandler}
+
           />
 
           <DisplaySettingsTab isSettingsHidden={isSettingsHidden}/>

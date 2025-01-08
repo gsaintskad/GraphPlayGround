@@ -1,1 +1,0 @@
-export type GraphBuilderActions = ''|'create'|'remove'|'directConnect'|'connect'|'disconnect'|'pointer'|'move'|'test';

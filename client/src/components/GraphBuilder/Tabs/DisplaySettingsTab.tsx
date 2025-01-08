@@ -29,7 +29,7 @@ import {
   AccordionTrigger,
 } from "@/components/shadcnUI/accordion.tsx";
 import { i18n } from "@/lib/i18n.ts";
-import AlgorithmTab from "@/components/GraphBuilder/GraphDisplay/AlgorithmTab.tsx";
+import AlgorithmTab from "@/components/GraphBuilder/Tabs/AlgorithmTab.tsx";
 
 interface DisplaySettingsTabProps {
   className?: string;

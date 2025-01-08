@@ -22,8 +22,10 @@ import {DisplaySettingsState} from "@/redux/DisplaySettings/reducer.ts";
 import displaySettingsReducer from "@/redux/DisplaySettings/reducer.ts";
 import animationReducer, {AnimationState} from "@/redux/Animations/reducer.ts";
 import {AnimationAction} from "@/redux/Animations/actionTypes.ts";
+import {graphBuilderReducer, GraphBuilderState} from "@/redux/GraphBuilder/reducer.ts";
+import {GraphBuilderAction} from "@/redux/GraphBuilder/actionTypes.ts";
 
-export type rootAction = GraphEdgeAction | GraphNodeAction|DisplaySettingsAction|AnimationAction;
+export type rootAction = GraphEdgeAction | GraphNodeAction|DisplaySettingsAction|AnimationAction|GraphBuilderAction;
 const store: ToolkitStore<
   {
     graphNodes: stateObject<GraphNodeProps>;
@@ -31,6 +33,7 @@ const store: ToolkitStore<
     selectedGraphNodes: GraphNodeProps[];
     displaySettings:DisplaySettingsState;
     animations:AnimationState;
+    graphBuilderTool:GraphBuilderState
   },
   rootAction,
   []
@@ -40,7 +43,8 @@ const store: ToolkitStore<
     graphEdges: graphEdgesReducer,
     selectedGraphNodes: selectedGraphNodesReducer,
     displaySettings:displaySettingsReducer,
-    animations:animationReducer
+    animations:animationReducer,
+    graphBuilderTool:graphBuilderReducer
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

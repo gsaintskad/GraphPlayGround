@@ -8,7 +8,7 @@ import {
   discardSelection,
 } from "@/redux/GraphNodes/actionCreator.ts";
 import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
-import InstrumentButton from "@/components/GraphBuilder/InstrumentButton.tsx";
+import ToolButton from "@/components/GraphBuilder/ToolButton.tsx";
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
 import DisplaySettingsTab from "@/components/GraphBuilder/GraphDisplay/DisplaySettingsTab.tsx";
 import { IconContext } from "react-icons";
@@ -19,6 +19,14 @@ import { BsArrowDownUp } from "react-icons/bs";
 import { ImArrowUpRight2 } from "react-icons/im";
 import { VscDebugDisconnect } from "react-icons/vsc";
 import { edgeDto, nodeDto, stateObject } from "@/lib/types.ts";
+import {
+  setConnectTool,
+  setCreateTool,
+  setDirectConnectTool, setDisconnectTool,
+  setMoveTool,
+  setPointerTool,
+  setRemoveTool
+} from "@/redux/GraphBuilder/actionCreator.ts";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
@@ -51,15 +59,15 @@ export const GraphBuilder = (props: {
         }}
       >
         <div className="flex h-16 gap-x-8 w-full items-center justify-center">
-          <InstrumentButton
+          <ToolButton
             name="Save Graph"
             description="Save the current graph"
             onClick={() => console.log("Graph has been saved!")}
           >
             <IoMdSave />
-          </InstrumentButton>
+          </ToolButton>
 
-          <InstrumentButton
+          <ToolButton
             name="Delete Graph"
             description="Delete the current graph"
             onClick={() => {
@@ -69,61 +77,62 @@ export const GraphBuilder = (props: {
             }}
           >
             <MdDelete />
-          </InstrumentButton>
-          <InstrumentButton
+          </ToolButton>
+          <ToolButton
             name="Settings"
             description="Open graph settings"
             onClick={() => setisSettingsHidden(!isSettingsHidden)}
           >
             <IoMdSettings />
-          </InstrumentButton>
+          </ToolButton>
         </div>
 
         <div className="grid grid-cols-[100px_1fr_auto] h-full">
           <div className="flex flex-col gap-y-4 items-center overflow-y-auto scrollbar-thin">
-            <InstrumentButton
+            <ToolButton
               name="Pointer"
-              onClick={() => setActiveHandler("pointer")}
+              onClick={() => dispatch(setPointerTool())}
             >
-              <TbPointer />
-            </InstrumentButton>
-            <InstrumentButton
+              <TbPointer/>
+            </ToolButton>
+            <ToolButton
               name="Move"
-              onClick={() => setActiveHandler("move")}
+              onClick={() => dispatch(setMoveTool())}
             >
-              <TbPointerMinus />
-            </InstrumentButton>
-            <InstrumentButton
+              <TbPointerMinus/>
+            </ToolButton>
+            <ToolButton
               name="Create Node"
-              onClick={() => setActiveHandler("create")}
+              onClick={() => dispatch(setCreateTool())}
             >
-              <TbPointerPlus />
-            </InstrumentButton>
-            <InstrumentButton
+              <TbPointerPlus/>
+            </ToolButton>
+            <ToolButton
               name="Delete Node"
-              onClick={() => setActiveHandler("remove")}
+              onClick={() => dispatch(setRemoveTool())}
             >
-              <MdDelete />
-            </InstrumentButton>
-            <InstrumentButton
+              <MdDelete/>
+            </ToolButton>
+            <ToolButton
               name="Connect Nodes"
-              onClick={() => setActiveHandler("connect")}
+              onClick={() => dispatch(setConnectTool())}
             >
-              <BsArrowDownUp />
-            </InstrumentButton>
-            <InstrumentButton
+              <BsArrowDownUp/>
+            </ToolButton>
+            <ToolButton
               name="Direct Connect"
-              onClick={() => setActiveHandler("directConnect")}
+              onClick={() => dispatch(setDirectConnectTool())}
             >
-              <ImArrowUpRight2 />
-            </InstrumentButton>
-            <InstrumentButton
+              <ImArrowUpRight2/>
+            </ToolButton>
+            <ToolButton
               name="Disconnect Nodes"
-              onClick={() => setActiveHandler("disconnect")}
+              onClick={() => dispatch(setDisconnectTool())}
             >
-              <VscDebugDisconnect />
-            </InstrumentButton>
+              <VscDebugDisconnect/>
+            </ToolButton>
           </div>
+
 
           <GraphDisplay
             className={`rounded-xl  ${
@@ -132,7 +141,7 @@ export const GraphBuilder = (props: {
             activeHandler={activeHandler}
           />
 
-          <DisplaySettingsTab isSettingsHidden={isSettingsHidden} />
+          <DisplaySettingsTab isSettingsHidden={isSettingsHidden}/>
         </div>
       </IconContext.Provider>
     </div>

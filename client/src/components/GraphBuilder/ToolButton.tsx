@@ -9,7 +9,7 @@ interface InstrumentButtonProps {
   description?: string;
 }
 // React.MouseEventHandler<HTMLButtonElement>
-const InstrumentButton = (props:InstrumentButtonProps) => {
+const ToolButton = (props:InstrumentButtonProps) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
@@ -31,4 +31,4 @@ const InstrumentButton = (props:InstrumentButtonProps) => {
   )
 };
 
-export default InstrumentButton;
+export default ToolButton;

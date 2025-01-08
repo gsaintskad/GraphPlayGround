@@ -97,6 +97,16 @@ export const graphNodesReducer: Reducer<
       // store.dispatch(calculateEdgeProps(prevState[payload.id]));
       return prevState;
     }
+    case GraphNodeActionTypes.SET_NODE_AS_SELECTED:{
+      const prevState = structuredClone(state);
+      const payload = action.payload // payload = id
+      prevState[payload] = {
+        ...prevState[payload],
+        algorithmState:"selected",
+      };
+
+      return prevState;
+    }
     default:
       return state;
   }

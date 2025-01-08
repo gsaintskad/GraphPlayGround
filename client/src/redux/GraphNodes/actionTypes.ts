@@ -18,22 +18,26 @@ export enum GraphNodeActionTypes {
   MOVE_NODE = "MOVE_NODE",
   SET_NODE_NAME = "SET_NODE_NAME",
   DISCARD_NODE_MAP = "DISCARD_NODE_MAP",
+  SET_NODE_AS_SELECTED = "SET_NODE_AS_SELECTED",
 }
+interface setNodeAsSelectedAction extends AnyAction {
+  type: GraphNodeActionTypes.SET_NODE_AS_SELECTED;
+  payload: string; //id
+}
+
 interface setNodeAsSecondaryAction extends AnyAction {
   type: GraphNodeActionTypes.SET_NODE_AS_SECONDARY;
-  payload:string; // ID of the node
-
+  payload: string; // ID of the node
 }
 
 interface setNodeAsComparingAction extends AnyAction {
   type: GraphNodeActionTypes.SET_NODE_AS_COMPARING;
   payload: string; // ID of the node
-
 }
 
 interface setNodeAsPrimaryAction extends AnyAction {
   type: GraphNodeActionTypes.SET_NODE_AS_PRIMARY;
-  payload:string; // ID of the node
+  payload: string; // ID of the node
 }
 
 interface markNodeAsVisitedAction extends AnyAction {
@@ -84,6 +88,7 @@ interface setNodeCoordinatesAction extends AnyAction {
   payload: { nodeCoordinates: Point; id: string };
 }
 export type GraphNodeAction =
+  | setNodeAsSelectedAction
   | discardNodeMapAction
   | setNodeNameAction
   | addNodeAction

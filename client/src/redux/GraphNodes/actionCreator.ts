@@ -75,6 +75,12 @@ export const setNodeAsSecondary = (id: string): GraphNodeAction => {
         payload: id,
     };
 };
+export const setNodeAsSelected=(id:string): GraphNodeAction=>{
+    return {
+        type: GraphNodeActionTypes.SET_NODE_AS_SELECTED,
+        payload: id,
+    }
+}
 
 // Action Creator for marking a node as comparing
 export const setNodeAsComparing = (id: string): GraphNodeAction => {

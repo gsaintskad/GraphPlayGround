@@ -1,24 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store.ts";
-import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/redux/store.ts";
+import {DisplaySettingsState} from "@/redux/DisplaySettings/reducer.ts";
 
-import { i18n } from "@/lib/i18n.ts";
-import { Button } from "@/components/shadcnUI/button.tsx";
-import {
-  IoPause,
-  IoPlay,
-  IoPlaySkipBackSharp,
-  IoPlaySkipForward,
-} from "react-icons/io5";
-import { AnimationState } from "@/redux/Animations/reducer.ts";
-import {
-  AlgorithmStep,
-  AlgorithmType,
-} from "@/redux/Animations/actionTypes.ts";
-import { edgeDto, nodeDto, stateObject } from "@/lib/types.ts";
-import { setDijkstra } from "@/redux/Animations/actionCreator.ts";
+import {i18n} from "@/lib/i18n.ts";
+import {Button} from "@/components/shadcnUI/button.tsx";
+import {IoPause, IoPlay, IoPlaySkipBackSharp, IoPlaySkipForward,} from "react-icons/io5";
+import {AnimationState} from "@/redux/Animations/reducer.ts";
+import {AlgorithmStep, AlgorithmType,} from "@/redux/Animations/actionTypes.ts";
+import {edgeDto, nodeDto, stateObject} from "@/lib/types.ts";
+import {setDijkstra} from "@/redux/Animations/actionCreator.ts";
 import {
   Table,
   TableBody,
@@ -31,12 +23,12 @@ import {
 } from "@/components/shadcnUI/table.tsx";
 import {
   markNodeAsVisited,
-  resetNodeMapState,
+  resetNodeMapState, selectNode,
   setNodeAsComparing,
   setNodeAsPrimary,
-  setNodeAsSecondary,
+  setNodeAsSecondary, setNodeAsSelected,
 } from "@/redux/GraphNodes/actionCreator.ts";
-import { GraphNodeActionTypes } from "@/redux/GraphNodes/actionTypes.ts";
+import {GraphNodeActionTypes} from "@/redux/GraphNodes/actionTypes.ts";
 
 interface AlgorithmTabProps {
   className?: string;
@@ -66,6 +58,10 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
   const handleStep = useCallback((step: AlgorithmStep) => {
     console.log('handling step : ' ,step)
     switch (step.type as GraphNodeActionTypes) {
+      case GraphNodeActionTypes.SET_NODE_AS_SELECTED:{
+        dispatch(setNodeAsSelected(step.payload.id));
+        break;
+      }
       case GraphNodeActionTypes.SET_NODE_AS_PRIMARY: {
         dispatch(setNodeAsPrimary(step.payload.id));
         break;
@@ -117,7 +113,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
   return (
     <div className={" flex flex-col"}>
       <div className="flex">
-        <Button className="w-full" onClick={()=>renderNextStep(currentStep-1)}>
+        <Button className="w-full" onClick={()=>renderNextStep(currentStep-2)}>
           <IoPlaySkipBackSharp />
         </Button>
         <Button
@@ -126,7 +122,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         >
           {isAnimationPlaying ? <IoPause /> : <IoPlay />}
         </Button>
-        <Button className="w-full" onClick={()=>renderNextStep(currentStep+1)}>
+        <Button className="w-full" onClick={()=>renderNextStep(currentStep)}>
           <IoPlaySkipForward />
         </Button>
       </div>
@@ -180,6 +176,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
               // dispatch(setAnimation)
 
               dispatch(setDijkstra(data.dijkstra));
+              setCurrentStep(0);
               console.log(animations);
             })
             .catch((error) => {
@@ -208,6 +205,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
                 step.type.toString() +
                 i.toString()
               }
+              className={currentStep===i?"bg-yellow-600/50":""}
             >
               <TableCell className="font-medium">{i}</TableCell>
               <TableCell>{step.type}</TableCell>
@@ -220,10 +218,8 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">
-              {JSON.stringify(animations[currentAlgorithm].output)}
-            </TableCell>
+            <TableCell colSpan={4}>Output : {JSON.stringify(animations[currentAlgorithm].output)}</TableCell>
+
           </TableRow>
         </TableFooter>
       </Table>

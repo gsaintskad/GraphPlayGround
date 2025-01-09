@@ -30,18 +30,12 @@ import {
   TableRow,
 } from "@/components/shadcnUI/table.tsx";
 import {
-  dehighlightNode,
   discardAlgorithmState,
-  highlightNode,
-  markNodeAsVisited,
   resetNodeMapState,
-  selectNode,
-  setNodeAsComparing,
-  setNodeAsPrimary,
-  setNodeAsSecondary,
-  setNodeAsSelected,
+  setAlgorithmState,
 } from "@/redux/GraphNodes/actionCreator.ts";
 import { GraphNodeActionTypes } from "@/redux/GraphNodes/actionTypes.ts";
+import { GraphNodeAlgorithmStates } from "@/redux/GraphNodes/actionTypes.ts";
 import { setAnimationSpeed } from "@/redux/DisplaySettings/actionCreator.ts";
 import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes.ts";
 import { setPlayAnimationTool } from "@/redux/GraphBuilder/actionCreator.ts";
@@ -71,10 +65,11 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
     [displaySettings.language],
   );
   const highlightHandler = useCallback((id: string) => {
-    dispatch(highlightNode(id));
+    const prevState = nodeMap[id].algorithmState!;
+    dispatch(setAlgorithmState(id, "highlighted"));
     console.log(`timeout for node${id} has been run`);
     setTimeout(() => {
-      dispatch(dehighlightNode(id));
+      dispatch(setAlgorithmState(id, prevState));
       console.log(`timeout for node${id} has been finished`);
     }, 2000);
   }, []);
@@ -82,58 +77,32 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
     useState<AlgorithmType>("Dijkstra");
   const [currentStep, setCurrentStep] = useState<number>(0);
 
-  const handleStep = useCallback((step: AlgorithmStep) => {
-    if (currentStep < animations[currentAlgorithm].steps.length)
-      console.log("fs done");
-    switch (step.type as GraphNodeActionTypes) {
-      case GraphNodeActionTypes.SET_NODE_AS_SELECTED: {
-        console.log(" done");
-        dispatch(setNodeAsSelected(step.payload.id));
-        break;
-      }
-      case GraphNodeActionTypes.SET_NODE_AS_PRIMARY: {
-        console.log("prim done");
-        dispatch(setNodeAsPrimary(step.payload.id));
-        break;
-      }
-      case GraphNodeActionTypes.SET_NODE_AS_SECONDARY: {
-        console.log("sec done");
-        dispatch(setNodeAsSecondary(step.payload.id));
-        break;
-      }
-      case GraphNodeActionTypes.SET_NODE_AS_COMPARING: {
-        console.log("comp done");
-        dispatch(setNodeAsComparing(step.payload.id));
-        break;
-      }
-      case GraphNodeActionTypes.MARK_NODE_AS_VISITED: {
-        console.log("vis done");
-        dispatch(markNodeAsVisited(step.payload.id));
-        break;
-      }
-
-      default: {
-        break;
-      }
-    }
-  }, []);
   const renderNextStep = useCallback(
     (stepNumber: number) => {
+      console.log(`stepNumber >= currentStep: ${stepNumber >= currentStep}`);
       if (stepNumber === -1) {
         dispatch(resetNodeMapState());
       } else if (stepNumber >= currentStep) {
         let i = currentStep;
         while (i <= stepNumber) {
-          handleStep(animations[currentAlgorithm].steps[i]);
-          i++;
+          if (currentStep < animations[currentAlgorithm].steps.length) {
+            const { id, algorithmState } =
+              animations[currentAlgorithm].steps[i].payload;
+            dispatch(setAlgorithmState(id, algorithmState));
+            i++;
+          }
         }
         setCurrentStep(i);
       } else if (stepNumber < currentStep) {
         dispatch(resetNodeMapState());
         let i = 0;
         while (i <= stepNumber) {
-          handleStep(animations[currentAlgorithm].steps[i]);
-          i++;
+          if (currentStep < animations[currentAlgorithm].steps.length) {
+            const { id, algorithmState } =
+              animations[currentAlgorithm].steps[i].payload;
+            dispatch(setAlgorithmState(id, algorithmState));
+            i++;
+          }
         }
         setCurrentStep(i);
       }

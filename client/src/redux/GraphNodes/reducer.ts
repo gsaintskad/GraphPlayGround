@@ -1,12 +1,15 @@
-import { GraphNodeActionTypes } from "./actionTypes.ts";
-import {GraphNodeProps, GraphNodeStates} from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
+import {
+  GraphNodeActionTypes,
+  GraphNodeAlgorithmStates,
+} from "./actionTypes.ts";
+import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 import { Reducer } from "@reduxjs/toolkit";
 import { Point, stateObject } from "../../lib/types.ts";
 import { rootAction } from "@/redux/store.ts";
 
 const initialGraphMapState: stateObject<GraphNodeProps> = {};
 const initialSelectedNodeArrState: GraphNodeProps[] = [];
-const previousGraphNodeStates:stateObject<GraphNodeStates> = {};
+const previousGraphNodeStates: stateObject<GraphNodeAlgorithmStates> = {};
 
 export const graphNodesReducer: Reducer<
   stateObject<GraphNodeProps>,
@@ -58,77 +61,22 @@ export const graphNodesReducer: Reducer<
       // store.dispatch(calculateEdgeProps(prevState[payload.id]));
       return prevState;
     }
-    case GraphNodeActionTypes.SET_NODE_AS_PRIMARY: {
+    case GraphNodeActionTypes.SET_NODE_ALGORITHM_STATE: {
       const prevState = structuredClone(state);
-      const payload = action.payload; // payload = id
-      prevState[payload] = {
-        ...prevState[payload],
-        algorithmState: "primary",
-      };
-      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
-      return prevState;
-    }
-    case GraphNodeActionTypes.SET_NODE_AS_SECONDARY: {
-      const prevState = structuredClone(state);
-      const payload = action.payload; // payload = id
-      prevState[payload] = {
-        ...prevState[payload],
-        algorithmState: "secondary",
-      };
-      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
-      return prevState;
-    }
-    case GraphNodeActionTypes.SET_NODE_AS_COMPARING: {
-      const prevState = structuredClone(state);
-      const payload = action.payload; // payload = id
-      prevState[payload] = {
-        ...prevState[payload],
-        algorithmState: "comparing",
-      };
-      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
-      return prevState;
-    }
-    case GraphNodeActionTypes.MARK_NODE_AS_VISITED: {
-      const prevState = structuredClone(state);
-      const payload = action.payload; // payload = id
-      prevState[payload] = {
-        ...prevState[payload],
-        algorithmState: "visited",
-      };
-      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
-      return prevState;
-    }
-    case GraphNodeActionTypes.SET_NODE_AS_SELECTED: {
-      const prevState = structuredClone(state);
-      const payload = action.payload; // payload = id
-      prevState[payload] = {
-        ...prevState[payload],
-        algorithmState: "selected",
-      };
 
+      prevState[action.payload.id] = {
+        ...prevState[action.payload.id],
+        algorithmState: action.payload.algorithmState,
+      };
+      // store.dispatch(calculateEdgeProps(prevState[payload.id]));
       return prevState;
     }
+
     case GraphNodeActionTypes.DISCARD_ALGORITHM_STATE: {
       const prevState = structuredClone(state);
       for (const id in prevState) {
         prevState[id].algorithmState = "primary";
       }
-
-      return prevState;
-    }
-    case GraphNodeActionTypes.HIGHLIGHT_NODE: {
-      const prevState = structuredClone(state);
-      // prevState.push(action.payload);
-      const payload = action.payload; // payload = id
-      previousGraphNodeStates[payload]=prevState[payload].algorithmState!;
-      prevState[payload] = {
-        ...prevState[payload],
-        algorithmState: "highlighted",
-      };
-      return prevState;
-    }
-    case GraphNodeActionTypes.DEHIGHLIGHT_NODE: {
-      const prevState = structuredClone(state);
 
       return prevState;
     }
@@ -158,22 +106,3 @@ export const selectedGraphNodesReducer: Reducer<
       return state;
   }
 };
-// export const highlightedGraphNodesReducer: Reducer<string[], rootAction> = (
-//   state = initialHighlightedNodeArrState,
-//   action: rootAction,
-// ): string[] => {
-//   switch (action.type) {
-//     case GraphNodeActionTypes.HIGHLIGHT_NODE: {
-//       const prevState = structuredClone(state);
-//       prevState.push(action.payload);
-//       return prevState;
-//     }
-//     case GraphNodeActionTypes.DEHIGHLIGHT_NODE: {
-//       const prevState = structuredClone(state);
-//
-//       return prevState.filter((id) => id !== action.payload);
-//     }
-//     default:
-//       return state;
-//   }
-// };

@@ -15,13 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setNodeName } from "@/redux/GraphNodes/actionCreator.ts";
 import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
 import { RootState } from "@/redux/store.ts";
-export type GraphNodeStates =
-  | "primary"
-  | "secondary"
-  | "selected"
-  | "comparing"
-  | "visited"
-  | "highlighted";
+import {GraphNodeAlgorithmStates} from "@/redux/GraphNodes/actionTypes.ts";
+
 export interface GraphNodeProps {
   displayValue: string;
 
@@ -29,7 +24,7 @@ export interface GraphNodeProps {
   coordinates: Point;
   radius?: number;
   isActive: boolean;
-  algorithmState?: GraphNodeStates;
+  algorithmState?: GraphNodeAlgorithmStates;
 }
 
 export const GraphNode = (props: GraphNodeProps) => {

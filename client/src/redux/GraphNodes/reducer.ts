@@ -128,15 +128,8 @@ export const graphNodesReducer: Reducer<
       return prevState;
     }
     case GraphNodeActionTypes.DEHIGHLIGHT_NODE: {
-
       const prevState = structuredClone(state);
 
-      const payload = action.payload; // payload = id
-      previousGraphNodeStates[payload]=prevState[payload].algorithmState!;
-      prevState[payload] = {
-        ...prevState[payload],
-        algorithmState: previousGraphNodeStates[payload],
-      };
       return prevState;
     }
     default:

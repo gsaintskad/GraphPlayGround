@@ -1,12 +1,12 @@
 import { GraphNodeActionTypes } from "./actionTypes.ts";
-import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
+import {GraphNodeProps, GraphNodeStates} from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 import { Reducer } from "@reduxjs/toolkit";
 import { Point, stateObject } from "../../lib/types.ts";
 import { rootAction } from "@/redux/store.ts";
 
 const initialGraphMapState: stateObject<GraphNodeProps> = {};
 const initialSelectedNodeArrState: GraphNodeProps[] = [];
-const initialHighlightedNodeArrState: string[] = [];
+const previousGraphNodeStates:stateObject<GraphNodeStates> = {};
 
 export const graphNodesReducer: Reducer<
   stateObject<GraphNodeProps>,
@@ -116,6 +116,29 @@ export const graphNodesReducer: Reducer<
 
       return prevState;
     }
+    case GraphNodeActionTypes.HIGHLIGHT_NODE: {
+      const prevState = structuredClone(state);
+      // prevState.push(action.payload);
+      const payload = action.payload; // payload = id
+      previousGraphNodeStates[payload]=prevState[payload].algorithmState!;
+      prevState[payload] = {
+        ...prevState[payload],
+        algorithmState: "highlighted",
+      };
+      return prevState;
+    }
+    case GraphNodeActionTypes.DEHIGHLIGHT_NODE: {
+
+      const prevState = structuredClone(state);
+
+      const payload = action.payload; // payload = id
+      previousGraphNodeStates[payload]=prevState[payload].algorithmState!;
+      prevState[payload] = {
+        ...prevState[payload],
+        algorithmState: previousGraphNodeStates[payload],
+      };
+      return prevState;
+    }
     default:
       return state;
   }
@@ -142,22 +165,22 @@ export const selectedGraphNodesReducer: Reducer<
       return state;
   }
 };
-export const highlightedGraphNodesReducer: Reducer<string[], rootAction> = (
-  state = initialHighlightedNodeArrState,
-  action: rootAction,
-): string[] => {
-  switch (action.type) {
-    case GraphNodeActionTypes.HIGHLIGHT_NODE: {
-      const stateCopy = structuredClone(state);
-      stateCopy.push(action.payload);
-      return stateCopy;
-    }
-    case GraphNodeActionTypes.DEHIGHLIGHT_NODE: {
-      const stateCopy = structuredClone(state);
-
-      return stateCopy.filter((id) => id !== action.payload);
-    }
-    default:
-      return state;
-  }
-};
+// export const highlightedGraphNodesReducer: Reducer<string[], rootAction> = (
+//   state = initialHighlightedNodeArrState,
+//   action: rootAction,
+// ): string[] => {
+//   switch (action.type) {
+//     case GraphNodeActionTypes.HIGHLIGHT_NODE: {
+//       const prevState = structuredClone(state);
+//       prevState.push(action.payload);
+//       return prevState;
+//     }
+//     case GraphNodeActionTypes.DEHIGHLIGHT_NODE: {
+//       const prevState = structuredClone(state);
+//
+//       return prevState.filter((id) => id !== action.payload);
+//     }
+//     default:
+//       return state;
+//   }
+// };

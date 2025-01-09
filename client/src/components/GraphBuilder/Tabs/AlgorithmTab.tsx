@@ -30,7 +30,9 @@ import {
   TableRow,
 } from "@/components/shadcnUI/table.tsx";
 import {
-  discardAlgorithmState, highlightNode,
+  dehighlightNode,
+  discardAlgorithmState,
+  highlightNode,
   markNodeAsVisited,
   resetNodeMapState,
   selectNode,
@@ -68,45 +70,52 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
     () => i18n[displaySettings.language],
     [displaySettings.language],
   );
-
+  const highlightHandler = useCallback((id: string) => {
+    dispatch(highlightNode(id));
+    console.log(`timeout for node${id} has been run`);
+    setTimeout(() => {
+      dispatch(dehighlightNode(id));
+      console.log(`timeout for node${id} has been finished`);
+    }, 2000);
+  }, []);
   const [currentAlgorithm, setCurrentAlgorithm] =
     useState<AlgorithmType>("Dijkstra");
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   const handleStep = useCallback((step: AlgorithmStep) => {
     if (currentStep < animations[currentAlgorithm].steps.length)
-      console.log('fs done');
-      switch (step.type as GraphNodeActionTypes) {
-        case GraphNodeActionTypes.SET_NODE_AS_SELECTED: {
-          console.log(' done');
-          dispatch(setNodeAsSelected(step.payload.id));
-          break;
-        }
-        case GraphNodeActionTypes.SET_NODE_AS_PRIMARY: {
-          console.log('prim done');
-          dispatch(setNodeAsPrimary(step.payload.id));
-          break;
-        }
-        case GraphNodeActionTypes.SET_NODE_AS_SECONDARY: {
-          console.log('sec done');
-          dispatch(setNodeAsSecondary(step.payload.id));
-          break;
-        }
-        case GraphNodeActionTypes.SET_NODE_AS_COMPARING: {
-          console.log('comp done');
-          dispatch(setNodeAsComparing(step.payload.id));
-          break;
-        }
-        case GraphNodeActionTypes.MARK_NODE_AS_VISITED: {
-          console.log('vis done');
-          dispatch(markNodeAsVisited(step.payload.id));
-          break;
-        }
-
-        default: {
-          break;
-        }
+      console.log("fs done");
+    switch (step.type as GraphNodeActionTypes) {
+      case GraphNodeActionTypes.SET_NODE_AS_SELECTED: {
+        console.log(" done");
+        dispatch(setNodeAsSelected(step.payload.id));
+        break;
       }
+      case GraphNodeActionTypes.SET_NODE_AS_PRIMARY: {
+        console.log("prim done");
+        dispatch(setNodeAsPrimary(step.payload.id));
+        break;
+      }
+      case GraphNodeActionTypes.SET_NODE_AS_SECONDARY: {
+        console.log("sec done");
+        dispatch(setNodeAsSecondary(step.payload.id));
+        break;
+      }
+      case GraphNodeActionTypes.SET_NODE_AS_COMPARING: {
+        console.log("comp done");
+        dispatch(setNodeAsComparing(step.payload.id));
+        break;
+      }
+      case GraphNodeActionTypes.MARK_NODE_AS_VISITED: {
+        console.log("vis done");
+        dispatch(markNodeAsVisited(step.payload.id));
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
   }, []);
   const renderNextStep = useCallback(
     (stepNumber: number) => {
@@ -114,7 +123,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         dispatch(resetNodeMapState());
       } else if (stepNumber >= currentStep) {
         let i = currentStep;
-        while (i <= stepNumber){
+        while (i <= stepNumber) {
           handleStep(animations[currentAlgorithm].steps[i]);
           i++;
         }
@@ -122,7 +131,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
       } else if (stepNumber < currentStep) {
         dispatch(resetNodeMapState());
         let i = 0;
-        while (i <= stepNumber){
+        while (i <= stepNumber) {
           handleStep(animations[currentAlgorithm].steps[i]);
           i++;
         }
@@ -134,7 +143,6 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
   useEffect(() => {}, [animations, isAnimationPlaying]);
   return (
     <div className={" flex flex-col"}>
-
       <div className="flex gap-x-5 py-3">
         <Button
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
@@ -152,7 +160,10 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         </Button>
         <Button
           className="w-full"
-          onClick={() =>   {if (currentStep < animations[currentAlgorithm].steps.length) renderNextStep(currentStep)}}
+          onClick={() => {
+            if (currentStep < animations[currentAlgorithm].steps.length)
+              renderNextStep(currentStep);
+          }}
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
         >
           <IoPlaySkipForward />
@@ -239,11 +250,19 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
                 step.type.toString() +
                 i.toString()
               }
-              className={currentStep-1 === i ? "bg-yellow-600/50" : ""}
+              className={currentStep - 1 === i ? "bg-yellow-600/50" : ""}
             >
               <TableCell className="font-medium">{i}</TableCell>
               <TableCell>{step.type}</TableCell>
-              <TableCell className={"hover:bg-yellow-600/50"} onClick={()=>dispatch(highlightNode(step.payload.id))} >{step.payload.id}</TableCell>
+              <TableCell
+                className={"hover:bg-yellow-600/50"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  highlightHandler(step.payload.id);
+                }}
+              >
+                {step.payload.id}
+              </TableCell>
               <TableCell className="text-right">
                 {JSON.stringify(step.payload.queueState)}
               </TableCell>

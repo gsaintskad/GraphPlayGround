@@ -7,15 +7,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcnUI/dropdown-menu.tsx";
 import { Point, stateObject } from "../../../lib/types.ts";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Input } from "@/components/shadcnUI/input.tsx";
 import { Button } from "@/components/shadcnUI/button.tsx";
 import { setWeight } from "@/redux/GraphEdges/actionCreator.ts";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  dehighlightNode,
-  setNodeName,
-} from "@/redux/GraphNodes/actionCreator.ts";
+import { setNodeName } from "@/redux/GraphNodes/actionCreator.ts";
 import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
 import { RootState } from "@/redux/store.ts";
 export type GraphNodeStates =
@@ -23,7 +20,8 @@ export type GraphNodeStates =
   | "secondary"
   | "selected"
   | "comparing"
-  | "visited";
+  | "visited"
+  | "highlighted";
 export interface GraphNodeProps {
   displayValue: string;
 
@@ -39,36 +37,8 @@ export const GraphNode = (props: GraphNodeProps) => {
   const displaySettings: DisplaySettingsState = useSelector(
     (state: RootState) => state.displaySettings,
   );
-  const highlightedNodeArr: string[] = useSelector(
-    (state: RootState) => state.highlightedGraphNodes,
-  );
 
   const [input, setInput] = useState<string>(`${props.displayValue}`);
-  const [backgroundColor, setBackgroundColor] = useState<string>(
-    displaySettings.nodeColors[props.algorithmState || "primary"],
-  );
-  useEffect(
-    () =>
-      setBackgroundColor(
-        displaySettings.nodeColors[props.algorithmState || "primary"],
-      ),
-    [props.algorithmState],
-  );
-  useEffect(() => {
-    if (highlightedNodeArr.some((id) => id === props.id)) {
-      const previousColor = backgroundColor;
-      setBackgroundColor(displaySettings.nodeColors.highlighted);
-
-      const timeout = setTimeout(() => {
-        setBackgroundColor(previousColor); // Revert to the previous color after the highlight
-      }, 1000); // Match the duration of the animation
-
-      return () => {
-        clearTimeout(timeout);
-        dispatch(dehighlightNode(props.id));
-      };
-    }
-  }, [highlightedNodeArr, displaySettings.nodeColors, props.algorithmState]);
 
   return (
     <div
@@ -84,7 +54,8 @@ export const GraphNode = (props: GraphNodeProps) => {
             className={`flex justify-center font-bold items-center shadow-2xl overflow-hidden aspect-square rounded-full w-full border-4`}
             style={{
               width: `${displaySettings.nodeSize || 90}px`,
-              backgroundColor,
+              backgroundColor:
+                displaySettings.nodeColors[props.algorithmState || "primary"],
               borderColor: displaySettings.nodeBorderColor,
               color: displaySettings.nodeFontColor,
               fontSize: displaySettings.nodeFontSize,

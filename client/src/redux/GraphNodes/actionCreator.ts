@@ -83,7 +83,7 @@ export const highlightNode = (id: string): GraphNodeAction => {
 };
 export const dehighlightNode = (id: string): GraphNodeAction => {
     return {
-        type: GraphNodeActionTypes.HIGHLIGHT_NODE,
+        type: GraphNodeActionTypes.DEHIGHLIGHT_NODE,
         payload: id,
     };
 };

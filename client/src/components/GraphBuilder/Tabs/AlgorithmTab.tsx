@@ -1,16 +1,24 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/redux/store.ts";
-import {DisplaySettingsState} from "@/redux/DisplaySettings/reducer.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store.ts";
+import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
 
-import {i18n} from "@/lib/i18n.ts";
-import {Button} from "@/components/shadcnUI/button.tsx";
-import {IoPause, IoPlay, IoPlaySkipBackSharp, IoPlaySkipForward,} from "react-icons/io5";
-import {AnimationState} from "@/redux/Animations/reducer.ts";
-import {AlgorithmStep, AlgorithmType,} from "@/redux/Animations/actionTypes.ts";
-import {edgeDto, nodeDto, stateObject} from "@/lib/types.ts";
-import {setDijkstra} from "@/redux/Animations/actionCreator.ts";
+import { i18n } from "@/lib/i18n.ts";
+import { Button } from "@/components/shadcnUI/button.tsx";
+import {
+  IoPause,
+  IoPlay,
+  IoPlaySkipBackSharp,
+  IoPlaySkipForward,
+} from "react-icons/io5";
+import { AnimationState } from "@/redux/Animations/reducer.ts";
+import {
+  AlgorithmStep,
+  AlgorithmType,
+} from "@/redux/Animations/actionTypes.ts";
+import { edgeDto, nodeDto, stateObject } from "@/lib/types.ts";
+import { setDijkstra } from "@/redux/Animations/actionCreator.ts";
 import {
   Table,
   TableBody,
@@ -22,13 +30,20 @@ import {
   TableRow,
 } from "@/components/shadcnUI/table.tsx";
 import {
+  discardAlgorithmState, highlightNode,
   markNodeAsVisited,
-  resetNodeMapState, selectNode,
+  resetNodeMapState,
+  selectNode,
   setNodeAsComparing,
   setNodeAsPrimary,
-  setNodeAsSecondary, setNodeAsSelected,
+  setNodeAsSecondary,
+  setNodeAsSelected,
 } from "@/redux/GraphNodes/actionCreator.ts";
-import {GraphNodeActionTypes} from "@/redux/GraphNodes/actionTypes.ts";
+import { GraphNodeActionTypes } from "@/redux/GraphNodes/actionTypes.ts";
+import { setAnimationSpeed } from "@/redux/DisplaySettings/actionCreator.ts";
+import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes.ts";
+import { setPlayAnimationTool } from "@/redux/GraphBuilder/actionCreator.ts";
+import { Label } from "@/components/shadcnUI/label.tsx";
 
 interface AlgorithmTabProps {
   className?: string;
@@ -37,6 +52,9 @@ interface AlgorithmTabProps {
 const AlgorithmTab = (props: AlgorithmTabProps) => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
+  const activeTool = useSelector(
+    (state: RootState) => state.graphBuilderTool.currentTool,
+  );
 
   const dispatch = useDispatch();
   const [isAnimationPlaying, setIsAnimationPlaying] = useState<boolean>(false);
@@ -56,54 +74,58 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   const handleStep = useCallback((step: AlgorithmStep) => {
-    console.log('handling step : ' ,step)
-    switch (step.type as GraphNodeActionTypes) {
-      case GraphNodeActionTypes.SET_NODE_AS_SELECTED:{
-        dispatch(setNodeAsSelected(step.payload.id));
-        break;
-      }
-      case GraphNodeActionTypes.SET_NODE_AS_PRIMARY: {
-        dispatch(setNodeAsPrimary(step.payload.id));
-        break;
-      }
-      case GraphNodeActionTypes.SET_NODE_AS_SECONDARY: {
-        dispatch(setNodeAsSecondary(step.payload.id));
-        break;
-      }
-      case GraphNodeActionTypes.SET_NODE_AS_COMPARING: {
-        dispatch(setNodeAsComparing(step.payload.id));
-        break;
-      }
-      case GraphNodeActionTypes.MARK_NODE_AS_VISITED: {
-        dispatch(markNodeAsVisited(step.payload.id));
-        break;
-      }
+    if (currentStep < animations[currentAlgorithm].steps.length)
+      console.log('fs done');
+      switch (step.type as GraphNodeActionTypes) {
+        case GraphNodeActionTypes.SET_NODE_AS_SELECTED: {
+          console.log(' done');
+          dispatch(setNodeAsSelected(step.payload.id));
+          break;
+        }
+        case GraphNodeActionTypes.SET_NODE_AS_PRIMARY: {
+          console.log('prim done');
+          dispatch(setNodeAsPrimary(step.payload.id));
+          break;
+        }
+        case GraphNodeActionTypes.SET_NODE_AS_SECONDARY: {
+          console.log('sec done');
+          dispatch(setNodeAsSecondary(step.payload.id));
+          break;
+        }
+        case GraphNodeActionTypes.SET_NODE_AS_COMPARING: {
+          console.log('comp done');
+          dispatch(setNodeAsComparing(step.payload.id));
+          break;
+        }
+        case GraphNodeActionTypes.MARK_NODE_AS_VISITED: {
+          console.log('vis done');
+          dispatch(markNodeAsVisited(step.payload.id));
+          break;
+        }
 
-      default: {
-        break;
+        default: {
+          break;
+        }
       }
-    }
   }, []);
   const renderNextStep = useCallback(
     (stepNumber: number) => {
       if (stepNumber === -1) {
         dispatch(resetNodeMapState());
-      }
-      else if (stepNumber > currentStep) {
+      } else if (stepNumber >= currentStep) {
         let i = currentStep;
-        do {
+        while (i <= stepNumber){
           handleStep(animations[currentAlgorithm].steps[i]);
           i++;
-        } while (i <= stepNumber);
+        }
         setCurrentStep(i);
-      }
-      else if( stepNumber < currentStep) {
+      } else if (stepNumber < currentStep) {
         dispatch(resetNodeMapState());
-        let i =0;
-        do {
+        let i = 0;
+        while (i <= stepNumber){
           handleStep(animations[currentAlgorithm].steps[i]);
           i++;
-        } while (i <= stepNumber);
+        }
         setCurrentStep(i);
       }
     },
@@ -112,21 +134,32 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
   useEffect(() => {}, [animations, isAnimationPlaying]);
   return (
     <div className={" flex flex-col"}>
-      <div className="flex">
-        <Button className="w-full" onClick={()=>renderNextStep(currentStep-2)}>
+
+      <div className="flex gap-x-5 py-3">
+        <Button
+          disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
+          className="w-full"
+          onClick={() => renderNextStep(currentStep - 2)}
+        >
           <IoPlaySkipBackSharp />
         </Button>
         <Button
+          disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
           className="w-full"
           onClick={() => setIsAnimationPlaying(!isAnimationPlaying)}
         >
           {isAnimationPlaying ? <IoPause /> : <IoPlay />}
         </Button>
-        <Button className="w-full" onClick={()=>renderNextStep(currentStep)}>
+        <Button
+          className="w-full"
+          onClick={() =>   {if (currentStep < animations[currentAlgorithm].steps.length) renderNextStep(currentStep)}}
+          disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
+        >
           <IoPlaySkipForward />
         </Button>
       </div>
       <Button
+        disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
         onClick={() => {
           // Prepare Graph to be sent
           const nodeDtoMap: stateObject<nodeDto> = {};
@@ -184,10 +217,10 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             });
         }}
       >
-        ss
+        save
       </Button>
       <Table>
-        <TableCaption>sss</TableCaption>
+        <TableCaption>Algorithm steps</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[30px]">Step</TableHead>
@@ -199,17 +232,18 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         <TableBody>
           {animations[currentAlgorithm!].steps.map((step, i) => (
             <TableRow
+              onClick={() => renderNextStep(i)}
               key={
                 step.payload.id.toString() +
                 "---" +
                 step.type.toString() +
                 i.toString()
               }
-              className={currentStep===i?"bg-yellow-600/50":""}
+              className={currentStep-1 === i ? "bg-yellow-600/50" : ""}
             >
               <TableCell className="font-medium">{i}</TableCell>
               <TableCell>{step.type}</TableCell>
-              <TableCell>{step.payload.id}</TableCell>
+              <TableCell className={"hover:bg-yellow-600/50"} onClick={()=>dispatch(highlightNode(step.payload.id))} >{step.payload.id}</TableCell>
               <TableCell className="text-right">
                 {JSON.stringify(step.payload.queueState)}
               </TableCell>
@@ -218,8 +252,9 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={4}>Output : {JSON.stringify(animations[currentAlgorithm].output)}</TableCell>
-
+            <TableCell colSpan={4}>
+              Output : {JSON.stringify(animations[currentAlgorithm].output)}
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>

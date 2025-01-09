@@ -10,6 +10,7 @@ export interface DisplaySettingsState {
     selected:string;
     comparing:string;
     visited:string;
+    highlighted:string;
   }
   nodeBorderColor: string;
   edgeColor: string;
@@ -21,6 +22,7 @@ export interface DisplaySettingsState {
   nodeFontSize: number;
   language:Language;
   animationSpeed: number;
+
 }
 
 const initialState: DisplaySettingsState = {
@@ -31,6 +33,8 @@ const initialState: DisplaySettingsState = {
     selected:"#00b4df",
     comparing:"#de0000",
     visited:"#546367",
+    highlighted:"#d260ff"
+
   },
   nodeBorderColor: "#ffffff",
   edgeColor: "#ffffff",

@@ -44,6 +44,7 @@ export interface SetNodeColorAction extends AnyAction {
     selected:string;
     comparing:string;
     visited:string;
+    highlighted:string;
   }; // Assuming color is represented as a string (e.g., hex or color name)
 }
 

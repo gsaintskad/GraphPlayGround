@@ -3,6 +3,7 @@ import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store.ts";
 import {
+  discardAlgorithmState,
   discardNodeMap,
   discardSelection,
 } from "@/redux/GraphNodes/actionCreator.ts";
@@ -13,7 +14,7 @@ import DisplaySettingsTab from "@/components/GraphBuilder/Tabs/DisplaySettingsTa
 import { IconContext } from "react-icons";
 import { IoMdPlay, IoMdSave, IoMdSettings } from "react-icons/io";
 import { MdDelete, MdStarOutline } from "react-icons/md";
-import { TbPointer, TbPointerMinus, TbPointerPlus } from "react-icons/tb";
+import {TbArrowsMove, TbPointer, TbPointerMinus, TbPointerPlus} from "react-icons/tb";
 import { BsArrowDownUp } from "react-icons/bs";
 import { ImArrowUpRight2 } from "react-icons/im";
 import { VscDebugDisconnect } from "react-icons/vsc";
@@ -22,9 +23,12 @@ import {
   setConnectTool,
   setCreateTool,
   setDirectConnectTool, setDisconnectTool,
-  setMoveTool,
+  setMoveTool, setPlayAnimationTool,
   setPointerTool, setRemoveTool
 } from "@/redux/GraphBuilder/actionCreator.ts";
+import {GraphBuilderTool} from "@/redux/GraphBuilder/actionTypes.ts";
+import {Button} from "@/components/shadcnUI/button.tsx";
+import {Label} from "@/components/shadcnUI/label.tsx";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
@@ -34,10 +38,13 @@ export const GraphBuilder = (props: {
   const displaySettings = useSelector(
     (state: RootState) => state.displaySettings,
   );
+  const activeTool = useSelector(
+    (state: RootState) => state.graphBuilderTool.currentTool,
+  );
 
   const dispatch = useDispatch();
   const theme = useTheme();
-  const [isSettingsHidden, setisSettingsHidden] = useState<boolean>(true);
+  const [isSettingsHidden, setIsSettingsHidden] = useState<boolean>(true);
 
   const backgroundGradient =
     theme.theme === "dark"
@@ -49,20 +56,14 @@ export const GraphBuilder = (props: {
       className={`grid grid-rows-[auto_1fr] h-full w-full pb-10 px-10 ${backgroundGradient} text-white`}
       style={props.style}
     >
-      <IconContext.Provider
-        value={{
-          size: "5rem",
-          color: theme.theme === "dark" ? "#000" : "#FFF",
-          style: { fontSize: "3rem" },
-        }}
-      >
+      <IconContext.Provider value={{ color: theme.theme==="dark"?'black':'white', size: "2em"}}>
         <div className="flex h-16 gap-x-8 w-full items-center justify-center">
           <ToolButton
             name="Save Graph"
             description="Save the current graph"
             onClick={() => console.log("Graph has been saved!")}
           >
-            <IoMdSave />
+            <IoMdSave/>
           </ToolButton>
 
           <ToolButton
@@ -74,61 +75,85 @@ export const GraphBuilder = (props: {
               dispatch(discardEdgeMap());
             }}
           >
-            <MdDelete />
+            <MdDelete/>
           </ToolButton>
           <ToolButton
+            isAlwaysActive={true}
             name="Settings"
             description="Open graph settings"
-            onClick={() => setisSettingsHidden(!isSettingsHidden)}
+            onClick={() => setIsSettingsHidden(!isSettingsHidden)}
           >
-            <IoMdSettings />
+            <IoMdSettings/>
           </ToolButton>
+          <div >
+            <Label className={theme.theme==="dark"?"text-white":"text-black"}>ACTIVE TOOL : {activeTool}</Label>
+
+            <Button
+              className="mx-6"
+              onClick={() => {
+                const state = activeTool === GraphBuilderTool.PLAY_ANIMATION;
+                if (state) dispatch(discardAlgorithmState());
+                // else setCurrentStep(0);
+                dispatch(setPlayAnimationTool(!state));
+              }}
+            >
+              toggle
+            </Button>
+              </div>
         </div>
 
         <div className="grid grid-cols-[100px_1fr_auto] h-full">
-          <div className="flex flex-col gap-y-4 items-center overflow-y-auto scrollbar-thin">
+          <div className="flex flex-col gap-y-4 items-center justify-center overflow-y-auto scrollbar-thin">
             <ToolButton
               name="Pointer"
+              tool={GraphBuilderTool.POINTER}
               onClick={() => dispatch(setPointerTool())}
             >
               <TbPointer/>
             </ToolButton>
             <ToolButton
               name="Move"
+              tool={GraphBuilderTool.MOVE}
               onClick={() => dispatch(setMoveTool())}
             >
-              <TbPointerMinus/>
+              <TbArrowsMove/>
             </ToolButton>
             <ToolButton
               name="Create Node"
+              tool={GraphBuilderTool.CREATE}
               onClick={() => dispatch(setCreateTool())}
             >
               <TbPointerPlus/>
             </ToolButton>
             <ToolButton
               name="Delete Node"
+              tool={GraphBuilderTool.REMOVE}
               onClick={() => dispatch(setRemoveTool())}
             >
-              <MdDelete/>
+              <TbPointerMinus/>
             </ToolButton>
             <ToolButton
               name="Connect Nodes"
+              tool={GraphBuilderTool.CONNECT}
               onClick={() => dispatch(setConnectTool())}
             >
               <BsArrowDownUp/>
             </ToolButton>
             <ToolButton
               name="Direct Connect"
+              tool={GraphBuilderTool.DIRECT_CONNECT}
               onClick={() => dispatch(setDirectConnectTool())}
             >
               <ImArrowUpRight2/>
             </ToolButton>
             <ToolButton
               name="Disconnect Nodes"
+              tool={GraphBuilderTool.DISCONNECT}
               onClick={() => dispatch(setDisconnectTool())}
             >
               <VscDebugDisconnect/>
             </ToolButton>
+
           </div>
 
           <GraphDisplay

@@ -1,6 +1,6 @@
-import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
-import { Point } from "../../lib/types.ts";
-import { GraphNodeAction, GraphNodeActionTypes } from "./actionTypes.ts";
+import {GraphNodeProps} from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
+import {Point} from "../../lib/types.ts";
+import {GraphNodeAction, GraphNodeActionTypes} from "./actionTypes.ts";
 
 // Action Creator for adding a node
 export const addNode = (nodeDto: GraphNodeProps): GraphNodeAction => {
@@ -75,13 +75,30 @@ export const setNodeAsSecondary = (id: string): GraphNodeAction => {
         payload: id,
     };
 };
+export const highlightNode = (id: string): GraphNodeAction => {
+    return {
+        type: GraphNodeActionTypes.HIGHLIGHT_NODE,
+        payload: id,
+    };
+};
+export const dehighlightNode = (id: string): GraphNodeAction => {
+    return {
+        type: GraphNodeActionTypes.HIGHLIGHT_NODE,
+        payload: id,
+    };
+};
 export const setNodeAsSelected=(id:string): GraphNodeAction=>{
     return {
         type: GraphNodeActionTypes.SET_NODE_AS_SELECTED,
         payload: id,
     }
 }
-
+export const discardAlgorithmState=():GraphNodeAction=>{
+    return {
+        type:GraphNodeActionTypes.DISCARD_ALGORITHM_STATE,
+        payload:null
+    }
+}
 // Action Creator for marking a node as comparing
 export const setNodeAsComparing = (id: string): GraphNodeAction => {
     return {

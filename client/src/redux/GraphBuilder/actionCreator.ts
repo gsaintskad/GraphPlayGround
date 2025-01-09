@@ -36,7 +36,7 @@ export const setRemoveTool = (): GraphBuilderAction => ({
   type: GraphBuilderTool.REMOVE,
   payload: null,
 });
-export const setPlayAnimationTool = (): GraphBuilderAction => ({
+export const setPlayAnimationTool = (isAnimationPlaying:boolean): GraphBuilderAction => ({
   type: GraphBuilderTool.PLAY_ANIMATION,
-  payload: null,
+  payload: isAnimationPlaying,
 });

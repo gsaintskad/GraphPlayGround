@@ -711,6 +711,11 @@ body {
   margin-right: 1.25rem;
 }
 
+.mx-6 {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -863,10 +868,6 @@ body {
 
 .min-h-screen {
   min-height: 100vh;
-}
-
-.w-10 {
-  width: 2.5rem;
 }
 
 .w-2 {
@@ -1344,6 +1345,10 @@ body {
   background-color: rgb(202 138 4 / 0.5);
 }
 
+.bg-yellow-600\/60 {
+  background-color: rgb(202 138 4 / 0.6);
+}
+
 .bg-yellow-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(161 98 7 / var(--tw-bg-opacity, 1));
@@ -1674,6 +1679,11 @@ body {
 
 .tracking-widest {
   letter-spacing: 0.1em;
+}
+
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity, 1));
 }
 
 .text-destructive-foreground {
@@ -2168,6 +2178,10 @@ html::-webkit-scrollbar-track {
 
 .hover\:bg-secondary\/80:hover {
   background-color: hsl(var(--secondary) / 0.8);
+}
+
+.hover\:bg-yellow-600\/50:hover {
+  background-color: rgb(202 138 4 / 0.5);
 }
 
 .hover\:text-accent-foreground:hover {

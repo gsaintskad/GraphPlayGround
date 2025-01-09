@@ -1,7 +1,7 @@
 import { AnyAction, configureStore, Reducer } from "@reduxjs/toolkit";
 
 import {
-  graphNodesReducer,
+  graphNodesReducer, highlightedGraphNodesReducer,
   selectedGraphNodesReducer,
 } from "@/redux/GraphNodes/reducer.ts";
 import graphEdgesReducer from "@/redux/GraphEdges/reducer.ts";
@@ -34,7 +34,8 @@ const store: ToolkitStore<
     selectedGraphNodes: GraphNodeProps[];
     displaySettings:DisplaySettingsState;
     animations:AnimationState;
-    graphBuilderTool:GraphBuilderState
+    graphBuilderTool:GraphBuilderState;
+    highlightedGraphNodes: string[];
 
   },
   rootAction,
@@ -46,7 +47,8 @@ const store: ToolkitStore<
     selectedGraphNodes: selectedGraphNodesReducer,
     displaySettings:displaySettingsReducer,
     animations:animationReducer,
-    graphBuilderTool:graphBuilderReducer
+    graphBuilderTool:graphBuilderReducer,
+    highlightedGraphNodes:highlightedGraphNodesReducer
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

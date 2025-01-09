@@ -29,6 +29,7 @@ export const setNodeColors = (colors: {
   selected: string;
   comparing: string;
   visited: string;
+  highlighted:string;
 }): rootAction => {
   return {
     type: DisplaySettingsActionTypes.SET_NODE_COLORS,

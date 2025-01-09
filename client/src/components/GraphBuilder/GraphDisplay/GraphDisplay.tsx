@@ -238,7 +238,11 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       changeNodesActiveState(false);
       setIsRemovingAnEdge(true);
       divElement.addEventListener("click", selectionHandler);
-    } else if (activeTool && divElement) {
+    }else if (activeTool === GraphBuilderTool.PLAY_ANIMATION && divElement && edgeMap) {
+      changeNodesActiveState(false);
+      divElement.addEventListener("click", selectionHandler);
+    }
+    else if (activeTool && divElement) {
       divElement.addEventListener("click", handleEvent);
     }
 

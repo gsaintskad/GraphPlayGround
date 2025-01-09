@@ -48,7 +48,7 @@ export interface SetMoveToolAction extends AnyAction {
 
 export interface SetPlayAnimationToolAction extends AnyAction {
   type: GraphBuilderTool.PLAY_ANIMATION;
-  payload: null;
+  payload: boolean;
 }
 
 export type GraphBuilderAction =

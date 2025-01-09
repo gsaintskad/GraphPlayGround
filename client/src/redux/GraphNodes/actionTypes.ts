@@ -18,7 +18,22 @@ export enum GraphNodeActionTypes {
   MOVE_NODE = "MOVE_NODE",
   SET_NODE_NAME = "SET_NODE_NAME",
   DISCARD_NODE_MAP = "DISCARD_NODE_MAP",
+  DISCARD_ALGORITHM_STATE = "DISCARD_ALGORITHM_STATE",
   SET_NODE_AS_SELECTED = "SET_NODE_AS_SELECTED",
+  HIGHLIGHT_NODE = "HIGHLIGHT_NODE",
+  DEHIGHLIGHT_NODE = "DEHIGHLIGHT_NODE",
+}
+interface discardAlgorithmStateAction extends AnyAction {
+  type: GraphNodeActionTypes.DISCARD_ALGORITHM_STATE;
+  payload: null;
+}
+interface highlightNodeAction extends AnyAction {
+  type: GraphNodeActionTypes.HIGHLIGHT_NODE;
+  payload: string; //id
+}
+interface dehighlightNodeAction extends AnyAction {
+  type: GraphNodeActionTypes.DEHIGHLIGHT_NODE;
+  payload: string; //id
 }
 interface setNodeAsSelectedAction extends AnyAction {
   type: GraphNodeActionTypes.SET_NODE_AS_SELECTED;
@@ -88,6 +103,9 @@ interface setNodeCoordinatesAction extends AnyAction {
   payload: { nodeCoordinates: Point; id: string };
 }
 export type GraphNodeAction =
+  | dehighlightNodeAction
+  | highlightNodeAction
+  | discardAlgorithmStateAction
   | setNodeAsSelectedAction
   | discardNodeMapAction
   | setNodeNameAction

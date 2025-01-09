@@ -20,7 +20,8 @@ import {
   setNodeFontColor,
   setNodeFontSize,
   setWeightFontSize,
-  setWeightColor, setAnimationSpeed,
+  setWeightColor,
+  setAnimationSpeed,
 } from "@/redux/DisplaySettings/actionCreator.ts";
 import {
   Accordion,
@@ -59,7 +60,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
     nodeFontColor: displaySettings.nodeFontColor,
     nodeFontSize: displaySettings.nodeFontSize,
     language: displaySettings.language,
-    animationSpeed:displaySettings.animationSpeed,
+    animationSpeed: displaySettings.animationSpeed,
   });
 
   const handleNodeSettingsSubmit = () => {
@@ -69,9 +70,9 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
     dispatch(setNodeFontColor(localSettings.nodeFontColor));
     dispatch(setNodeFontSize(localSettings.nodeFontSize));
   };
-  const handleAnimationSettingSubmit=()=>{
+  const handleAnimationSettingSubmit = () => {
     dispatch(setAnimationSpeed(localSettings.animationSpeed));
-  }
+  };
 
   const handleEdgeSettingsSubmit = () => {
     dispatch(setEdgeColor(localSettings.edgeColor));
@@ -100,6 +101,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           selected?: string;
           comparing?: string;
           visited?: string;
+          highlighted?: string;
         },
   ) => {
     setLocalSettings((prev) => {
@@ -114,8 +116,10 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
   };
 
   return (
-    <div className="bg-zinc-700/20  mx-5 rounded-xl overflow-y-auto scrollbar scrollbar-thin dark:scrollbar-thumb-gray-950 dark:scrollbar-track-zinc-800
-     light:scrollbar-thumb-gray-200 light:scrollbar-track-zinc-100 max-h-[80vh]">
+    <div
+      className="bg-zinc-700/20  mx-5 rounded-xl overflow-y-auto scrollbar scrollbar-thin dark:scrollbar-thumb-gray-950 dark:scrollbar-track-zinc-800
+     light:scrollbar-thumb-gray-200 light:scrollbar-track-zinc-100 max-h-[80vh]"
+    >
       <Tabs
         defaultValue="GraphInfo"
         className={`w-[32em]  overflow-y-auto`}
@@ -125,7 +129,6 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           hidden={props.isSettingsHidden}
           className={`flex items-center justify-center px-2`}
         >
-
           <TabsTrigger value="GraphInfo">
             {language.displaySettingsTab.tabs.graphInfo}
           </TabsTrigger>
@@ -156,7 +159,9 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
               <AccordionTrigger>
-                <h1>{language.displaySettingsTab.headings.nodeCustomization}</h1>
+                <h1>
+                  {language.displaySettingsTab.headings.nodeCustomization}
+                </h1>
               </AccordionTrigger>
               <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
                 <div>
@@ -176,7 +181,9 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
 
                     <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
                       <div className="flex items-center">
-                        <Label className="w-20 text-nowrap mr-3">Primary:</Label>
+                        <Label className="w-20 text-nowrap mr-3">
+                          Primary:
+                        </Label>
                         <ColorPicker
                           onChange={(v) =>
                             handleChange("nodeColors", { primary: v })
@@ -198,7 +205,9 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                         />
                       </div>
                       <div className="flex items-center">
-                        <Label className="w-20 text-nowrap mr-3">Selected:</Label>
+                        <Label className="w-20 text-nowrap mr-3">
+                          Selected:
+                        </Label>
                         <ColorPicker
                           onChange={(v) =>
                             handleChange("nodeColors", { selected: v })
@@ -220,7 +229,9 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                         />
                       </div>
                       <div className="flex items-center">
-                        <Label className="w-20 text-nowrap mr-3">Visited:</Label>
+                        <Label className="w-20 text-nowrap mr-3">
+                          Visited:
+                        </Label>
                         <ColorPicker
                           onChange={(v) =>
                             handleChange("nodeColors", { visited: v })
@@ -253,7 +264,9 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                   />
                 </div>
                 <div>
-                  <Label>{language.displaySettingsTab.labels.nodeFontSize}</Label>
+                  <Label>
+                    {language.displaySettingsTab.labels.nodeFontSize}
+                  </Label>
                   <Slider
                     className={"bg-white rounded-full"}
                     onValueChange={(v) => handleChange("nodeFontSize", v[0])}
@@ -276,7 +289,9 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
               <AccordionTrigger>
-                <h1>{language.displaySettingsTab.headings.edgeCustomization}</h1>
+                <h1>
+                  {language.displaySettingsTab.headings.edgeCustomization}
+                </h1>
               </AccordionTrigger>
               <AccordionContent className="px-5 gap-y-6 flex flex-col relative">
                 <div className="flex items-center">
@@ -361,9 +376,18 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           value="AnimationSettings"
           className="px-10 pb-5 gap-y-6 flex flex-col relative"
         >
-
+          <div className="flex items-center">
+            <Label className="w-20 mr-3">Highlighter color:</Label>
+            <ColorPicker
+              onChange={(v) => handleChange("nodeColors", { highlighted: v })}
+              value={localSettings.nodeColors.highlighted}
+              className={"w-28"}
+            />
+          </div>
           <div>
-            <Label>Set animation speed : {localSettings.animationSpeed} ms</Label>
+            <Label>
+              Set animation speed : {localSettings.animationSpeed} ms
+            </Label>
             <Slider
               className={"bg-white rounded-full"}
               onValueChange={(v) => handleChange("animationSpeed", v[0])}
@@ -382,7 +406,6 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           <AlgorithmTab />
         </TabsContent>
       </Tabs>
-
     </div>
   );
 };

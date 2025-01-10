@@ -40,6 +40,13 @@ import { setAnimationSpeed } from "@/redux/DisplaySettings/actionCreator.ts";
 import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes.ts";
 import { setPlayAnimationTool } from "@/redux/GraphBuilder/actionCreator.ts";
 import { Label } from "@/components/shadcnUI/label.tsx";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcnUI/select.tsx";
 
 interface AlgorithmTabProps {
   className?: string;
@@ -151,7 +158,6 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
               }
             else LocalTimerIDs.forEach((timeout) => clearTimeout(timeout));
             setTimerIDs(LocalTimerIDs);
-            setIsAnimationPlaying(!isAnimationPlaying);
           }}
         >
           {isAnimationPlaying ? <IoPause /> : <IoPlay />}
@@ -168,7 +174,27 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         </Button>
       </div>
       <div className="mx-auto">
+        <Label>Current Algorithm:</Label>
+        {/*<Select*/}
+        {/*  onValueChange={(alg) => setCurrentAlgorithm(alg as AlgorithmType)}*/}
+        {/*>*/}
+        {/*  <SelectTrigger>*/}
+        {/*    <SelectValue*/}
+        {/*      className={"inline"}*/}
+        {/*      placeholder="Choose an algorithm"*/}
+        {/*    />*/}
+        {/*  </SelectTrigger>*/}
+        {/*  <SelectContent>*/}
+        {/*    <SelectItem value={"Dijkstra" as AlgorithmType}>*/}
+        {/*      Dijkstra*/}
+        {/*    </SelectItem>*/}
+        {/*    <SelectItem value={"Astar" as AlgorithmType}>Astar</SelectItem>*/}
+        {/*    <SelectItem value={"DFS" as AlgorithmType}>DFS</SelectItem>*/}
+        {/*    <SelectItem value={"BFS" as AlgorithmType}>BFS</SelectItem>*/}
+        {/*  </SelectContent>*/}
+        {/*</Select>*/}
         <Button
+          className="ml-3"
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
           onClick={() => {
             // Prepare Graph to be sent
@@ -227,9 +253,10 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
               });
           }}
         >
-          save
+          Calculate
         </Button>
         <Button
+          className="ml-3"
           onClick={() => {
             dispatch(resetNodeMapState());
             setIsAnimationPlaying(false);
@@ -282,7 +309,14 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={4}>
-              Output : {JSON.stringify(animations[currentAlgorithm].output)}
+              Output :{" "}
+              {Object.entries(
+                animations[currentAlgorithm].output as stateObject<number>,
+              ).map(([id, weight]) => (
+                <Label>
+                  {nodeMap[id].displayValue} : {weight};
+                </Label>
+              ))}
             </TableCell>
           </TableRow>
         </TableFooter>

@@ -89,37 +89,35 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   const renderStep = useCallback(
-    (stepNumber: number) => {
-      console.log(`currentStep: ${currentStep}`);
-      if (stepNumber >= currentStep) {
-        let i = currentStep;
-        while (i <= stepNumber) {
-          if (currentStep < animations[currentAlgorithm].steps.length) {
-            const { id, algorithmState } =
-              animations[currentAlgorithm].steps[i].payload;
-            dispatch(setAlgorithmState(id, algorithmState));
-            i++;
-          }
-        }
-        console.log(`stepNumber >= currentStep: ${i}`);
-        setCurrentStep(i);
-      } else if (stepNumber < currentStep) {
-        dispatch(resetNodeMapState());
+    /*the currentStep duplicating is necessary to optimize redux work.
+    because in some cases the function is calling in places where the index
+    has no time to update itself
+     */
+    (stepNumber: number, currStep: number = currentStep) => {
+      if (currStep < animations[currentAlgorithm].steps.length) {
+        console.log(`currentStep: ${currStep}`);
         let i = 0;
-        console.log(`stepNumber < currentStep: ${i}`);
-        while (i <= stepNumber) {
-          if (currentStep < animations[currentAlgorithm].steps.length) {
+        if (stepNumber >= currStep) {
+          for (i = currStep; i <= stepNumber; i++) {
             const { id, algorithmState } =
               animations[currentAlgorithm].steps[i].payload;
             dispatch(setAlgorithmState(id, algorithmState));
-            i++;
+          }
+          console.log(`stepNumber >= currentStep: ${i}`);
+        } else if (stepNumber < currStep) {
+          dispatch(resetNodeMapState());
+          let i = 0;
+          console.log(`stepNumber < currentStep: ${i}`);
+          for (i = 0; i <= stepNumber; i++) {
+            const { id, algorithmState } =
+              animations[currentAlgorithm].steps[i].payload;
+            dispatch(setAlgorithmState(id, algorithmState));
           }
         }
-
         setCurrentStep(i);
       }
     },
-    [animations],
+    [animations, currentStep],
   );
 
   return (
@@ -146,7 +144,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
               ) {
                 LocalTimerIDs.push(
                   setTimeout(
-                    () => renderStep(i),
+                    () => renderStep(i, i),
                     (i - currentStep) * displaySettings.animationSpeed,
                   ),
                 );

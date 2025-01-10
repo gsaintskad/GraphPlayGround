@@ -43,7 +43,7 @@ const initialState: DisplaySettingsState = {
   nodeFontColor: "#ffffff",
   nodeFontSize: 20,
   language: "en",
-  animationSpeed: 5000,
+  animationSpeed: 500,
 };
 
 const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (

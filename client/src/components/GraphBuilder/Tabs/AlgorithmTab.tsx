@@ -54,6 +54,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
 
   const dispatch = useDispatch();
   const [isAnimationPlaying, setIsAnimationPlaying] = useState<boolean>(false);
+  const [timerIDs, setTimerIDs] = useState<NodeJS.Timeout[]>([]);
   const displaySettings: DisplaySettingsState = useSelector(
     (state: RootState) => state.displaySettings,
   );
@@ -89,10 +90,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
 
   const renderStep = useCallback(
     (stepNumber: number) => {
-      console.log(`stepNumber >= currentStep: ${stepNumber >= currentStep}`);
-      if (stepNumber === -1) {
-        dispatch(resetNodeMapState());
-      } else if (stepNumber >= currentStep) {
+      if (stepNumber >= currentStep) {
         let i = currentStep;
         while (i <= stepNumber) {
           if (currentStep < animations[currentAlgorithm].steps.length) {
@@ -121,22 +119,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
     },
     [animations],
   );
-  const animate = useCallback(() => {
-    renderStep(currentStep);
-  }, [currentAlgorithm]);
-  useEffect(() => {
-    let localIsAnimationPlaying: boolean = isAnimationPlaying;
-    let timerID: NodeJS.Timeout;
-    while (localIsAnimationPlaying) {
-      timerID = setTimeout(animate, displaySettings.animationSpeed);
-      if (currentStep >= animations[currentAlgorithm].steps.length)
-        localIsAnimationPlaying = false;
-    }
-    return () => {
-      if (timerID) clearTimeout(timerID); // Cleanup on dependency change
-      setIsAnimationPlaying(false);
-    }; // Cleanup on unmount or dependency change
-  }, [isAnimationPlaying]);
+
   return (
     <div className={" flex flex-col"}>
       <div className="flex gap-x-5 py-3">
@@ -151,6 +134,23 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
           className="w-full"
           onClick={() => {
+            setIsAnimationPlaying(!isAnimationPlaying);
+            const LocalTimerIDs = structuredClone(timerIDs);
+            if (!isAnimationPlaying)
+              for (
+                let i = currentStep;
+                i < animations[currentAlgorithm].steps.length;
+                i++
+              ) {
+                LocalTimerIDs.push(
+                  setTimeout(
+                    () => renderStep(i),
+                    (i - currentStep) * displaySettings.animationSpeed,
+                  ),
+                );
+              }
+            else LocalTimerIDs.forEach((timeout) => clearTimeout(timeout));
+            setTimerIDs(LocalTimerIDs);
             setIsAnimationPlaying(!isAnimationPlaying);
           }}
         >

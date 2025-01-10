@@ -173,26 +173,26 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
           <IoPlaySkipForward />
         </Button>
       </div>
-      <div className="mx-auto">
-        <Label>Current Algorithm:</Label>
-        {/*<Select*/}
-        {/*  onValueChange={(alg) => setCurrentAlgorithm(alg as AlgorithmType)}*/}
-        {/*>*/}
-        {/*  <SelectTrigger>*/}
-        {/*    <SelectValue*/}
-        {/*      className={"inline"}*/}
-        {/*      placeholder="Choose an algorithm"*/}
-        {/*    />*/}
-        {/*  </SelectTrigger>*/}
-        {/*  <SelectContent>*/}
-        {/*    <SelectItem value={"Dijkstra" as AlgorithmType}>*/}
-        {/*      Dijkstra*/}
-        {/*    </SelectItem>*/}
-        {/*    <SelectItem value={"Astar" as AlgorithmType}>Astar</SelectItem>*/}
-        {/*    <SelectItem value={"DFS" as AlgorithmType}>DFS</SelectItem>*/}
-        {/*    <SelectItem value={"BFS" as AlgorithmType}>BFS</SelectItem>*/}
-        {/*  </SelectContent>*/}
-        {/*</Select>*/}
+      <div className="mx-auto flex my-3">
+        <Label className={"mr-3"}>Current Algorithm:</Label>
+        <Select
+          onValueChange={(alg) => setCurrentAlgorithm(alg as AlgorithmType)}
+        >
+          <SelectTrigger>
+            <SelectValue
+              className={"inline "}
+              placeholder="Choose an algorithm"
+            />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={"Dijkstra" as AlgorithmType}>
+              Dijkstra
+            </SelectItem>
+            <SelectItem value={"Astar" as AlgorithmType}>Astar</SelectItem>
+            <SelectItem value={"DFS" as AlgorithmType}>DFS</SelectItem>
+            <SelectItem value={"BFS" as AlgorithmType}>BFS</SelectItem>
+          </SelectContent>
+        </Select>
         <Button
           className="ml-3"
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
@@ -309,14 +309,19 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={4}>
-              Output :{" "}
-              {Object.entries(
-                animations[currentAlgorithm].output as stateObject<number>,
-              ).map(([id, weight]) => (
-                <Label>
-                  {nodeMap[id].displayValue} : {weight};
-                </Label>
-              ))}
+              Output :
+              {
+                JSON.stringify(animations[currentAlgorithm]!.output!)
+                // Object!
+                // .entries(
+                //   animations[currentAlgorithm]!.output! as stateObject<number>,
+                // )
+                // .map(([id, weight]) => (
+                //   <Label>
+                //     {nodeMap[id].displayValue} : {weight};
+                //   </Label>
+                // ))
+              }
             </TableCell>
           </TableRow>
         </TableFooter>

@@ -1,11 +1,8 @@
-import {
-  GraphNodeActionTypes,
-  GraphNodeAlgorithmStates,
-} from "./actionTypes.ts";
-import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
-import { Reducer } from "@reduxjs/toolkit";
-import { Point, stateObject } from "../../lib/types.ts";
-import { rootAction } from "@/redux/store.ts";
+import {GraphNodeActionTypes, GraphNodeAlgorithmStates,} from "./actionTypes.ts";
+import {GraphNodeProps} from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
+import {Reducer} from "@reduxjs/toolkit";
+import {Point, stateObject} from "../../lib/types.ts";
+import {rootAction} from "@/redux/store.ts";
 
 const initialGraphMapState: stateObject<GraphNodeProps> = {};
 const initialSelectedNodeArrState: GraphNodeProps[] = [];
@@ -35,6 +32,13 @@ export const graphNodesReducer: Reducer<
         }
       }
       return newState;
+    }
+    case GraphNodeActionTypes.RESET_NODE_MAP_STATE:{
+      const prevState = structuredClone(state);
+      for (const nId in prevState) {
+        prevState[nId].algorithmState='primary'
+      }
+      return prevState;
     }
     case GraphNodeActionTypes.DISCARD_NODE_MAP: {
       return {} satisfies stateObject<string>;

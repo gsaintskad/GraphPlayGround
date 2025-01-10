@@ -10,7 +10,7 @@ import {PiGraphBold} from "react-icons/pi";
 const NavigationBar = () => {
 
   return (
-    <div className={"flex justify-between items-center bg-zinc-700/10 text-foreground px-[2em] py-[0.5em] m-[1em] rounded-3xl"}>
+    <div className={"flex justify-between items-center bg-zinc-700/10 sticky text-foreground px-[2em] py-[0.5em] m-[1em] rounded-3xl"}>
      {/*<BreadCrumb/>*/}
       <div className="flex justify-center items-center space-x-2">
         <PiGraphBold className="text-[40px]" />

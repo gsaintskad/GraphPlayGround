@@ -1,17 +1,17 @@
-import {DisplaySettingsActionTypes, Language} from "./actionTypes.ts";
-import {Reducer} from "@reduxjs/toolkit";
-import {rootAction} from "@/redux/store.ts";
+import { DisplaySettingsActionTypes, Language } from "./actionTypes.ts";
+import { Reducer } from "@reduxjs/toolkit";
+import { rootAction } from "@/redux/store.ts";
 
 export interface DisplaySettingsState {
   nodeSize: number;
   nodeColors: {
-    primary:string;
-    secondary:string;
-    selected:string;
-    comparing:string;
-    visited:string;
-    highlighted:string;
-  }
+    primary: string;
+    secondary: string;
+    selected: string;
+    comparing: string;
+    visited: string;
+    highlighted: string;
+  };
   nodeBorderColor: string;
   edgeColor: string;
   edgeBorderColor: string;
@@ -20,21 +20,19 @@ export interface DisplaySettingsState {
   weightFontSize: number;
   nodeFontColor: string;
   nodeFontSize: number;
-  language:Language;
+  language: Language;
   animationSpeed: number;
-
 }
 
 const initialState: DisplaySettingsState = {
   nodeSize: 90,
   nodeColors: {
-    primary:"#219421",
-    secondary:"#dfcc00",
-    selected:"#00b4df",
-    comparing:"#de0000",
-    visited:"#546367",
-    highlighted:"#d260ff"
-
+    primary: "#219421",
+    secondary: "#dfcc00",
+    selected: "#00b4df",
+    comparing: "#de0000",
+    visited: "#546367",
+    highlighted: "#d260ff",
   },
   nodeBorderColor: "#ffffff",
   edgeColor: "#ffffff",
@@ -42,40 +40,40 @@ const initialState: DisplaySettingsState = {
   edgeWidth: 20,
   weightColor: "#ffffff",
   weightFontSize: 20,
-  nodeFontColor:"#ffffff",
+  nodeFontColor: "#ffffff",
   nodeFontSize: 20,
-  language:'en',
-  animationSpeed:500,
+  language: "en",
+  animationSpeed: 5000,
 };
 
 const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (
   state = initialState,
-  action: rootAction
+  action: rootAction,
 ): DisplaySettingsState => {
   switch (action.type) {
-    case DisplaySettingsActionTypes.SET_ANIMATION_SPEED:{
+    case DisplaySettingsActionTypes.SET_ANIMATION_SPEED: {
       return {
         ...state,
-        animationSpeed:action.payload
-      }
+        animationSpeed: action.payload,
+      };
     }
-    case DisplaySettingsActionTypes.SET_NODE_FONT_COLOR:{
+    case DisplaySettingsActionTypes.SET_NODE_FONT_COLOR: {
       return {
         ...state,
         nodeFontColor: action.payload,
-      }
+      };
     }
-    case DisplaySettingsActionTypes.SET_LANGUAGE:{
-      return{
+    case DisplaySettingsActionTypes.SET_LANGUAGE: {
+      return {
         ...state,
-        language:(action.payload as Language),
-      }
+        language: action.payload as Language,
+      };
     }
-    case DisplaySettingsActionTypes.SET_NODE_FONT_SIZE:{
+    case DisplaySettingsActionTypes.SET_NODE_FONT_SIZE: {
       return {
         ...state,
         nodeFontSize: action.payload,
-      }
+      };
     }
     case DisplaySettingsActionTypes.SET_NODE_SIZE: {
       return {
@@ -86,7 +84,7 @@ const displaySettingsReducer: Reducer<DisplaySettingsState, rootAction> = (
     case DisplaySettingsActionTypes.SET_NODE_COLORS: {
       return {
         ...state,
-        nodeColors: action.payload ,
+        nodeColors: action.payload,
       };
     }
     case DisplaySettingsActionTypes.SET_NODE_BORDER_COLOR: {

@@ -64,20 +64,30 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
     () => i18n[displaySettings.language],
     [displaySettings.language],
   );
-  const highlightHandler = useCallback((id: string) => {
-    const prevState = nodeMap[id].algorithmState!;
-    dispatch(setAlgorithmState(id, "highlighted"));
-    console.log(`timeout for node${id} has been run`);
-    setTimeout(() => {
-      dispatch(setAlgorithmState(id, prevState));
-      console.log(`timeout for node${id} has been finished`);
-    }, 2000);
-  }, []);
+  const highlightHandler = useCallback(
+    (id: string) => {
+      const prevState = nodeMap[id].algorithmState!;
+      dispatch(setAlgorithmState(id, "highlighted"));
+      console.log(
+        `timeout for node${id} has been run\nprev state:${prevState}`,
+      );
+      setTimeout(() => {
+        dispatch(
+          setAlgorithmState(
+            id,
+            prevState === "highlighted" ? "primary" : prevState,
+          ),
+        );
+        console.log(`timeout for node${id} has been finished`);
+      }, displaySettings.animationSpeed);
+    },
+    [displaySettings.animationSpeed, nodeMap],
+  );
   const [currentAlgorithm, setCurrentAlgorithm] =
     useState<AlgorithmType>("Dijkstra");
   const [currentStep, setCurrentStep] = useState<number>(0);
 
-  const renderNextStep = useCallback(
+  const renderStep = useCallback(
     (stepNumber: number) => {
       console.log(`stepNumber >= currentStep: ${stepNumber >= currentStep}`);
       if (stepNumber === -1) {
@@ -92,6 +102,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             i++;
           }
         }
+        console.log(`stepNumber >= currentStep: ${i}`);
         setCurrentStep(i);
       } else if (stepNumber < currentStep) {
         dispatch(resetNodeMapState());
@@ -104,26 +115,44 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             i++;
           }
         }
+        console.log(`stepNumber < currentStep: ${i}`);
         setCurrentStep(i);
       }
     },
     [animations],
   );
-  useEffect(() => {}, [animations, isAnimationPlaying]);
+  const animate = useCallback(() => {
+    renderStep(currentStep);
+  }, [currentAlgorithm]);
+  useEffect(() => {
+    let localIsAnimationPlaying: boolean = isAnimationPlaying;
+    let timerID: NodeJS.Timeout;
+    while (localIsAnimationPlaying) {
+      timerID = setTimeout(animate, displaySettings.animationSpeed);
+      if (currentStep >= animations[currentAlgorithm].steps.length)
+        localIsAnimationPlaying = false;
+    }
+    return () => {
+      if (timerID) clearTimeout(timerID); // Cleanup on dependency change
+      setIsAnimationPlaying(false);
+    }; // Cleanup on unmount or dependency change
+  }, [isAnimationPlaying]);
   return (
     <div className={" flex flex-col"}>
       <div className="flex gap-x-5 py-3">
         <Button
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
           className="w-full"
-          onClick={() => renderNextStep(currentStep - 2)}
+          onClick={() => renderStep(currentStep - 2)}
         >
           <IoPlaySkipBackSharp />
         </Button>
         <Button
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
           className="w-full"
-          onClick={() => setIsAnimationPlaying(!isAnimationPlaying)}
+          onClick={() => {
+            setIsAnimationPlaying(!isAnimationPlaying);
+          }}
         >
           {isAnimationPlaying ? <IoPause /> : <IoPlay />}
         </Button>
@@ -131,7 +160,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
           className="w-full"
           onClick={() => {
             if (currentStep < animations[currentAlgorithm].steps.length)
-              renderNextStep(currentStep);
+              renderStep(currentStep);
           }}
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
         >
@@ -201,7 +230,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
       </Button>
       <Table>
         <TableCaption>Algorithm steps</TableCaption>
-        <TableHeader>
+        <TableHeader className="sticky">
           <TableRow>
             <TableHead className="w-[30px]">Step</TableHead>
             <TableHead className="w-[100px]">Action</TableHead>
@@ -212,7 +241,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         <TableBody>
           {animations[currentAlgorithm!].steps.map((step, i) => (
             <TableRow
-              onClick={() => renderNextStep(i)}
+              onClick={() => renderStep(i)}
               key={
                 step.payload.id.toString() +
                 "---" +
@@ -222,7 +251,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
               className={currentStep - 1 === i ? "bg-yellow-600/50" : ""}
             >
               <TableCell className="font-medium">{i}</TableCell>
-              <TableCell>{step.type}</TableCell>
+              <TableCell>Set node as {step.payload.algorithmState}</TableCell>
               <TableCell
                 className={"hover:bg-yellow-600/50"}
                 onClick={(e) => {
@@ -246,6 +275,15 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
           </TableRow>
         </TableFooter>
       </Table>
+      <Button
+        onClick={() => {
+          dispatch(resetNodeMapState());
+          setCurrentStep(0);
+          renderStep(0);
+        }}
+      >
+        Reset
+      </Button>
     </div>
   );
 };

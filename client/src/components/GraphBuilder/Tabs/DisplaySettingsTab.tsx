@@ -127,7 +127,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
       >
         <TabsList
           hidden={props.isSettingsHidden}
-          className={`flex items-center justify-center px-2`}
+          className={`flex items-center justify-center px-2 sticky`}
         >
           <TabsTrigger value="GraphInfo">
             {language.displaySettingsTab.tabs.graphInfo}
@@ -186,7 +186,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                         </Label>
                         <ColorPicker
                           onChange={(v) =>
-                            handleChange("nodeColors", { primary: v })
+                            handleChange("nodeColors", {primary: v})
                           }
                           value={localSettings.nodeColors.primary}
                           className={"w-28"}
@@ -198,7 +198,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                         </Label>
                         <ColorPicker
                           onChange={(v) =>
-                            handleChange("nodeColors", { secondary: v })
+                            handleChange("nodeColors", {secondary: v})
                           }
                           value={localSettings.nodeColors.secondary}
                           className={"w-28"}
@@ -210,7 +210,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                         </Label>
                         <ColorPicker
                           onChange={(v) =>
-                            handleChange("nodeColors", { selected: v })
+                            handleChange("nodeColors", {selected: v})
                           }
                           value={localSettings.nodeColors.selected}
                           className={"w-28"}
@@ -222,7 +222,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                         </Label>
                         <ColorPicker
                           onChange={(v) =>
-                            handleChange("nodeColors", { comparing: v })
+                            handleChange("nodeColors", {comparing: v})
                           }
                           value={localSettings.nodeColors.comparing}
                           className={"w-28"}
@@ -234,9 +234,18 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
                         </Label>
                         <ColorPicker
                           onChange={(v) =>
-                            handleChange("nodeColors", { visited: v })
+                            handleChange("nodeColors", {visited: v})
                           }
                           value={localSettings.nodeColors.visited}
+                          className={"w-28"}
+                        />
+
+                      </div>
+                      <div className="flex items-center">
+                        <Label className="w-20 mr-3">Highlighter color:</Label>
+                        <ColorPicker
+                          onChange={(v) => handleChange("nodeColors", {highlighted: v})}
+                          value={localSettings.nodeColors.highlighted}
                           className={"w-28"}
                         />
                       </div>
@@ -376,14 +385,7 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
           value="AnimationSettings"
           className="px-10 pb-5 gap-y-6 flex flex-col relative"
         >
-          <div className="flex items-center">
-            <Label className="w-20 mr-3">Highlighter color:</Label>
-            <ColorPicker
-              onChange={(v) => handleChange("nodeColors", { highlighted: v })}
-              value={localSettings.nodeColors.highlighted}
-              className={"w-28"}
-            />
-          </div>
+
           <div>
             <Label>
               Set animation speed : {localSettings.animationSpeed} ms

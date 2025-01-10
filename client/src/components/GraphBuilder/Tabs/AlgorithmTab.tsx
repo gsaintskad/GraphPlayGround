@@ -90,6 +90,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
 
   const renderStep = useCallback(
     (stepNumber: number) => {
+      console.log(`currentStep: ${currentStep}`);
       if (stepNumber >= currentStep) {
         let i = currentStep;
         while (i <= stepNumber) {
@@ -105,6 +106,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
       } else if (stepNumber < currentStep) {
         dispatch(resetNodeMapState());
         let i = 0;
+        console.log(`stepNumber < currentStep: ${i}`);
         while (i <= stepNumber) {
           if (currentStep < animations[currentAlgorithm].steps.length) {
             const { id, algorithmState } =
@@ -113,7 +115,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             i++;
           }
         }
-        console.log(`stepNumber < currentStep: ${i}`);
+
         setCurrentStep(i);
       }
     },
@@ -167,67 +169,79 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
           <IoPlaySkipForward />
         </Button>
       </div>
-      <Button
-        disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
-        onClick={() => {
-          // Prepare Graph to be sent
-          const nodeDtoMap: stateObject<nodeDto> = {};
-          const edgeDtoMap: stateObject<edgeDto> = {};
-          let lastId: string = "";
-          for (const id in nodeMap) {
-            nodeDtoMap[id] = {
-              displayValue: nodeMap[id].displayValue,
-              id,
-            } as nodeDto;
-            lastId = id;
-          }
-          for (const id in edgeMap) {
-            const { nodeAid, nodeBid, weight, isDirected } = edgeMap[id];
+      <div className="mx-auto">
+        <Button
+          disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
+          onClick={() => {
+            // Prepare Graph to be sent
+            const nodeDtoMap: stateObject<nodeDto> = {};
+            const edgeDtoMap: stateObject<edgeDto> = {};
+            let lastId: string = "";
+            for (const id in nodeMap) {
+              nodeDtoMap[id] = {
+                displayValue: nodeMap[id].displayValue,
+                id,
+              } as nodeDto;
+              lastId = id;
+            }
+            for (const id in edgeMap) {
+              const { nodeAid, nodeBid, weight, isDirected } = edgeMap[id];
 
-            edgeDtoMap[id] = {
-              nodeAid,
-              nodeBid,
-              weight,
-              id,
-              isDirected: !!isDirected,
-            };
-          }
+              edgeDtoMap[id] = {
+                nodeAid,
+                nodeBid,
+                weight,
+                id,
+                isDirected: !!isDirected,
+              };
+            }
 
-          // Log the data
-          console.log(edgeDtoMap, nodeDtoMap);
+            // Log the data
+            console.log(edgeDtoMap, nodeDtoMap);
 
-          // Send the data via a POST request
-          fetch("http://localhost:3000/graph", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              nodes: nodeDtoMap,
-              edges: edgeDtoMap,
-              startNodeId: lastId,
-            }),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-              return response.json();
+            // Send the data via a POST request
+            fetch("http://localhost:3000/graph", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                nodes: nodeDtoMap,
+                edges: edgeDtoMap,
+                startNodeId: lastId,
+              }),
             })
-            .then((data) => {
-              // dispatch(setAnimation)
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then((data) => {
+                // dispatch(setAnimation)
 
-              dispatch(setDijkstra(data.dijkstra));
-              setCurrentStep(0);
-              console.log(animations);
-            })
-            .catch((error) => {
-              console.error("Error saving graph:", error);
-            });
-        }}
-      >
-        save
-      </Button>
+                dispatch(setDijkstra(data.dijkstra));
+                setCurrentStep(0);
+                console.log(animations);
+              })
+              .catch((error) => {
+                console.error("Error saving graph:", error);
+              });
+          }}
+        >
+          save
+        </Button>
+        <Button
+          onClick={() => {
+            dispatch(resetNodeMapState());
+            setIsAnimationPlaying(false);
+            setCurrentStep(0);
+            renderStep(0);
+          }}
+        >
+          Reset
+        </Button>
+      </div>
       <Table>
         <TableCaption>Algorithm steps</TableCaption>
         <TableHeader className="sticky">
@@ -275,15 +289,6 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
           </TableRow>
         </TableFooter>
       </Table>
-      <Button
-        onClick={() => {
-          dispatch(resetNodeMapState());
-          setCurrentStep(0);
-          renderStep(0);
-        }}
-      >
-        Reset
-      </Button>
     </div>
   );
 };

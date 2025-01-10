@@ -830,10 +830,6 @@ body {
   height: 1rem;
 }
 
-.h-60 {
-  height: 15rem;
-}
-
 .h-8 {
   height: 2rem;
 }
@@ -872,14 +868,6 @@ body {
 
 .max-h-\[80vh\] {
   max-height: 80vh;
-}
-
-.max-h-52 {
-  max-height: 13rem;
-}
-
-.max-h-32 {
-  max-height: 8rem;
 }
 
 .min-h-screen {

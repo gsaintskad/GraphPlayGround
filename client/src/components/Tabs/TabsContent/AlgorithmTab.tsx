@@ -47,6 +47,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcnUI/select.tsx";
+import { Slider } from "@/components/shadcnUI/slider.tsx";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/shadcnUI/accordion.tsx";
 
 interface AlgorithmTabProps {
   className?: string;
@@ -67,6 +74,9 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
   );
   const animations: AnimationState = useSelector(
     (state: RootState) => state.animations,
+  );
+  const [localAnimationSpeed, setLocalAnimationSpeed] = useState<number>(
+    displaySettings.animationSpeed,
   );
   const language = useMemo(
     () => i18n[displaySettings.language],
@@ -126,9 +136,49 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
     },
     [animations, currentStep],
   );
-
+  const handleAnimationSettingSubmit = () => {
+    dispatch(setAnimationSpeed(localAnimationSpeed));
+  };
   return (
     <div className={" flex flex-col"}>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Animation Settings</AccordionTrigger>
+          <AccordionContent>
+            <div className={"flex flex-col items-center"}>
+              <div className="flex  items-center gap-x-5 h-10 mb-5">
+                <Label>Animation speed : {localAnimationSpeed} ms</Label>
+                <button
+                  onClick={handleAnimationSettingSubmit}
+                  className="mt-1 p-1 bg-blue-500 text-white rounded"
+                >
+                  Save Animation Settings
+                </button>
+              </div>
+              <Slider
+                className={"bg-white rounded-full"}
+                onValueChange={(v) => setLocalAnimationSpeed(v[0])}
+                defaultValue={[localAnimationSpeed]}
+                max={5000}
+                min={100}
+                step={100}
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+      <div className="flex  items-center gap-x-5 h-10 mb-5 hidden">
+        <Label>Current step : {currentStep}</Label>
+        <Slider
+          value={[currentStep]}
+          className={"bg-white rounded-full"}
+          onValueChange={([v, ...rest]) => renderStep(v)}
+          defaultValue={[0]}
+          max={animations[currentAlgorithm].steps.length}
+          min={0}
+          step={1}
+        />
+      </div>
       <div className="flex gap-x-5 py-3">
         <Button
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}

@@ -1,7 +1,10 @@
-import {GraphNodeActionTypes, GraphNodeAlgorithmStates} from "@/redux/GraphNodes/actionTypes.ts";
-export type AlgorithmType = 'Astar'|"Dijkstra"|"DFS"|"BFS"
+import {
+  GraphNodeActionTypes,
+  GraphNodeAlgorithmStates,
+} from "@/redux/GraphNodes/actionTypes.ts";
+export type AlgorithmType = "Astar" | "Dijkstra" | "DFS" | "BFS";
 export enum AnimationActionTypes {
-  CHOOSE_CURRENT_ALGORITHM = 'CHOOSE_CURRENT_ALGORITHM',
+  CHOOSE_CURRENT_ALGORITHM = "CHOOSE_CURRENT_ALGORITHM",
 
   SET_DIJKSTRA = "SET_DIJKSTRA",
   SET_ASTAR = "SET_ASTAR",
@@ -21,13 +24,14 @@ export interface AlgorithmStep {
 }
 export interface AlgorithmState {
   steps: AlgorithmStep[];
-  output?:unknown;
+  arguments: { [key: string]: unknown };
+  output?: unknown;
 }
 export interface SetAlgorithmAction {
   type: AnimationActionTypes;
   payload: AlgorithmStep[];
 }
-export interface AnimationAction  {
+export interface AnimationAction {
   type: AnimationActionTypes;
   payload: unknown;
 }

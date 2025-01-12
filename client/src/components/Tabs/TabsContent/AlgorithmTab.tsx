@@ -225,24 +225,44 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
       </div>
       <div className="mx-auto flex my-3">
         <Label className={"mr-3"}>Current Algorithm:</Label>
-        <Select
-          onValueChange={(alg) => setCurrentAlgorithm(alg as AlgorithmType)}
-        >
-          <SelectTrigger>
-            <SelectValue
-              className={"inline "}
-              placeholder="Choose an algorithm"
-            />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={"Dijkstra" as AlgorithmType}>
-              Dijkstra
-            </SelectItem>
-            <SelectItem value={"Astar" as AlgorithmType}>Astar</SelectItem>
-            <SelectItem value={"DFS" as AlgorithmType}>DFS</SelectItem>
-            <SelectItem value={"BFS" as AlgorithmType}>BFS</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex flex-col gap-y-3">
+          <Select
+            onValueChange={(alg) => setCurrentAlgorithm(alg as AlgorithmType)}
+          >
+            <SelectTrigger>
+              <SelectValue
+                className={"inline "}
+                placeholder="Choose an algorithm"
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={"Dijkstra" as AlgorithmType}>
+                Dijkstra
+              </SelectItem>
+              <SelectItem value={"Astar" as AlgorithmType}>Astar</SelectItem>
+              <SelectItem value={"DFS" as AlgorithmType}>DFS</SelectItem>
+              <SelectItem value={"BFS" as AlgorithmType}>BFS</SelectItem>
+            </SelectContent>
+          </Select>
+          <div className="flex flex-col gap-y-3">
+            <Label className={"mr-3"}>Current Algorithm:</Label>
+            <Select
+              onValueChange={(alg) => setCurrentAlgorithm(alg as AlgorithmType)}
+            >
+              <SelectTrigger>
+                <SelectValue className={"inline "} placeholder="NodeB" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={"Dijkstra" as AlgorithmType}>
+                  Dijkstra
+                </SelectItem>
+                <SelectItem value={"Astar" as AlgorithmType}>Astar</SelectItem>
+                <SelectItem value={"DFS" as AlgorithmType}>DFS</SelectItem>
+                <SelectItem value={"BFS" as AlgorithmType}>BFS</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
         <Button
           className="ml-3"
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}

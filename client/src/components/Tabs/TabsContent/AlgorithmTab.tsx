@@ -18,7 +18,7 @@ import {
   AlgorithmType,
 } from "@/redux/Animations/actionTypes.ts";
 import { edgeDto, nodeDto, stateObject } from "@/lib/types.ts";
-import { setDijkstra } from "@/redux/Animations/actionCreator.ts";
+
 import {
   Table,
   TableBody,
@@ -54,6 +54,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/shadcnUI/accordion.tsx";
+import AlgorithmInputSelect from "@/components/Tabs/TabsContent/AlgorithmInputSelect.tsx";
+import {
+  chooseCurrentAlgorithm,
+  setDijkstra,
+} from "@/redux/Animations/actionCreator.ts";
 
 interface AlgorithmTabProps {
   className?: string;
@@ -72,7 +77,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
   const displaySettings: DisplaySettingsState = useSelector(
     (state: RootState) => state.displaySettings,
   );
-  const animations: AnimationState = useSelector(
+  const { currentAlgorithm, ...algorithms }: AnimationState = useSelector(
     (state: RootState) => state.animations,
   );
   const [localAnimationSpeed, setLocalAnimationSpeed] = useState<number>(
@@ -101,8 +106,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
     },
     [displaySettings.animationSpeed, nodeMap],
   );
-  const [currentAlgorithm, setCurrentAlgorithm] =
-    useState<AlgorithmType>("Dijkstra");
+
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   const renderStep = useCallback(
@@ -111,13 +115,13 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
     has no time to update itself
      */
     (stepNumber: number, currStep: number = currentStep) => {
-      if (currStep < animations[currentAlgorithm].steps.length) {
+      if (currStep < algorithms[currentAlgorithm!].steps.length) {
         console.log(`currentStep: ${currStep}`);
         let i = 0;
         if (stepNumber >= currStep) {
           for (i = currStep; i <= stepNumber; i++) {
             const { id, algorithmState } =
-              animations[currentAlgorithm].steps[i].payload;
+              algorithms[currentAlgorithm!].steps[i].payload;
             dispatch(setAlgorithmState(id, algorithmState));
           }
           console.log(`stepNumber >= currentStep: ${i}`);
@@ -127,14 +131,14 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
           console.log(`stepNumber < currentStep: ${i}`);
           for (i = 0; i <= stepNumber; i++) {
             const { id, algorithmState } =
-              animations[currentAlgorithm].steps[i].payload;
+              algorithms[currentAlgorithm!].steps[i].payload;
             dispatch(setAlgorithmState(id, algorithmState));
           }
         }
         setCurrentStep(i);
       }
     },
-    [animations, currentStep],
+    [algorithms, currentStep],
   );
   const handleAnimationSettingSubmit = () => {
     dispatch(setAnimationSpeed(localAnimationSpeed));
@@ -174,7 +178,9 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
           className={"bg-white rounded-full"}
           onValueChange={([v, ...rest]) => renderStep(v)}
           defaultValue={[0]}
-          max={animations[currentAlgorithm].steps.length}
+          max={
+            currentAlgorithm ? algorithms[currentAlgorithm].steps.length : 10
+          }
           min={0}
           step={1}
         />
@@ -196,7 +202,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             if (!isAnimationPlaying)
               for (
                 let i = currentStep;
-                i < animations[currentAlgorithm].steps.length;
+                i < algorithms[currentAlgorithm!].steps.length;
                 i++
               ) {
                 LocalTimerIDs.push(
@@ -215,7 +221,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         <Button
           className="w-full"
           onClick={() => {
-            if (currentStep < animations[currentAlgorithm].steps.length)
+            if (currentStep < algorithms[currentAlgorithm!].steps.length)
               renderStep(currentStep);
           }}
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
@@ -227,7 +233,9 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         <Label className={"mr-3"}>Current Algorithm:</Label>
         <div className="flex flex-col gap-y-3">
           <Select
-            onValueChange={(alg) => setCurrentAlgorithm(alg as AlgorithmType)}
+            onValueChange={(alg) =>
+              dispatch(chooseCurrentAlgorithm(alg as AlgorithmType))
+            }
           >
             <SelectTrigger>
               <SelectValue
@@ -245,22 +253,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             </SelectContent>
           </Select>
           <div className="flex flex-col gap-y-3">
-            <Label className={"mr-3"}>Current Algorithm:</Label>
-            <Select
-              onValueChange={(alg) => setCurrentAlgorithm(alg as AlgorithmType)}
-            >
-              <SelectTrigger>
-                <SelectValue className={"inline "} placeholder="NodeB" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={"Dijkstra" as AlgorithmType}>
-                  Dijkstra
-                </SelectItem>
-                <SelectItem value={"Astar" as AlgorithmType}>Astar</SelectItem>
-                <SelectItem value={"DFS" as AlgorithmType}>DFS</SelectItem>
-                <SelectItem value={"BFS" as AlgorithmType}>BFS</SelectItem>
-              </SelectContent>
-            </Select>
+            <AlgorithmInputSelect />
           </div>
         </div>
         <Button
@@ -316,7 +309,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
 
                 dispatch(setDijkstra(data.dijkstra));
                 setCurrentStep(0);
-                console.log(animations);
+                console.log(algorithms);
               })
               .catch((error) => {
                 console.error("Error saving graph:", error);
@@ -347,54 +340,60 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             <TableHead>Payload</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {animations[currentAlgorithm!].steps.map((step, i) => (
-            <TableRow
-              onClick={() => renderStep(i)}
-              key={
-                step.payload.id.toString() +
-                "---" +
-                step.type.toString() +
-                i.toString()
-              }
-              className={currentStep - 1 === i ? "bg-yellow-600/50" : ""}
-            >
-              <TableCell className="font-medium">{i}</TableCell>
-              <TableCell>Set node as {step.payload.algorithmState}</TableCell>
-              <TableCell
-                className={"hover:bg-yellow-600/50"}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  highlightHandler(step.payload.id);
-                }}
-              >
-                {step.payload.id}
-              </TableCell>
-              <TableCell className="text-right">
-                {JSON.stringify(step.payload.queueState)}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={4}>
-              Output :
-              {
-                JSON.stringify(animations[currentAlgorithm]!.output!)
-                // Object!
-                // .entries(
-                //   animations[currentAlgorithm]!.output! as stateObject<number>,
-                // )
-                // .map(([id, weight]) => (
-                //   <Label>
-                //     {nodeMap[id].displayValue} : {weight};
-                //   </Label>
-                // ))
-              }
-            </TableCell>
-          </TableRow>
-        </TableFooter>
+        {currentAlgorithm && (
+          <>
+            <TableBody>
+              {algorithms[currentAlgorithm!].steps.map((step, i) => (
+                <TableRow
+                  onClick={() => renderStep(i)}
+                  key={
+                    step.payload.id.toString() +
+                    "---" +
+                    step.type.toString() +
+                    i.toString()
+                  }
+                  className={currentStep - 1 === i ? "bg-yellow-600/50" : ""}
+                >
+                  <TableCell className="font-medium">{i}</TableCell>
+                  <TableCell>
+                    Set node as {step.payload.algorithmState}
+                  </TableCell>
+                  <TableCell
+                    className={"hover:bg-yellow-600/50"}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      highlightHandler(step.payload.id);
+                    }}
+                  >
+                    {step.payload.id}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {JSON.stringify(step.payload.queueState)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={4}>
+                  Output :
+                  {
+                    JSON.stringify(algorithms[currentAlgorithm!]!.output!)
+                    // Object!
+                    // .entries(
+                    //   animations[currentAlgorithm!]!.output! as stateObject<number>,
+                    // )
+                    // .map(([id, weight]) => (
+                    //   <Label>
+                    //     {nodeMap[id].displayValue} : {weight};
+                    //   </Label>
+                    // ))
+                  }
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </>
+        )}
       </Table>
     </div>
   );

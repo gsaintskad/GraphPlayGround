@@ -64,30 +64,7 @@
     @apply bg-background text-foreground;
   }
 }
-@layer utilities {
-  /* Custom scrollbar for the entire page */
-  html {
-    @apply scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200; /* Tailwind classes */
-  }
 
-  /* Adjust hover effects */
-  html::-webkit-scrollbar-thumb:hover {
-    background-color: #4b5563; /* Darker gray for hover */
-  }
-
-  /* Customize scrollbar width */
-  html::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  html::-webkit-scrollbar-thumb {
-    border-radius: 8px;
-  }
-
-  html::-webkit-scrollbar-track {
-    border-radius: 8px;
-  }
-}
 @font-face {
   font-family: 'Montserrat';
   src: url('./fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');

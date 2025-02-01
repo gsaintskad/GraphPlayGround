@@ -316,7 +316,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
               });
           }}
         >
-          Calculate
+          Compute
         </Button>
         <Button
           className="ml-3"

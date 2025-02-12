@@ -6,11 +6,13 @@ import { UsersModule } from "./users/users.module";
 import { ConfigModule } from '@nestjs/config';
 import * as process from 'node:process';
 import { User } from './users/users.model';
-import { GraphModule } from './graph/graph.module';
+import { GraphsModule } from './graphs/graphs.module';
 import { NodeModule } from './node/node.module';
 import { EgdeModule } from './egde/egde.module';
 import { DisplaySettingsModule } from './display-settings/display-settings.module';
 import { NodeColorsModule } from './node-colors/node-colors.module';
+import { Graph } from './graphs/graphs.model';
+import { UserGraphs } from './graphs/user-graphs.model';
 @Module({
   controllers: [AppController],
   providers: [AppService],
@@ -25,11 +27,11 @@ import { NodeColorsModule } from './node-colors/node-colors.module';
       username: process.env.POSTGRES_USER,
       password:process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User],
+      models: [User,Graph,UserGraphs],
       autoLoadModels: true,
     }),
     UsersModule,
-    GraphModule,
+    GraphsModule,
     NodeModule,
     EgdeModule,
 

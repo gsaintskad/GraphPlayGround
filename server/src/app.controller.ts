@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller('/graph-playground-backend')
+@Controller('/graphs-playground-backend')
 export class AppController {
     constructor(private appService: AppService) {
     }

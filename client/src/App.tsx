@@ -1,11 +1,29 @@
-import {GraphBuilder} from "./GraphBuilder/GraphBuilder.tsx";
+import { GraphBuilder } from "./components/GraphBuilder/GraphBuilder.tsx";
 
+import HomePage from "@/components/Pages/HomePage.tsx";
+import NavigationBar from "@/components/NavigationBar/NavigationBar.tsx";
+import { Route, Routes } from "react-router-dom";
+import AboutPage from "@/components/Pages/AboutPage.tsx";
+import BTreeBuilder from "@/components/BTreeBuilder/BTreeBuilder.tsx";
 
 function App() {
   return (
-    <div className="flex items-center justify-center bg-gray-100" style={{ height: "70vh", width: "70vw" }}>
-
-        <GraphBuilder/>
+    <div
+      className={
+        "flex flex-col bg-background text-foreground h-[100vh]  self-center "
+      }
+    >
+      <NavigationBar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/GraphBuilder"
+          element={<GraphBuilder style={{ height: "100%", width: "100%" }} />}
+        />
+        <Route path="/BTreeBuilder" element={<BTreeBuilder />} />
+        <Route path="/About" element={<AboutPage />} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
     </div>
   );
 }

@@ -1,12 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: ["class"],
-    content: [
-    "./index.html", "./src/**/*.{ts,tsx,js,jsx}",
+  darkMode: ["class"],
+  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
+  safelist: [
+    "-translate-y-2.5",
+    "bg-green-700",
+    "bg-blue-700",
+    "bg-gray-700",
+    "bg-yellow-700",
+    "bg-sky-700",
   ],
   theme: {
   	extend: {
-  		borderRadius: {
+		fontFamily: {
+			sans: ['Montserrat', 'sans-serif'], // Default font for the project
+		},
+
+		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
@@ -52,9 +62,31 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			}
+  		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
-}
-
+  plugins: [require("tailwindcss-animate")
+  ],
+};

@@ -1,23 +1,15 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
+
+import { UsersService } from './users.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './users.model';
-import { Role } from '../roles/roles.model';
-import { UserRoles } from '../roles/user-roles.model';
-import { RolesModule } from '../roles/roles.module';
-import { AuthModule } from '../auth/auth.module';
-import { JwtModule } from '@nestjs/jwt';
+import { Graph } from '../graphs/graphs.model';
+import { UserGraphs } from '../graphs/user-graphs.model';
 
 @Module({
-    providers: [UsersService],
-    controllers: [UsersController],
-    imports: [
-        SequelizeModule.forFeature([User, Role, UserRoles]),
-        RolesModule,
-        forwardRef(() => AuthModule),
-        JwtModule,
-    ],
-    exports: [UsersService],
+  controllers: [UsersController],
+  providers: [ UsersService],
+  imports: [SequelizeModule.forFeature([User,Graph,UserGraphs])]
 })
 export class UsersModule {}

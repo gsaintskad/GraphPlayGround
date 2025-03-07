@@ -1,35 +1,44 @@
-import {forwardRef, Module} from '@nestjs/common'; // Import the correct Module decorator
-
-import { SequelizeModule } from '@nestjs/sequelize';
-import { UsersModule } from './users/users.module';
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { SequelizeModule } from "@nestjs/sequelize";
+import { UsersModule } from "./users/users.module";
 import { ConfigModule } from '@nestjs/config';
-import * as process from "node:process";
-import {User} from "./users/users.model";
-import { RolesModule } from './roles/roles.module';
-import {Role} from "./roles/roles.model";
-import {UserRoles} from "./roles/user-roles.model";
-import { AuthModule } from './auth/auth.module';
-import {JwtModule} from "@nestjs/jwt";
-
+import * as process from 'node:process';
+import { User } from './users/users.model';
+import { GraphsModule } from './graphs/graphs.module';
+import { NodeModule } from './node/node.module';
+import { EgdeModule } from './egde/egde.module';
+import { DisplaySettingsModule } from './display-settings/display-settings.module';
+import { NodeColorsModule } from './node-colors/node-colors.module';
+import { Graph } from './graphs/graphs.model';
+import { UserGraphs } from './graphs/user-graphs.model';
 @Module({
-  controllers: [],
-  providers: [JwtModule, UsersModule],
+  controllers: [AppController],
+  providers: [AppService],
   imports: [
-    ConfigModule.forRoot({ envFilePath: `${process.env.NODE_ENV}.env` }),
+    ConfigModule.forRoot({
+      envFilePath:`.${process.env.NODE_ENV}.env`,
+    }),
     SequelizeModule.forRoot({
-      dialect: 'postgres',
+      dialect: "postgres",
       host: process.env.POSTGRES_HOST,
       port: Number(process.env.POSTGRES_PORT),
-      username:process.env.POSTGRES_USERNAME ,
-      password: process.env.POSTGRES_PASSWORD,
-      database:process.env.POSTGRES_DATABASE,
-      models: [User, Role,UserRoles],
-      autoLoadModels: true, //its need to auto creation relation basing on modules in nest app
+      username: process.env.POSTGRES_USER,
+      password:process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      models: [User,Graph,UserGraphs],
+      autoLoadModels: true,
     }),
-    forwardRef(()=>UsersModule),
-    RolesModule,
-    AuthModule,
+    UsersModule,
+    GraphsModule,
+    NodeModule,
+    EgdeModule,
+
+    DisplaySettingsModule,
+    NodeColorsModule,
   ],
-  exports:[AuthModule,JwtModule],
 })
+
 export class AppModule {}
+

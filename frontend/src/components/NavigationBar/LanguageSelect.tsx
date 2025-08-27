@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import {
   Select,
   SelectContent,
@@ -7,13 +7,13 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue
-} from "@/components/shadcnUI/select.tsx";
-import {useDispatch, useSelector} from "react-redux";
-import {setLanguage} from "@/redux/DisplaySettings/actionCreator.ts";
-import {Language} from "@/redux/DisplaySettings/actionTypes.ts";
-import {Label} from "@radix-ui/react-label";
-import {RootState} from "@/redux/store.ts";
-import {i18n} from "@/lib/i18n.ts";
+} from "@/components/shadcnUI/select";
+import { useDispatch, useSelector } from "react-redux";
+import { setLanguage } from "@/redux/DisplaySettings/actionCreator";
+import { Language } from "@/redux/DisplaySettings/actionTypes";
+import { Label } from "@radix-ui/react-label";
+import { RootState } from "@/redux/store";
+import { i18n } from "@/lib/i18n";
 
 const LanguageSelect = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const LanguageSelect = () => {
   return (
     <Select
       defaultValue="en"
-      onValueChange={(l)=>dispatch(setLanguage(l as Language))}>
+      onValueChange={(l) => dispatch(setLanguage(l as Language))}>
       <SelectTrigger className="w-[180px]">
         <Label>{language.languageSelect.trigger}</Label>
       </SelectTrigger>

@@ -8,7 +8,7 @@ import {
   BFSState,
   DFSState,
   DijkstraState,
-} from "@/redux/Animations/actionTypes.ts";
+} from "@/redux/Animations/actionTypes";
 
 export interface AnimationState {
   Dijkstra: DijkstraState;

@@ -1,7 +1,7 @@
 import {
   GraphNodeActionTypes,
   GraphNodeAlgorithmStates,
-} from "@/redux/GraphNodes/actionTypes.ts";
+} from "@/redux/GraphNodes/actionTypes";
 export type AlgorithmType = "Astar" | "Dijkstra" | "DFS" | "BFS";
 export enum AnimationActionTypes {
   CHOOSE_CURRENT_ALGORITHM = "CHOOSE_CURRENT_ALGORITHM",

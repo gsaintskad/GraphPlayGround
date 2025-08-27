@@ -8,25 +8,25 @@ import {
   selectNode,
   setNodeCoordinates,
   setNodesIsActive,
-} from "@/redux/GraphNodes/actionCreator.ts";
+} from "@/redux/GraphNodes/actionCreator";
 
 import {
   GraphNodeProps,
   GraphNode,
-} from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
-import { GraphEdge } from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
-import { isLiesBetween, movePoint, Point } from "../../../lib/types.ts";
-import { RootState } from "../../../redux/store.ts";
+} from "@/components/GraphBuilder/GraphDisplay/GraphNode";
+import { GraphEdge } from "@/components/GraphBuilder/GraphDisplay/GraphEdge";
+import { isLiesBetween, movePoint, Point } from "../../../lib/types";
+import { RootState } from "../../../redux/store";
 import {
   addEdge,
   removeEdge,
   removeEdgesForNode,
   setEdgesIsActive,
-} from "@/redux/GraphEdges/actionCreator.ts";
-import {GraphBuilderTool} from "@/redux/GraphBuilder/actionTypes.ts";
+} from "@/redux/GraphEdges/actionCreator";
+import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes";
 
 interface GraphDisplayProps {
-  
+
   className?: string;
 }
 
@@ -38,7 +38,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
   const selectedNodesArr = useSelector((state: RootState) => {
     return state.selectedGraphNodes;
   });
-  const displaySettings =useSelector((state:RootState)=>state.displaySettings);
+  const displaySettings = useSelector((state: RootState) => state.displaySettings);
   const activeTool = useSelector((state: RootState) => state.graphBuilderTool.currentTool);
 
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -163,7 +163,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
             }),
           );
         }
-        else{
+        else {
           dispatch(
             addEdge({
               nodeAid: nodeA.id,
@@ -238,7 +238,7 @@ const GraphDisplay = (props: GraphDisplayProps) => {
       changeNodesActiveState(false);
       setIsRemovingAnEdge(true);
       divElement.addEventListener("click", selectionHandler);
-    }else if (activeTool === GraphBuilderTool.PLAY_ANIMATION && divElement && edgeMap) {
+    } else if (activeTool === GraphBuilderTool.PLAY_ANIMATION && divElement && edgeMap) {
       changeNodesActiveState(false);
       divElement.addEventListener("click", selectionHandler);
     }

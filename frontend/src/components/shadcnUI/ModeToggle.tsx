@@ -5,9 +5,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,}
-from "./dropdown-menu.tsx"
-import { useTheme } from "./ThemeProvider.tsx"
+  DropdownMenuTrigger,
+}
+  from "./dropdown-menu"
+import { useTheme } from "./ThemeProvider"
 
 export function ModeToggle() {
   const { setTheme } = useTheme()

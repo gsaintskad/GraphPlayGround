@@ -4,13 +4,13 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/shadcnUI/tabs.tsx";
-import { Label } from "@/components/shadcnUI/label.tsx";
-import { Slider } from "@/components/shadcnUI/slider.tsx";
-import { ColorPicker } from "@/components/shadcnUI/color-picker.tsx";
+} from "@/components/shadcnUI/tabs";
+import { Label } from "@/components/shadcnUI/label";
+import { Slider } from "@/components/shadcnUI/slider";
+import { ColorPicker } from "@/components/shadcnUI/color-picker";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store.ts";
-import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
+import { RootState } from "@/redux/store";
+import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer";
 import {
   setEdgeBorderColor,
   setEdgeColor,
@@ -22,15 +22,15 @@ import {
   setWeightFontSize,
   setWeightColor,
   setAnimationSpeed,
-} from "@/redux/DisplaySettings/actionCreator.ts";
+} from "@/redux/DisplaySettings/actionCreator";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/shadcnUI/accordion.tsx";
-import { i18n } from "@/lib/i18n.ts";
-import AlgorithmTab from "@/components/Tabs/TabsContent/AlgorithmTab.tsx";
+} from "@/components/shadcnUI/accordion";
+import { i18n } from "@/lib/i18n";
+import AlgorithmTab from "@/components/Tabs/TabsContent/AlgorithmTab";
 
 interface DisplaySettingsTabProps {
   className?: string;
@@ -95,13 +95,13 @@ const DisplaySettingsTab = (props: DisplaySettingsTabProps) => {
       | number
       | string
       | {
-          primary?: string;
-          secondary?: string;
-          selected?: string;
-          comparing?: string;
-          visited?: string;
-          highlighted?: string;
-        },
+        primary?: string;
+        secondary?: string;
+        selected?: string;
+        comparing?: string;
+        visited?: string;
+        highlighted?: string;
+      },
   ) => {
     setLocalSettings((prev) => {
       if (field === "nodeColors" && typeof value === "object") {

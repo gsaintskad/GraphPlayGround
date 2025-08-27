@@ -5,18 +5,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/shadcnUI/dropdown-menu.tsx";
+} from "@/components/shadcnUI/dropdown-menu";
 
-import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
+import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode";
 import { useEffect, useMemo, useState } from "react";
-import { Point } from "../../../lib/types.ts";
-import { Input } from "@/components/shadcnUI/input.tsx";
-import { Button } from "@/components/shadcnUI/button.tsx";
+import { Point } from "../../../lib/types";
+import { Input } from "@/components/shadcnUI/input";
+import { Button } from "@/components/shadcnUI/button";
 import { useDispatch, useSelector } from "react-redux";
-import { setWeight } from "@/redux/GraphEdges/actionCreator.ts";
-import { RootState } from "@/redux/store.ts";
-import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
-import { Label } from "@/components/shadcnUI/label.tsx";
+import { setWeight } from "@/redux/GraphEdges/actionCreator";
+import { RootState } from "@/redux/store";
+import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer";
+import { Label } from "@/components/shadcnUI/label";
 
 export interface GraphEdgeProps {
   id: string;
@@ -125,7 +125,7 @@ export const GraphEdge = (props: GraphEdgeProps) => {
           className={`flex items-center shadow-2xl h-full w-full rounded-sm  m-0
           ${isMiddleEdge ? "-translate-y-2.5" : ""}
           `}
-          // ${props.isDirected?'-translate-y-2.5':''}
+        // ${props.isDirected?'-translate-y-2.5':''}
         >
           {isNodeSelfConnected ? (
             <div className="flex items-center">

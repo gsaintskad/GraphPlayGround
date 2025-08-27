@@ -1,16 +1,16 @@
-import GraphDisplay from "@/components/GraphBuilder/GraphDisplay/GraphDisplay.tsx";
+import GraphDisplay from "@/components/GraphBuilder/GraphDisplay/GraphDisplay";
 import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store.ts";
+import { RootState } from "@/redux/store";
 import {
   discardAlgorithmState,
   discardNodeMap,
   discardSelection,
-} from "@/redux/GraphNodes/actionCreator.ts";
-import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
-import ToolButton from "@/components/GraphBuilder/ToolButton.tsx";
-import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
-import DisplaySettingsTab from "@/components/Tabs/TabsContent/DisplaySettingsTab.tsx";
+} from "@/redux/GraphNodes/actionCreator";
+import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator";
+import ToolButton from "@/components/GraphBuilder/ToolButton";
+import { useTheme } from "@/components/shadcnUI/ThemeProvider";
+import DisplaySettingsTab from "@/components/Tabs/TabsContent/DisplaySettingsTab";
 import { IconContext } from "react-icons";
 import { IoMdPlay, IoMdSave, IoMdSettings } from "react-icons/io";
 import { MdDelete, MdStarOutline } from "react-icons/md";
@@ -23,7 +23,7 @@ import {
 import { BsArrowDownUp } from "react-icons/bs";
 import { ImArrowUpRight2 } from "react-icons/im";
 import { VscDebugDisconnect } from "react-icons/vsc";
-import { edgeDto, nodeDto, stateObject } from "@/lib/types.ts";
+import { edgeDto, nodeDto, stateObject } from "@/lib/types";
 import {
   setConnectTool,
   setCreateTool,
@@ -33,11 +33,11 @@ import {
   setPlayAnimationTool,
   setPointerTool,
   setRemoveTool,
-} from "@/redux/GraphBuilder/actionCreator.ts";
-import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes.ts";
-import { Button } from "@/components/shadcnUI/button.tsx";
-import { Label } from "@/components/shadcnUI/label.tsx";
-import GraphBuilderTabs from "@/components/Tabs/GraphBuilderTabs.tsx";
+} from "@/redux/GraphBuilder/actionCreator";
+import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes";
+import { Button } from "@/components/shadcnUI/button";
+import { Label } from "@/components/shadcnUI/label";
+import GraphBuilderTabs from "@/components/Tabs/GraphBuilderTabs";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
@@ -174,9 +174,8 @@ export const GraphBuilder = (props: {
           </div>
 
           <GraphDisplay
-            className={`rounded-xl  ${
-              theme.theme === "dark" ? "bg-gray-800" : "bg-gray-200"
-            }`}
+            className={`rounded-xl  ${theme.theme === "dark" ? "bg-gray-800" : "bg-gray-200"
+              }`}
           />
 
           <GraphBuilderTabs isTabsHidden={isTabsHidden} />

@@ -5,17 +5,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/shadcnUI/dropdown-menu.tsx";
-import { Point, stateObject } from "../../../lib/types.ts";
+} from "@/components/shadcnUI/dropdown-menu";
+import { Point, stateObject } from "../../../lib/types";
 import { useMemo, useState } from "react";
-import { Input } from "@/components/shadcnUI/input.tsx";
-import { Button } from "@/components/shadcnUI/button.tsx";
-import { setWeight } from "@/redux/GraphEdges/actionCreator.ts";
+import { Input } from "@/components/shadcnUI/input";
+import { Button } from "@/components/shadcnUI/button";
+import { setWeight } from "@/redux/GraphEdges/actionCreator";
 import { useDispatch, useSelector } from "react-redux";
-import { setNodeName } from "@/redux/GraphNodes/actionCreator.ts";
-import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
-import { RootState } from "@/redux/store.ts";
-import { GraphNodeAlgorithmStates } from "@/redux/GraphNodes/actionTypes.ts";
+import { setNodeName } from "@/redux/GraphNodes/actionCreator";
+import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer";
+import { RootState } from "@/redux/store";
+import { GraphNodeAlgorithmStates } from "@/redux/GraphNodes/actionTypes";
 
 export interface GraphNodeProps {
   displayValue: string;

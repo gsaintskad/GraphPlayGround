@@ -1,6 +1,6 @@
-import { DisplaySettingsActionTypes, Language } from "./actionTypes.ts";
+import { DisplaySettingsActionTypes, Language } from "./actionTypes";
 import { Reducer } from "@reduxjs/toolkit";
-import { rootAction } from "@/redux/store.ts";
+import { rootAction } from "@/redux/store";
 
 export interface DisplaySettingsState {
   nodeSize: number;

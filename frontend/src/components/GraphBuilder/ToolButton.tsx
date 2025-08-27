@@ -3,11 +3,11 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/shadcnUI/hover-card.tsx";
-import { Button } from "@/components/shadcnUI/button.tsx";
+} from "@/components/shadcnUI/hover-card";
+import { Button } from "@/components/shadcnUI/button";
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store.ts";
-import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes.ts";
+import { RootState } from "@/redux/store";
+import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes";
 
 interface InstrumentButtonProps {
   children: ReactNode | ReactNode[];
@@ -19,7 +19,7 @@ interface InstrumentButtonProps {
 }
 // React.MouseEventHandler<HTMLButtonElement>
 const ToolButton = (props: InstrumentButtonProps) => {
-  const {isAlwaysActive} = props;
+  const { isAlwaysActive } = props;
   const activeTool = useSelector(
     (state: RootState) => state.graphBuilderTool.currentTool,
   );

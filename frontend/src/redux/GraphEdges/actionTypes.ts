@@ -1,5 +1,5 @@
-import { GraphEdgeProps } from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
-import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
+import { GraphEdgeProps } from "@/components/GraphBuilder/GraphDisplay/GraphEdge";
+import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode";
 import { AnyAction } from "@reduxjs/toolkit";
 
 export enum GraphEdgesActionTypes {
@@ -24,8 +24,8 @@ interface setEdgeIsActive extends AnyAction {
   payload: boolean;
 }
 interface discardEdgeMapAction extends AnyAction {
-  type:GraphEdgesActionTypes.DISCARD_EDGE_MAP;
-  payload:null
+  type: GraphEdgesActionTypes.DISCARD_EDGE_MAP;
+  payload: null
 }
 interface calculateEdgePropsAction extends AnyAction {
   type: GraphEdgesActionTypes.CALCULATE_PROPS;
@@ -40,7 +40,7 @@ interface removeEdgesForNodeAction extends AnyAction {
   payload: string;
 }
 export type GraphEdgeAction =
-  |discardEdgeMapAction
+  | discardEdgeMapAction
   | addEdgeAction
   | removeEdgeAction
   | calculateEdgePropsAction

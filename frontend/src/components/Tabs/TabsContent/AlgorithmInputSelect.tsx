@@ -1,24 +1,24 @@
 import React, { ReactNode, useCallback } from "react";
-import { Label } from "@/components/shadcnUI/label.tsx";
+import { Label } from "@/components/shadcnUI/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/shadcnUI/select.tsx";
+} from "@/components/shadcnUI/select";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store.ts";
-import { AnimationState } from "@/redux/Animations/reducer.ts";
+import { RootState } from "@/redux/store";
+import { AnimationState } from "@/redux/Animations/reducer";
 import {
   chooseCurrentAlgorithm,
   setAlgorithmArguments,
   setDijkstra,
-} from "@/redux/Animations/actionCreator.ts";
+} from "@/redux/Animations/actionCreator";
 import {
   AlgorithmType,
   DijkstraInput,
-} from "@/redux/Animations/actionTypes.ts";
+} from "@/redux/Animations/actionTypes";
 
 const AlgorithmInputSelect = () => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);

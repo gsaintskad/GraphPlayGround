@@ -1,15 +1,15 @@
-import {GraphEdgesActionTypes} from "./actionTypes.ts";
-import {Reducer} from "@reduxjs/toolkit";
-import {stateObject} from "../../lib/types.ts";
-import {GraphEdgeProps} from "@/components/GraphBuilder/GraphDisplay/GraphEdge.tsx";
-import {rootAction} from "@/redux/store.ts";
+import { GraphEdgesActionTypes } from "./actionTypes";
+import { Reducer } from "@reduxjs/toolkit";
+import { stateObject } from "../../lib/types";
+import { GraphEdgeProps } from "@/components/GraphBuilder/GraphDisplay/GraphEdge";
+import { rootAction } from "@/redux/store";
 
 const initialState: stateObject<GraphEdgeProps> = {};
 
 const graphEdgesReducer: Reducer<
   stateObject<GraphEdgeProps>,
   rootAction
-> = (state = initialState, action:rootAction): stateObject<GraphEdgeProps> => {
+> = (state = initialState, action: rootAction): stateObject<GraphEdgeProps> => {
   switch (action.type) {
     case GraphEdgesActionTypes.ADD_EDGE: {
       const prevState = structuredClone(state);
@@ -38,7 +38,7 @@ const graphEdgesReducer: Reducer<
       }
       return newState;
     }
-    case GraphEdgesActionTypes.DISCARD_EDGE_MAP:{
+    case GraphEdgesActionTypes.DISCARD_EDGE_MAP: {
       return {} satisfies stateObject<string>
     }
     case GraphEdgesActionTypes.SET_WEIGHT: {

@@ -1,23 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store.ts";
-import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
+import { RootState } from "@/redux/store";
+import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer";
 
-import { i18n } from "@/lib/i18n.ts";
-import { Button } from "@/components/shadcnUI/button.tsx";
+import { i18n } from "@/lib/i18n";
+import { Button } from "@/components/shadcnUI/button";
 import {
   IoPause,
   IoPlay,
   IoPlaySkipBackSharp,
   IoPlaySkipForward,
 } from "react-icons/io5";
-import { AnimationState } from "@/redux/Animations/reducer.ts";
+import { AnimationState } from "@/redux/Animations/reducer";
 import {
   AlgorithmStep,
   AlgorithmType,
-} from "@/redux/Animations/actionTypes.ts";
-import { edgeDto, nodeDto, stateObject } from "@/lib/types.ts";
+} from "@/redux/Animations/actionTypes";
+import { edgeDto, nodeDto, stateObject } from "@/lib/types";
 
 import {
   Table,
@@ -28,37 +28,37 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/shadcnUI/table.tsx";
+} from "@/components/shadcnUI/table";
 import {
   discardAlgorithmState,
   resetNodeMapState,
   setAlgorithmState,
-} from "@/redux/GraphNodes/actionCreator.ts";
-import { GraphNodeActionTypes } from "@/redux/GraphNodes/actionTypes.ts";
-import { GraphNodeAlgorithmStates } from "@/redux/GraphNodes/actionTypes.ts";
-import { setAnimationSpeed } from "@/redux/DisplaySettings/actionCreator.ts";
-import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes.ts";
-import { setPlayAnimationTool } from "@/redux/GraphBuilder/actionCreator.ts";
-import { Label } from "@/components/shadcnUI/label.tsx";
+} from "@/redux/GraphNodes/actionCreator";
+import { GraphNodeActionTypes } from "@/redux/GraphNodes/actionTypes";
+import { GraphNodeAlgorithmStates } from "@/redux/GraphNodes/actionTypes";
+import { setAnimationSpeed } from "@/redux/DisplaySettings/actionCreator";
+import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes";
+import { setPlayAnimationTool } from "@/redux/GraphBuilder/actionCreator";
+import { Label } from "@/components/shadcnUI/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/shadcnUI/select.tsx";
-import { Slider } from "@/components/shadcnUI/slider.tsx";
+} from "@/components/shadcnUI/select";
+import { Slider } from "@/components/shadcnUI/slider";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/shadcnUI/accordion.tsx";
-import AlgorithmInputSelect from "@/components/Tabs/TabsContent/AlgorithmInputSelect.tsx";
+} from "@/components/shadcnUI/accordion";
+import AlgorithmInputSelect from "@/components/Tabs/TabsContent/AlgorithmInputSelect";
 import {
   chooseCurrentAlgorithm,
   setDijkstra,
-} from "@/redux/Animations/actionCreator.ts";
+} from "@/redux/Animations/actionCreator";
 
 interface AlgorithmTabProps {
   className?: string;

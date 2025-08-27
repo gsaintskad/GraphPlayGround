@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/shadcnUI/table.tsx";
+} from "@/components/shadcnUI/table";
 
 const GraphInfoTab = () => {
   return (

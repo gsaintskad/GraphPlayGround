@@ -4,22 +4,22 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/shadcnUI/tabs.tsx";
+} from "@/components/shadcnUI/tabs";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/shadcnUI/accordion.tsx";
-import { Label } from "@/components/shadcnUI/label.tsx";
-import { Slider } from "@/components/shadcnUI/slider.tsx";
-import { ColorPicker } from "@/components/shadcnUI/color-picker.tsx";
-import AlgorithmTab from "@/components/Tabs/TabsContent/AlgorithmTab.tsx";
-import DisplaySettingsTab from "@/components/Tabs/TabsContent/DisplaySettingsTab.tsx";
-import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
+} from "@/components/shadcnUI/accordion";
+import { Label } from "@/components/shadcnUI/label";
+import { Slider } from "@/components/shadcnUI/slider";
+import { ColorPicker } from "@/components/shadcnUI/color-picker";
+import AlgorithmTab from "@/components/Tabs/TabsContent/AlgorithmTab";
+import DisplaySettingsTab from "@/components/Tabs/TabsContent/DisplaySettingsTab";
+import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer";
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store.ts";
-import { i18n } from "@/lib/i18n.ts";
+import { RootState } from "@/redux/store";
+import { i18n } from "@/lib/i18n";
 interface GraphBuilderTabsProps {
   className?: string;
   isTabsHidden: boolean;

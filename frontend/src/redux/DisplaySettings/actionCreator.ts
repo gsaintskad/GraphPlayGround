@@ -2,8 +2,8 @@ import {
   DisplaySettingsAction,
   DisplaySettingsActionTypes,
   Language,
-} from "@/redux/DisplaySettings/actionTypes";
-import { rootAction } from "@/redux/store";
+} from "@/redux/DisplaySettings/actionTypes.ts";
+import { rootAction } from "@/redux/store.ts";
 // Action creators for DisplaySettings
 export const setNodeSize = (size: number): rootAction => {
   return {
@@ -17,7 +17,7 @@ export const setLanguage = (language: Language) => {
     payload: language,
   } as DisplaySettingsAction;
 };
-export const setAnimationSpeed = (speed: number) => {
+export const setAnimationSpeed = (speed:number) => {
   return {
     type: DisplaySettingsActionTypes.SET_ANIMATION_SPEED,
     payload: speed,
@@ -29,7 +29,7 @@ export const setNodeColors = (colors: {
   selected: string;
   comparing: string;
   visited: string;
-  highlighted: string;
+  highlighted:string;
 }): rootAction => {
   return {
     type: DisplaySettingsActionTypes.SET_NODE_COLORS,

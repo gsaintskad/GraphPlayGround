@@ -1,19 +1,19 @@
-import { Reducer } from "@reduxjs/toolkit";
+import {Reducer} from "@reduxjs/toolkit";
 
-import { rootAction } from "@/redux/store";
-import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes";
+import {rootAction} from "@/redux/store.ts";
+import {GraphBuilderTool} from "@/redux/GraphBuilder/actionTypes.ts";
 
 export interface GraphBuilderState {
   currentTool: GraphBuilderTool;
 }
 
-const initialState: GraphBuilderState = {
+ const initialState: GraphBuilderState = {
   currentTool: GraphBuilderTool.POINTER, // Default tool
 };
 const graphBuilderReducer: Reducer<
   GraphBuilderState,
   rootAction
-> = (state = initialState, action: rootAction): GraphBuilderState => {
+> = (state = initialState, action:rootAction): GraphBuilderState => {
 
   switch (action.type) {
     case GraphBuilderTool.POINTER:
@@ -30,7 +30,7 @@ const graphBuilderReducer: Reducer<
     case GraphBuilderTool.PLAY_ANIMATION:
       return {
         ...state,
-        currentTool: action.payload ? action.type : GraphBuilderTool.POINTER
+        currentTool:action.payload?action.type:GraphBuilderTool.POINTER
       }
     default:
       return state;

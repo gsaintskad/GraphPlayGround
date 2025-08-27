@@ -1,6 +1,6 @@
 import { GraphNodeProps } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
 
-import { Point } from "../../lib/types";
+import { Point } from "../../lib/types.ts";
 import { AnyAction } from "@reduxjs/toolkit";
 export type GraphNodeAlgorithmStates =
   | "primary"

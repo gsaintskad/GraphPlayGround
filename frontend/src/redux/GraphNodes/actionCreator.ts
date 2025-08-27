@@ -2,8 +2,8 @@ import {
 
   GraphNodeProps,
 } from "@/components/GraphBuilder/GraphDisplay/GraphNode.tsx";
-import { Point } from "../../lib/types";
-import { GraphNodeAction, GraphNodeActionTypes, GraphNodeAlgorithmStates } from "./actionTypes";
+import { Point } from "../../lib/types.ts";
+import {GraphNodeAction, GraphNodeActionTypes, GraphNodeAlgorithmStates} from "./actionTypes.ts";
 
 // Action Creator for adding a node
 export const addNode = (nodeDto: GraphNodeProps): GraphNodeAction => {

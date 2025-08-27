@@ -12,7 +12,7 @@ import {
   DFSState,
   DijkstraInput,
   DijkstraState,
-} from "@/redux/Animations/actionTypes";
+} from "@/redux/Animations/actionTypes.ts";
 export const chooseCurrentAlgorithm = (algorithm: AlgorithmType) => {
   return {
     type: AnimationActionTypes.CHOOSE_CURRENT_ALGORITHM,

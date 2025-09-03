@@ -1,14 +1,13 @@
 // lib/store.ts
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from './features/counter/counter.slice';
-
+import counterReducer from '@/lib/features/counter.slice'
 export const makeStore = () => {
-  return configureStore({
-    reducer: {
-      counter: counterReducer,
-      // Add other reducers here
-    },
-  });
+    return configureStore({
+        reducer: {
+            counter: counterReducer,
+            // Add other reducers here
+        },
+    });
 };
 
 // Infer the type of makeStore

@@ -3,7 +3,7 @@ import { GraphService } from './graph.service';
 import { CreateGraphDto } from './dto/create-graph.dto';
 import { UpdateGraphDto } from './dto/update-graph.dto';
 
-@Controller('graph')
+@Controller('graphs')
 export class GraphController {
   constructor(private readonly graphService: GraphService) {}
 

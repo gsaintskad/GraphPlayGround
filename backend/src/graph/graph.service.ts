@@ -1,15 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateGraphDto } from './dto/create-graph.dto';
 import { UpdateGraphDto } from './dto/update-graph.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class GraphService {
+  constructor(private prisma: PrismaService) {}
   create(createGraphDto: CreateGraphDto) {
     return 'This action adds a new graph';
   }
 
   findAll() {
-    return `This action returns all graph`;
+    Logger.log('trying to find all users');
+    return this.prisma.user.findMany({
+      select: { id: true, name: true, email: true },
+    });
   }
 
   findOne(id: number) {

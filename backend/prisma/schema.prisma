@@ -17,6 +17,17 @@ datasource db {
 model User {
   id    Int     @default(autoincrement()) @id
   email String  @unique
-  name  String?
+  name  String
+  passwordHash String @map("password_hash")
+
+//displaySettings
+  @@map("users")
   
 }
+
+model Graph{
+  id Int @default(autoincrement()) @id
+  isDirected Boolean @map("is_directed")
+  //created_by
+}
+

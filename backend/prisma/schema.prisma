@@ -40,3 +40,10 @@ model  Node{
   x Int
   y Int
 }
+
+model Edge{
+
+  id Int @default(autoincrement()) @id
+  weight Float
+  isDirected Boolean @map("is_directed")
+}

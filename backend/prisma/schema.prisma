@@ -31,3 +31,12 @@ model Graph{
   //created_by
 }
 
+model  Node{
+  
+  id Int @default(autoincrement()) @id
+  //graph id
+  //value
+  displayValue String? @map("dispaly_value")
+  x Int
+  y Int
+}

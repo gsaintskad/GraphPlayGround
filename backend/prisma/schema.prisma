@@ -29,6 +29,7 @@ model Graph{
   id Int @default(autoincrement()) @id
   isDirected Boolean @map("is_directed")
   //created_by
+  @@map("graphs")
 }
 
 model  Node{
@@ -39,6 +40,7 @@ model  Node{
   displayValue String? @map("dispaly_value")
   x Int
   y Int
+  @@map("nodes")
 }
 
 model Edge{
@@ -46,4 +48,5 @@ model Edge{
   id Int @default(autoincrement()) @id
   weight Float
   isDirected Boolean @map("is_directed")
+  @@map("edges")
 }

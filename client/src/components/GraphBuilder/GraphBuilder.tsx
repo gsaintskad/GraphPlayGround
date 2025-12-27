@@ -19,7 +19,8 @@ import {
   TbPointer,
   TbPointerMinus,
   TbPointerPlus,
-} from "react-icons/tb";
+}
+ from "react-icons/tb";
 import { BsArrowDownUp } from "react-icons/bs";
 import { ImArrowUpRight2 } from "react-icons/im";
 import { VscDebugDisconnect } from "react-icons/vsc";
@@ -38,6 +39,7 @@ import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes.ts";
 import { Button } from "@/components/shadcnUI/button.tsx";
 import { Label } from "@/components/shadcnUI/label.tsx";
 import GraphBuilderTabs from "@/components/Tabs/GraphBuilderTabs.tsx";
+import { saveGraph } from '@/api/axios'; // Import saveGraph
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
@@ -50,6 +52,7 @@ export const GraphBuilder = (props: {
   const activeTool = useSelector(
     (state: RootState) => state.graphBuilderTool.currentTool,
   );
+  const { token } = useSelector((state: RootState) => state.auth); // Get token from auth state
 
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -59,6 +62,28 @@ export const GraphBuilder = (props: {
     theme.theme === "dark"
       ? "bg-gradient-to-br from-blue-800 via-teal-900 to-zinc-800"
       : "bg-gradient-to-br from-blue-300 via-purple-300 to-gray-200";
+
+  const handleSaveGraph = async () => {
+    if (!token) {
+      alert("You must be logged in to save a graph.");
+      return;
+    }
+
+    const graphData = {
+      nodes: nodeMap,
+      edges: edgeMap,
+    };
+
+    try {
+      const response = await saveGraph(graphData, token);
+      alert(`Graph saved successfully with ID: ${response.id}`);
+      // Optionally update some state if you want to store the graph ID for updates
+    } catch (error) {
+      console.error("Failed to save graph:", error);
+      alert("Failed to save graph. Please try again.");
+    }
+  };
+
 
   return (
     <div
@@ -75,7 +100,7 @@ export const GraphBuilder = (props: {
           <ToolButton
             name="Save Graph"
             description="Save the current graph"
-            onClick={() => console.log("Graph has been saved!")}
+            onClick={handleSaveGraph} // Use the new handler
           >
             <IoMdSave />
           </ToolButton>

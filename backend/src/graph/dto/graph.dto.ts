@@ -15,4 +15,6 @@ export class GraphInputDto {
   nodes: Record<string, NodeDto>;
   edges: Record<string, EdgeDto>;
   startNodeId: string;
+  targetNodeId?: string;
+  algorithm: string;
 }

@@ -8,7 +8,16 @@ export class GraphController {
 
   @Post()
   computeGraph(@Body() graphInput: GraphInputDto) {
-    const dijkstra = this.graphService.solveDijkstra(graphInput);
-    return { dijkstra };
+    switch (graphInput.algorithm) {
+      case 'BFS':
+        return { bfs: this.graphService.solveBFS(graphInput) };
+      case 'DFS':
+        return { dfs: this.graphService.solveDFS(graphInput) };
+      case 'Astar':
+        return { astar: this.graphService.solveAstar(graphInput) };
+      case 'Dijkstra':
+      default:
+        return { dijkstra: this.graphService.solveDijkstra(graphInput) };
+    }
   }
 }

@@ -57,6 +57,9 @@ import {
 import AlgorithmInputSelect from "@/components/Tabs/TabsContent/AlgorithmInputSelect.tsx";
 import {
   chooseCurrentAlgorithm,
+  setAstar,
+  setBFS,
+  setDFS,
   setDijkstra,
 } from "@/redux/Animations/actionCreator.ts";
 
@@ -68,43 +71,43 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
   const activeTool = useSelector(
-    (state: RootState) => state.graphBuilderTool.currentTool,
+    (state: RootState) => state.graphBuilderTool.currentTool
   );
 
   const dispatch = useDispatch();
   const [isAnimationPlaying, setIsAnimationPlaying] = useState<boolean>(false);
   const [timerIDs, setTimerIDs] = useState<NodeJS.Timeout[]>([]);
   const displaySettings: DisplaySettingsState = useSelector(
-    (state: RootState) => state.displaySettings,
+    (state: RootState) => state.displaySettings
   );
   const { currentAlgorithm, ...algorithms }: AnimationState = useSelector(
-    (state: RootState) => state.animations,
+    (state: RootState) => state.animations
   );
   const [localAnimationSpeed, setLocalAnimationSpeed] = useState<number>(
-    displaySettings.animationSpeed,
+    displaySettings.animationSpeed
   );
   const language = useMemo(
     () => i18n[displaySettings.language],
-    [displaySettings.language],
+    [displaySettings.language]
   );
   const highlightHandler = useCallback(
     (id: string) => {
       const prevState = nodeMap[id].algorithmState!;
       dispatch(setAlgorithmState(id, "highlighted"));
       console.log(
-        `timeout for node${id} has been run\nprev state:${prevState}`,
+        `timeout for node${id} has been run\nprev state:${prevState}`
       );
       setTimeout(() => {
         dispatch(
           setAlgorithmState(
             id,
-            prevState === "highlighted" ? "primary" : prevState,
-          ),
+            prevState === "highlighted" ? "primary" : prevState
+          )
         );
         console.log(`timeout for node${id} has been finished`);
       }, displaySettings.animationSpeed);
     },
-    [displaySettings.animationSpeed, nodeMap],
+    [displaySettings.animationSpeed, nodeMap]
   );
 
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -138,7 +141,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         setCurrentStep(i);
       }
     },
-    [algorithms, currentStep],
+    [algorithms, currentStep]
   );
   const handleAnimationSettingSubmit = () => {
     dispatch(setAnimationSpeed(localAnimationSpeed));
@@ -208,8 +211,8 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
                 LocalTimerIDs.push(
                   setTimeout(
                     () => renderStep(i, i),
-                    (i - currentStep) * displaySettings.animationSpeed,
-                  ),
+                    (i - currentStep) * displaySettings.animationSpeed
+                  )
                 );
               }
             else LocalTimerIDs.forEach((timeout) => clearTimeout(timeout));
@@ -296,6 +299,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
                 nodes: nodeDtoMap,
                 edges: edgeDtoMap,
                 startNodeId: lastId,
+                algorithm: currentAlgorithm,
               }),
             })
               .then((response) => {
@@ -307,7 +311,20 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
               .then((data) => {
                 // dispatch(setAnimation)
 
-                dispatch(setDijkstra(data.dijkstra));
+                switch (currentAlgorithm) {
+                  case "Dijkstra":
+                    dispatch(setDijkstra(data.dijkstra));
+                    break;
+                  case "BFS":
+                    dispatch(setBFS(data.bfs));
+                    break;
+                  case "DFS":
+                    dispatch(setDFS(data.dfs));
+                    break;
+                  case "Astar":
+                    dispatch(setAstar(data.astar));
+                    break;
+                }
                 setCurrentStep(0);
                 console.log(algorithms);
               })

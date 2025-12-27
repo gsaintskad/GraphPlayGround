@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SaveGraphDto } from './dto/save-graph.dto';
 import { ComputeAlgorithmDto } from './dto/compute-algorithm.dto';
-import { Prisma } from 'generated/prisma';
 
 // This interface is used by the algorithm logic and expects string IDs
 export interface AlgorithmStep {

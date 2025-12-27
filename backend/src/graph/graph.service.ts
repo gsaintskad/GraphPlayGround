@@ -25,7 +25,7 @@ export interface GraphData {
 export class GraphService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async saveGraph(saveGraphDto: SaveGraphDto, graphIdToUpdate?: string) {
+  async saveGraph(saveGraphDto: SaveGraphDto, userId: number, graphIdToUpdate?: string) {
     const { nodes: nodesDto, edges: edgesDto } = saveGraphDto;
 
     return this.prisma.$transaction(async (tx) => {
@@ -38,7 +38,15 @@ export class GraphService {
         await tx.node.deleteMany({ where: { graphId: graphIdInt } });
         graph = { id: graphIdInt };
       } else {
-        graph = await tx.graph.create({ data: {} });
+        graph = await tx.graph.create({
+          data: {
+            createdBy: {
+              connect: {
+                id: userId,
+              },
+            },
+          },
+        });
       }
 
       const nodeIdMap = new Map<string, number>();

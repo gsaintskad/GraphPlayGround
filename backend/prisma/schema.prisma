@@ -1,56 +1,150 @@
 
+
+
 generator client {
+
   provider = "prisma-client-js"
+
 }
+
+
 
 datasource db {
+
   provider = "postgresql"
+
 }
+
+
+
+model User {
+
+  id        Int      @id @default(autoincrement())
+
+  email     String   @unique
+
+  password  String
+
+  name      String?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+
+
+  createdGraphs Graph[] @relation("CreatedBy")
+
+  sharedGraphs  Graph[] @relation("SharedWith")
+
+
+
+  @@map("users")
+
+}
+
+
 
 model Graph {
-  id    Int    @id @default(autoincrement())
+
+  id    Int     @id @default(autoincrement())
+
   name  String?
+
   nodes Node[]
+
   edges Edge[]
 
+
+
+  createdById Int
+
+  createdBy   User @relation("CreatedBy", fields: [createdById], references: [id])
+
+
+
+  sharedWith User[] @relation("SharedWith")
+
+
+
   @@map("graphs")
+
 }
+
+
 
 model Node {
+
   id           Int    @id @default(autoincrement())
+
   displayValue String @map("display_value")
+
   x            Float
+
   y            Float
+
   
+
   // This is the original string ID from the frontend/DTO
+
   originalId   String @unique
 
-  graph   Graph @relation(fields: [graphId], references: [id])
+
+
+  graph   Graph @relation(fields: [graphId], references: [id], onDelete: Cascade)
+
   graphId Int
+
+
 
   sourceEdges Edge[] @relation("SourceNode")
+
   targetEdges Edge[] @relation("TargetNode")
 
+
+
   @@map("nodes")
+
 }
 
+
+
 model Edge {
+
   id         Int     @id @default(autoincrement())
+
   weight     Float
+
   isDirected Boolean @map("is_directed")
+
   
+
   // This is the original string ID from the frontend/DTO
+
   originalId   String @unique
 
 
-  graph   Graph @relation(fields: [graphId], references: [id])
+
+
+
+  graph   Graph @relation(fields: [graphId], references: [id], onDelete: Cascade)
+
   graphId Int
 
+
+
   sourceNode   Node @relation("SourceNode", fields: [sourceNodeId], references: [id])
+
   sourceNodeId Int
 
+
+
   targetNode   Node @relation("TargetNode", fields: [targetNodeId], references: [id])
+
   targetNodeId Int
 
+
+
   @@map("edges")
+
 }

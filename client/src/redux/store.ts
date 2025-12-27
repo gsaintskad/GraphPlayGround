@@ -25,9 +25,11 @@ import animationReducer, {AnimationState} from "@/redux/Animations/reducer.ts";
 import {AnimationAction} from "@/redux/Animations/actionTypes.ts";
 import {GraphBuilderAction} from "@/redux/GraphBuilder/actionTypes.ts";
 import graphBuilderReducer, {GraphBuilderState} from "@/redux/GraphBuilder/reducer.ts";
+import authReducer from "./Auth/reducer.ts";
+import { AuthAction } from "./Auth/actionTypes.ts";
 
 
-export type rootAction = GraphEdgeAction | GraphNodeAction|DisplaySettingsAction|AnimationAction|GraphBuilderAction;
+export type rootAction = GraphEdgeAction | GraphNodeAction|DisplaySettingsAction|AnimationAction|GraphBuilderAction | AuthAction;
 const store: ToolkitStore<
   {
     graphNodes: stateObject<GraphNodeProps>;
@@ -36,6 +38,10 @@ const store: ToolkitStore<
     displaySettings:DisplaySettingsState;
     animations:AnimationState;
     graphBuilderTool:GraphBuilderState;
+    auth: {
+      token: string | null;
+      isAuthenticated: boolean;
+    }
     // highlightedGraphNodes: string[];
 
   },
@@ -49,6 +55,7 @@ const store: ToolkitStore<
     displaySettings:displaySettingsReducer,
     animations:animationReducer,
     graphBuilderTool:graphBuilderReducer,
+    auth: authReducer,
     // highlightedGraphNodes:highlightedGraphNodesReducer
   },
 });

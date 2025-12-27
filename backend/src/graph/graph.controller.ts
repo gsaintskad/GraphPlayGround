@@ -1,15 +1,17 @@
-import { Body, Controller, Post, Param, Put, Get } from '@nestjs/common';
+import { Body, Controller, Post, Param, Put, Get, UseGuards, Req } from '@nestjs/common';
 import { GraphService } from './graph.service';
 import { SaveGraphDto } from './dto/save-graph.dto';
 import { ComputeAlgorithmDto } from './dto/compute-algorithm.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('graph')
 export class GraphController {
   constructor(private readonly graphService: GraphService) {}
 
   @Post()
-  saveGraph(@Body() saveGraphDto: SaveGraphDto) {
-    return this.graphService.saveGraph(saveGraphDto);
+  @UseGuards(JwtAuthGuard)
+  saveGraph(@Body() saveGraphDto: SaveGraphDto, @Req() req) {
+    return this.graphService.saveGraph(saveGraphDto, req.user.userId);
   }
 
   @Get(':id')
@@ -18,11 +20,13 @@ export class GraphController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   updateGraph(
     @Param('id') id: string,
     @Body() saveGraphDto: SaveGraphDto,
+    @Req() req,
   ) {
-    return this.graphService.saveGraph(saveGraphDto, id);
+    return this.graphService.saveGraph(saveGraphDto, req.user.userId, id);
   }
 
   @Post(':id/compute')

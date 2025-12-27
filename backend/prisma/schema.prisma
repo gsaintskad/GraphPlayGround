@@ -1,0 +1,56 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Graph {
+  id    Int    @id @default(autoincrement())
+  name  String?
+  nodes Node[]
+  edges Edge[]
+
+  @@map("graphs")
+}
+
+model Node {
+  id           Int    @id @default(autoincrement())
+  displayValue String @map("display_value")
+  x            Float
+  y            Float
+  
+  // This is the original string ID from the frontend/DTO
+  originalId   String @unique
+
+  graph   Graph @relation(fields: [graphId], references: [id])
+  graphId Int
+
+  sourceEdges Edge[] @relation("SourceNode")
+  targetEdges Edge[] @relation("TargetNode")
+
+  @@map("nodes")
+}
+
+model Edge {
+  id         Int     @id @default(autoincrement())
+  weight     Float
+  isDirected Boolean @map("is_directed")
+  
+  // This is the original string ID from the frontend/DTO
+  originalId   String @unique
+
+
+  graph   Graph @relation(fields: [graphId], references: [id])
+  graphId Int
+
+  sourceNode   Node @relation("SourceNode", fields: [sourceNodeId], references: [id])
+  sourceNodeId Int
+
+  targetNode   Node @relation("TargetNode", fields: [targetNodeId], references: [id])
+  targetNodeId Int
+
+  @@map("edges")
+}

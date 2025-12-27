@@ -5,7 +5,6 @@ import {
 export type AlgorithmType = "Astar" | "Dijkstra" | "DFS" | "BFS";
 export enum AnimationActionTypes {
   CHOOSE_CURRENT_ALGORITHM = "CHOOSE_CURRENT_ALGORITHM",
-
   SET_DIJKSTRA = "SET_DIJKSTRA",
   SET_ASTAR = "SET_ASTAR",
   SET_DFS = "SET_DFS",

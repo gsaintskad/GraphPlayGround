@@ -5,9 +5,11 @@ export interface Point {
 export interface stateObject<T> {
   [key: string]: T;
 }
-export interface nodeDto{
+export interface nodeDto {
   id: string;
   displayValue: string;
+  x: number;
+  y: number;
 }
 export interface edgeDto{
   id: string;

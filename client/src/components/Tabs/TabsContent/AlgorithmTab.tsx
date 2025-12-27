@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store.ts";
 import { DisplaySettingsState } from "@/redux/DisplaySettings/reducer.ts";
-
 import { i18n } from "@/lib/i18n.ts";
 import { Button } from "@/components/shadcnUI/button.tsx";
 import {
@@ -14,11 +12,9 @@ import {
 } from "react-icons/io5";
 import { AnimationState } from "@/redux/Animations/reducer.ts";
 import {
-  AlgorithmStep,
   AlgorithmType,
 } from "@/redux/Animations/actionTypes.ts";
 import { edgeDto, nodeDto, stateObject } from "@/lib/types.ts";
-
 import {
   Table,
   TableBody,
@@ -30,15 +26,10 @@ import {
   TableRow,
 } from "@/components/shadcnUI/table.tsx";
 import {
-  discardAlgorithmState,
   resetNodeMapState,
   setAlgorithmState,
 } from "@/redux/GraphNodes/actionCreator.ts";
-import { GraphNodeActionTypes } from "@/redux/GraphNodes/actionTypes.ts";
-import { GraphNodeAlgorithmStates } from "@/redux/GraphNodes/actionTypes.ts";
-import { setAnimationSpeed } from "@/redux/DisplaySettings/actionCreator.ts";
 import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes.ts";
-import { setPlayAnimationTool } from "@/redux/GraphBuilder/actionCreator.ts";
 import { Label } from "@/components/shadcnUI/label.tsx";
 import {
   Select,
@@ -57,66 +48,56 @@ import {
 import AlgorithmInputSelect from "@/components/Tabs/TabsContent/AlgorithmInputSelect.tsx";
 import {
   chooseCurrentAlgorithm,
+  setAstar,
+  setBFS,
+  setDFS,
   setDijkstra,
 } from "@/redux/Animations/actionCreator.ts";
+import { setAnimationSpeed } from "@/redux/DisplaySettings/actionCreator.ts";
 
-interface AlgorithmTabProps {
-  className?: string;
-}
-
-const AlgorithmTab = (props: AlgorithmTabProps) => {
+const AlgorithmTab = () => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
   const activeTool = useSelector(
-    (state: RootState) => state.graphBuilderTool.currentTool,
+    (state: RootState) => state.graphBuilderTool.currentTool
   );
-
   const dispatch = useDispatch();
   const [isAnimationPlaying, setIsAnimationPlaying] = useState<boolean>(false);
   const [timerIDs, setTimerIDs] = useState<NodeJS.Timeout[]>([]);
   const displaySettings: DisplaySettingsState = useSelector(
-    (state: RootState) => state.displaySettings,
+    (state: RootState) => state.displaySettings
   );
   const { currentAlgorithm, ...algorithms }: AnimationState = useSelector(
-    (state: RootState) => state.animations,
+    (state: RootState) => state.animations
   );
   const [localAnimationSpeed, setLocalAnimationSpeed] = useState<number>(
-    displaySettings.animationSpeed,
+    displaySettings.animationSpeed
   );
+  const [savedGraphId, setSavedGraphId] = useState<string | null>(null);
   const language = useMemo(
     () => i18n[displaySettings.language],
-    [displaySettings.language],
+    [displaySettings.language]
   );
   const highlightHandler = useCallback(
     (id: string) => {
       const prevState = nodeMap[id].algorithmState!;
       dispatch(setAlgorithmState(id, "highlighted"));
-      console.log(
-        `timeout for node${id} has been run\nprev state:${prevState}`,
-      );
       setTimeout(() => {
         dispatch(
           setAlgorithmState(
             id,
-            prevState === "highlighted" ? "primary" : prevState,
-          ),
+            prevState === "highlighted" ? "primary" : prevState
+          )
         );
-        console.log(`timeout for node${id} has been finished`);
       }, displaySettings.animationSpeed);
     },
-    [displaySettings.animationSpeed, nodeMap],
+    [displaySettings.animationSpeed, nodeMap]
   );
-
   const [currentStep, setCurrentStep] = useState<number>(0);
 
   const renderStep = useCallback(
-    /*the currentStep duplicating is necessary to optimize redux work.
-    because in some cases the function is calling in places where the index
-    has no time to update itself
-     */
     (stepNumber: number, currStep: number = currentStep) => {
       if (currStep < algorithms[currentAlgorithm!].steps.length) {
-        console.log(`currentStep: ${currStep}`);
         let i = 0;
         if (stepNumber >= currStep) {
           for (i = currStep; i <= stepNumber; i++) {
@@ -124,11 +105,8 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
               algorithms[currentAlgorithm!].steps[i].payload;
             dispatch(setAlgorithmState(id, algorithmState));
           }
-          console.log(`stepNumber >= currentStep: ${i}`);
-        } else if (stepNumber < currStep) {
+        } else {
           dispatch(resetNodeMapState());
-          let i = 0;
-          console.log(`stepNumber < currentStep: ${i}`);
           for (i = 0; i <= stepNumber; i++) {
             const { id, algorithmState } =
               algorithms[currentAlgorithm!].steps[i].payload;
@@ -138,11 +116,92 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
         setCurrentStep(i);
       }
     },
-    [algorithms, currentStep],
+    [algorithms, currentStep]
   );
+
+  const handleSaveGraph = () => {
+    const nodeDtoMap: stateObject<nodeDto> = {};
+    for (const id in nodeMap) {
+      nodeDtoMap[id] = {
+        id,
+        displayValue: nodeMap[id].displayValue,
+        x: nodeMap[id].coordinates.x,
+        y: nodeMap[id].coordinates.y,
+      };
+    }
+
+    const edgeDtoMap: stateObject<edgeDto> = {};
+    for (const id in edgeMap) {
+      const { nodeAid, nodeBid, weight, isDirected } = edgeMap[id];
+      edgeDtoMap[id] = {
+        id,
+        nodeAid,
+        nodeBid,
+        weight,
+        isDirected: !!isDirected,
+      };
+    }
+
+    const url = savedGraphId
+      ? `http://localhost:3000/graph/${savedGraphId}`
+      : "http://localhost:3000/graph";
+    const method = savedGraphId ? "PUT" : "POST";
+
+    fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nodes: nodeDtoMap, edges: edgeDtoMap }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.id) {
+          setSavedGraphId(data.id);
+        }
+      })
+      .catch(console.error);
+  };
+
+  const handleCompute = () => {
+    if (!savedGraphId || !currentAlgorithm) return;
+
+    const { startNodeId, targetNodeId } = algorithms[currentAlgorithm].arguments;
+
+    fetch(`http://localhost:3000/graph/${savedGraphId}/compute`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        algorithm: currentAlgorithm,
+        startNodeId: startNodeId,
+        targetNodeId: targetNodeId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch(resetNodeMapState());
+        const result = data[currentAlgorithm.toLowerCase()];
+        switch (currentAlgorithm) {
+          case "Dijkstra":
+            dispatch(setDijkstra(result));
+            break;
+          case "BFS":
+            dispatch(setBFS(result));
+            break;
+          case "DFS":
+            dispatch(setDFS(result));
+            break;
+          case "Astar":
+            dispatch(setAstar(result));
+            break;
+        }
+        setCurrentStep(0);
+      })
+      .catch(console.error);
+  };
+
   const handleAnimationSettingSubmit = () => {
     dispatch(setAnimationSpeed(localAnimationSpeed));
   };
+
   return (
     <div className={" flex flex-col"}>
       <Accordion type="single" collapsible>
@@ -171,20 +230,6 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      <div className="flex  items-center gap-x-5 h-10 mb-5 hidden">
-        <Label>Current step : {currentStep}</Label>
-        <Slider
-          value={[currentStep]}
-          className={"bg-white rounded-full"}
-          onValueChange={([v, ...rest]) => renderStep(v)}
-          defaultValue={[0]}
-          max={
-            currentAlgorithm ? algorithms[currentAlgorithm].steps.length : 10
-          }
-          min={0}
-          step={1}
-        />
-      </div>
       <div className="flex gap-x-5 py-3">
         <Button
           disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
@@ -208,8 +253,8 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
                 LocalTimerIDs.push(
                   setTimeout(
                     () => renderStep(i, i),
-                    (i - currentStep) * displaySettings.animationSpeed,
-                  ),
+                    (i - currentStep) * displaySettings.animationSpeed
+                  )
                 );
               }
             else LocalTimerIDs.forEach((timeout) => clearTimeout(timeout));
@@ -256,65 +301,13 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             <AlgorithmInputSelect />
           </div>
         </div>
+        <Button className="ml-3" onClick={handleSaveGraph}>
+          {savedGraphId ? "Update Graph" : "Save Graph"}
+        </Button>
         <Button
           className="ml-3"
-          disabled={activeTool !== GraphBuilderTool.PLAY_ANIMATION}
-          onClick={() => {
-            // Prepare Graph to be sent
-            const nodeDtoMap: stateObject<nodeDto> = {};
-            const edgeDtoMap: stateObject<edgeDto> = {};
-            let lastId: string = "";
-            for (const id in nodeMap) {
-              nodeDtoMap[id] = {
-                displayValue: nodeMap[id].displayValue,
-                id,
-              } as nodeDto;
-              lastId = id;
-            }
-            for (const id in edgeMap) {
-              const { nodeAid, nodeBid, weight, isDirected } = edgeMap[id];
-
-              edgeDtoMap[id] = {
-                nodeAid,
-                nodeBid,
-                weight,
-                id,
-                isDirected: !!isDirected,
-              };
-            }
-
-            // Log the data
-            console.log(edgeDtoMap, nodeDtoMap);
-
-            // Send the data via a POST request
-            fetch("http://localhost:3000/graph", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                nodes: nodeDtoMap,
-                edges: edgeDtoMap,
-                startNodeId: lastId,
-              }),
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-              })
-              .then((data) => {
-                // dispatch(setAnimation)
-
-                dispatch(setDijkstra(data.dijkstra));
-                setCurrentStep(0);
-                console.log(algorithms);
-              })
-              .catch((error) => {
-                console.error("Error saving graph:", error);
-              });
-          }}
+          onClick={handleCompute}
+          disabled={!savedGraphId}
         >
           Compute
         </Button>
@@ -324,7 +317,6 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             dispatch(resetNodeMapState());
             setIsAnimationPlaying(false);
             setCurrentStep(0);
-            renderStep(0);
           }}
         >
           Reset
@@ -340,18 +332,13 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
             <TableHead>Payload</TableHead>
           </TableRow>
         </TableHeader>
-        {currentAlgorithm && (
+        {currentAlgorithm && algorithms[currentAlgorithm] && (
           <>
             <TableBody>
-              {algorithms[currentAlgorithm!].steps.map((step, i) => (
+              {algorithms[currentAlgorithm].steps.map((step, i) => (
                 <TableRow
                   onClick={() => renderStep(i)}
-                  key={
-                    step.payload.id.toString() +
-                    "---" +
-                    step.type.toString() +
-                    i.toString()
-                  }
+                  key={`${step.payload.id}-${step.type}-${i}`}
                   className={currentStep - 1 === i ? "bg-yellow-600/50" : ""}
                 >
                   <TableCell className="font-medium">{i}</TableCell>
@@ -377,18 +364,7 @@ const AlgorithmTab = (props: AlgorithmTabProps) => {
               <TableRow>
                 <TableCell colSpan={4}>
                   Output :
-                  {
-                    JSON.stringify(algorithms[currentAlgorithm!]!.output!)
-                    // Object!
-                    // .entries(
-                    //   animations[currentAlgorithm!]!.output! as stateObject<number>,
-                    // )
-                    // .map(([id, weight]) => (
-                    //   <Label>
-                    //     {nodeMap[id].displayValue} : {weight};
-                    //   </Label>
-                    // ))
-                  }
+                  {JSON.stringify(algorithms[currentAlgorithm]!.output!)}
                 </TableCell>
               </TableRow>
             </TableFooter>

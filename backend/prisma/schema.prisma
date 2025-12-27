@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -14,39 +11,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String
-  passwordHash String @map("password_hash")
+model Graph {
+  id    Int    @id @default(autoincrement())
+  name  String?
+  nodes Node[]
+  edges Edge[]
 
-//displaySettings
-  @@map("users")
-  
-}
-
-model Graph{
-  id Int @default(autoincrement()) @id
-  isDirected Boolean @map("is_directed")
-  //created_by
   @@map("graphs")
 }
 
-model  Node{
+model Node {
+  id           Int    @id @default(autoincrement())
+  displayValue String @map("display_value")
+  x            Float
+  y            Float
   
-  id Int @default(autoincrement()) @id
-  //graph id
-  //value
-  displayValue String? @map("dispaly_value")
-  x Int
-  y Int
+  // This is the original string ID from the frontend/DTO
+  originalId   String @unique
+
+  graph   Graph @relation(fields: [graphId], references: [id])
+  graphId Int
+
+  sourceEdges Edge[] @relation("SourceNode")
+  targetEdges Edge[] @relation("TargetNode")
+
   @@map("nodes")
 }
 
-model Edge{
-
-  id Int @default(autoincrement()) @id
-  weight Float
+model Edge {
+  id         Int     @id @default(autoincrement())
+  weight     Float
   isDirected Boolean @map("is_directed")
+  
+  // This is the original string ID from the frontend/DTO
+  originalId   String @unique
+
+
+  graph   Graph @relation(fields: [graphId], references: [id])
+  graphId Int
+
+  sourceNode   Node @relation("SourceNode", fields: [sourceNodeId], references: [id])
+  sourceNodeId Int
+
+  targetNode   Node @relation("TargetNode", fields: [targetNodeId], references: [id])
+  targetNodeId Int
+
   @@map("edges")
 }

@@ -1,6 +1,8 @@
 export class NodeDto {
   id: string;
   displayValue: string;
+  x: number;
+  y: number;
 }
 
 export class EdgeDto {

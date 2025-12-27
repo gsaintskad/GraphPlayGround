@@ -1,23 +1,35 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Param, Put, Get } from '@nestjs/common';
 import { GraphService } from './graph.service';
-import { GraphInputDto } from './dto/graph.dto';
+import { SaveGraphDto } from './dto/save-graph.dto';
+import { ComputeAlgorithmDto } from './dto/compute-algorithm.dto';
 
 @Controller('graph')
 export class GraphController {
   constructor(private readonly graphService: GraphService) {}
 
   @Post()
-  computeGraph(@Body() graphInput: GraphInputDto) {
-    switch (graphInput.algorithm) {
-      case 'BFS':
-        return { bfs: this.graphService.solveBFS(graphInput) };
-      case 'DFS':
-        return { dfs: this.graphService.solveDFS(graphInput) };
-      case 'Astar':
-        return { astar: this.graphService.solveAstar(graphInput) };
-      case 'Dijkstra':
-      default:
-        return { dijkstra: this.graphService.solveDijkstra(graphInput) };
-    }
+  saveGraph(@Body() saveGraphDto: SaveGraphDto) {
+    return this.graphService.saveGraph(saveGraphDto);
+  }
+
+  @Get(':id')
+  getGraph(@Param('id') id: string) {
+    return this.graphService.getGraph(id);
+  }
+
+  @Put(':id')
+  updateGraph(
+    @Param('id') id: string,
+    @Body() saveGraphDto: SaveGraphDto,
+  ) {
+    return this.graphService.saveGraph(saveGraphDto, id);
+  }
+
+  @Post(':id/compute')
+  computeAlgorithm(
+    @Param('id') id: string,
+    @Body() computeDto: ComputeAlgorithmDto,
+  ) {
+    return this.graphService.computeAlgorithm(id, computeDto);
   }
 }

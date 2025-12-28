@@ -8,12 +8,12 @@ import { Request } from 'express';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      // Custom extractor: Check for token in cookies first, then header
+      // Custom extractor: Check for token in 'access_token' cookie first
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
           let token = null;
           if (req && req.cookies) {
-            token = req.cookies['Authentication'];
+            token = req.cookies['access_token'];
           }
           return token || ExtractJwt.fromAuthHeaderAsBearerToken()(req);
         },

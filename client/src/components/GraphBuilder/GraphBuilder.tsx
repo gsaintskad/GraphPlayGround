@@ -46,7 +46,7 @@ export const GraphBuilder = (props: {
   const activeTool = useSelector(
     (state: RootState) => state.graphBuilderTool.currentTool
   );
-  // We check authentication via the store or localStorage just for UI feedback
+  // Get auth state
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch();
@@ -59,12 +59,12 @@ export const GraphBuilder = (props: {
       : "bg-gradient-to-br from-blue-300 via-purple-300 to-gray-200";
 
   const handleSaveGraph = async () => {
-    if (!isAuthenticated && !localStorage.getItem("token")) {
+    // FIX: Removed localStorage check. Rely only on Redux state.
+    if (!isAuthenticated) {
       alert("You must be logged in to save a graph.");
       return;
     }
 
-    // --- FIX: Transform Redux state to API DTO format ---
     const nodesForApi: Record<string, NodeData> = {};
     Object.values(nodeMap).forEach((node) => {
       nodesForApi[node.id] = {
@@ -75,10 +75,8 @@ export const GraphBuilder = (props: {
       };
     });
 
-    // Ensure edges also match the expected structure
     const edgesForApi: Record<string, EdgeData> = {};
     Object.values(edgeMap).forEach((edge) => {
-      // Assuming edgeMap in Redux has compatible fields, but strict mapping is safer
       edgesForApi[edge.id] = {
         id: edge.id,
         weight: edge.weight,
@@ -87,7 +85,6 @@ export const GraphBuilder = (props: {
         nodeBid: edge.nodeBid,
       };
     });
-    // ----------------------------------------------------
 
     const graphData = {
       nodes: nodesForApi,
@@ -95,15 +92,18 @@ export const GraphBuilder = (props: {
     };
 
     try {
-      // No token passed here; axios interceptor handles it
+      // The cookie is handled automatically by the browser/proxy
       const response = await saveGraph(graphData);
       alert(`Graph saved successfully with ID: ${response.id}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to save graph:", error);
-      alert("Failed to save graph. Please try again.");
+      // Better error message handling
+      const msg = error.response?.data?.message || "Failed to save graph.";
+      alert(msg);
     }
   };
 
+  // ... (Rest of the component remains exactly the same)
   return (
     <div
       className={`grid grid-rows-[auto_1fr] h-full w-full pb-10 px-10 ${backgroundGradient} text-white`}

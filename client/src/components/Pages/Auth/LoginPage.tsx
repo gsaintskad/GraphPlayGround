@@ -11,14 +11,15 @@ import { Input } from "@/components/shadcnUI/input";
 import { Label } from "@/components/shadcnUI/label";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { loginSuccess } from "@/redux/Auth/actionCreator";
+// Remove useDispatch if you are no longer storing the token in Redux
+// import { useDispatch } from "react-redux";
+// import { loginSuccess } from "@/redux/Auth/actionCreator";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -30,8 +31,11 @@ export function LoginPage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        dispatch(loginSuccess(data.access_token));
+        // The browser automatically sets the 'access_token' cookie here.
+        // If your app needs user details, you might fetch them here (e.g., /api/users/me)
+        // or just navigate to home.
+
+        // dispatch(loginSuccess(data.access_token)); // Token is no longer in the body
         navigate("/");
       } else {
         const errorData = await response.json();

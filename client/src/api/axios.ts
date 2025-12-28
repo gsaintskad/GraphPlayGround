@@ -1,17 +1,18 @@
 import axios from "axios";
 
-// Ensure this points to your proxy path
+// CORRECT: Relative path hits the Vite Proxy (http://localhost:5173/api)
 const API_BASE_URL = "/api";
+
+// INCORRECT: This bypasses the proxy and causes the cookie issue
+// const API_BASE_URL = "http://localhost:3000";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Important: This ensures cookies are sent with requests
+  withCredentials: true, // Required for cookies
 });
-
-// We no longer need the interceptor to manually attach the token
 
 export interface NodeData {
   id: string;

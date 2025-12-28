@@ -1,30 +1,26 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = ''; // Changed to empty string to let Vite proxy handle it
+// Ensure this points to your proxy path
+const API_BASE_URL = "/api";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
+  withCredentials: true, // Important: This ensures cookies are sent with requests
 });
 
-export const setAuthToken = (token: string | null) => {
-  if (token) {
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete axiosInstance.defaults.headers.common['Authorization'];
-  }
-};
+// We no longer need the interceptor to manually attach the token
 
-interface NodeData {
+export interface NodeData {
   id: string;
   displayValue: string;
   x: number;
   y: number;
 }
 
-interface EdgeData {
+export interface EdgeData {
   id: string;
   weight: number;
   isDirected: boolean;
@@ -32,18 +28,12 @@ interface EdgeData {
   nodeBid: string;
 }
 
-interface SaveGraphDto {
+export interface SaveGraphDto {
   nodes: Record<string, NodeData>;
   edges: Record<string, EdgeData>;
 }
 
-export const saveGraph = async (
-  graphData: SaveGraphDto,
-  token: string,
-  graphId?: string,
-) => {
-  setAuthToken(token); // Set the token for this request
-
+export const saveGraph = async (graphData: SaveGraphDto, graphId?: string) => {
   const url = graphId ? `/graph/${graphId}` : "/graph";
   const method = graphId ? "PUT" : "POST";
 

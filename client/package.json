@@ -26,6 +26,8 @@
     "@radix-ui/react-tabs": "^1.1.2",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.13.2",
+    "baseline-browser-mapping": "^2.9.11",
+    "caniuse-lite": "^1.0.30001761",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.460.0",

@@ -1,5 +1,5 @@
 import GraphDisplay from "@/components/GraphBuilder/GraphDisplay/GraphDisplay.tsx";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store.ts";
 import {
@@ -10,21 +10,18 @@ import {
 import { discardEdgeMap } from "@/redux/GraphEdges/actionCreator.ts";
 import ToolButton from "@/components/GraphBuilder/ToolButton.tsx";
 import { useTheme } from "@/components/shadcnUI/ThemeProvider.tsx";
-import DisplaySettingsTab from "@/components/Tabs/TabsContent/DisplaySettingsTab.tsx";
 import { IconContext } from "react-icons";
-import { IoMdPlay, IoMdSave, IoMdSettings } from "react-icons/io";
-import { MdDelete, MdStarOutline } from "react-icons/md";
+import { IoMdSave, IoMdSettings } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
 import {
   TbArrowsMove,
   TbPointer,
   TbPointerMinus,
   TbPointerPlus,
-}
- from "react-icons/tb";
+} from "react-icons/tb";
 import { BsArrowDownUp } from "react-icons/bs";
 import { ImArrowUpRight2 } from "react-icons/im";
 import { VscDebugDisconnect } from "react-icons/vsc";
-import { edgeDto, nodeDto, stateObject } from "@/lib/types.ts";
 import {
   setConnectTool,
   setCreateTool,
@@ -39,20 +36,18 @@ import { GraphBuilderTool } from "@/redux/GraphBuilder/actionTypes.ts";
 import { Button } from "@/components/shadcnUI/button.tsx";
 import { Label } from "@/components/shadcnUI/label.tsx";
 import GraphBuilderTabs from "@/components/Tabs/GraphBuilderTabs.tsx";
-import { saveGraph } from '@/api/axios'; // Import saveGraph
+import { saveGraph, NodeData, EdgeData } from "@/api/axios";
 
 export const GraphBuilder = (props: {
   style: { width: string; height: string };
 }) => {
   const nodeMap = useSelector((state: RootState) => state.graphNodes);
   const edgeMap = useSelector((state: RootState) => state.graphEdges);
-  const displaySettings = useSelector(
-    (state: RootState) => state.displaySettings,
-  );
   const activeTool = useSelector(
-    (state: RootState) => state.graphBuilderTool.currentTool,
+    (state: RootState) => state.graphBuilderTool.currentTool
   );
-  const { token } = useSelector((state: RootState) => state.auth); // Get token from auth state
+  // We check authentication via the store or localStorage just for UI feedback
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -64,26 +59,50 @@ export const GraphBuilder = (props: {
       : "bg-gradient-to-br from-blue-300 via-purple-300 to-gray-200";
 
   const handleSaveGraph = async () => {
-    if (!token) {
+    if (!isAuthenticated && !localStorage.getItem("token")) {
       alert("You must be logged in to save a graph.");
       return;
     }
 
+    // --- FIX: Transform Redux state to API DTO format ---
+    const nodesForApi: Record<string, NodeData> = {};
+    Object.values(nodeMap).forEach((node) => {
+      nodesForApi[node.id] = {
+        id: node.id,
+        displayValue: node.displayValue,
+        x: node.coordinates.x,
+        y: node.coordinates.y,
+      };
+    });
+
+    // Ensure edges also match the expected structure
+    const edgesForApi: Record<string, EdgeData> = {};
+    Object.values(edgeMap).forEach((edge) => {
+      // Assuming edgeMap in Redux has compatible fields, but strict mapping is safer
+      edgesForApi[edge.id] = {
+        id: edge.id,
+        weight: edge.weight,
+        isDirected: edge.isDirected!,
+        nodeAid: edge.nodeAid,
+        nodeBid: edge.nodeBid,
+      };
+    });
+    // ----------------------------------------------------
+
     const graphData = {
-      nodes: nodeMap,
-      edges: edgeMap,
+      nodes: nodesForApi,
+      edges: edgesForApi,
     };
 
     try {
-      const response = await saveGraph(graphData, token);
+      // No token passed here; axios interceptor handles it
+      const response = await saveGraph(graphData);
       alert(`Graph saved successfully with ID: ${response.id}`);
-      // Optionally update some state if you want to store the graph ID for updates
     } catch (error) {
       console.error("Failed to save graph:", error);
       alert("Failed to save graph. Please try again.");
     }
   };
-
 
   return (
     <div
@@ -100,7 +119,7 @@ export const GraphBuilder = (props: {
           <ToolButton
             name="Save Graph"
             description="Save the current graph"
-            onClick={handleSaveGraph} // Use the new handler
+            onClick={handleSaveGraph}
           >
             <IoMdSave />
           </ToolButton>
@@ -136,7 +155,6 @@ export const GraphBuilder = (props: {
               onClick={() => {
                 const state = activeTool === GraphBuilderTool.PLAY_ANIMATION;
                 if (state) dispatch(discardAlgorithmState());
-                // else setCurrentStep(0);
                 dispatch(setPlayAnimationTool(!state));
               }}
             >

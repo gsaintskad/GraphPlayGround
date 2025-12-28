@@ -1,26 +1,39 @@
-import { LOGIN_SUCCESS, LOGOUT } from './actionTypes';
+import { LOGIN_SUCCESS, LOGOUT } from "./actionTypes";
 
 interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
 }
 
+// Helper to get cookie by name
+const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
+  return null;
+};
+
 const initialState: AuthState = {
-  token: localStorage.getItem('token'),
-  isAuthenticated: !!localStorage.getItem('token'),
+  token: getCookie("Authentication"),
+  isAuthenticated: !!getCookie("Authentication"),
 };
 
 const authReducer = (state = initialState, action: any): AuthState => {
   switch (action.type) {
     case LOGIN_SUCCESS:
-      localStorage.setItem('token', action.payload);
+      // Store token in cookie
+      document.cookie = `Authentication=${action.payload}; Path=/; SameSite=Lax`;
+
       return {
         ...state,
         token: action.payload,
         isAuthenticated: true,
       };
     case LOGOUT:
-      localStorage.removeItem('token');
+      // Remove cookie by setting past expiration date
+      document.cookie =
+        "Authentication=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
       return {
         ...state,
         token: null,
